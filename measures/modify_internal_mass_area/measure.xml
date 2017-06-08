@@ -1,0 +1,92 @@
+<measure>
+  <schema_version>3.0</schema_version>
+  <name>modify_internal_mass_area</name>
+  <uid>66a74e61-cfc2-484d-bfb1-91a598e371b7</uid>
+  <version_id>d0e6a1e6-bec4-4ace-887f-1592fd6671b8</version_id>
+  <version_modified>20170607T193912Z</version_modified>
+  <xml_checksum>CB700443</xml_checksum>
+  <class_name>ModifyInternalMassArea</class_name>
+  <display_name>Modify Internal Mass Area</display_name>
+  <description>This measure allows the user to manipulate the exposed area of thermal mass in a model.</description>
+  <modeler_description>This OpenStudio measure takes one input: a thermal mass multiplier. The measure looks for any InternalMass instances and alters the instance multiplier. This measure will only work if thermal mass has already been added to the model. It only alter's internal mass objects, not interior partitions.</modeler_description>
+  <arguments>
+    <argument>
+      <name>area_multiplier</name>
+      <display_name>Thermal Mass Area Multiplier</display_name>
+      <type>Double</type>
+      <required>true</required>
+      <model_dependent>false</model_dependent>
+      <default_value>1</default_value>
+    </argument>
+  </arguments>
+  <outputs/>
+  <provenances/>
+  <tags>
+    <tag>Envelope.Opaque</tag>
+  </tags>
+  <attributes>
+    <attribute>
+      <name>Measure Type</name>
+      <value>ModelMeasure</value>
+      <datatype>string</datatype>
+    </attribute>
+    <attribute>
+      <name>Intended Software Tool</name>
+      <value>Apply Measure Now</value>
+      <datatype>string</datatype>
+    </attribute>
+    <attribute>
+      <name>Intended Software Tool</name>
+      <value>OpenStudio Application</value>
+      <datatype>string</datatype>
+    </attribute>
+    <attribute>
+      <name>Intended Software Tool</name>
+      <value>Parametric Analysis Tool</value>
+      <datatype>string</datatype>
+    </attribute>
+    <attribute>
+      <name>Intended Software Tool</name>
+      <value>Analysis Spreadsheet</value>
+      <datatype>string</datatype>
+    </attribute>
+    <attribute>
+      <name>Intended Use Case</name>
+      <value>Model Articulation</value>
+      <datatype>string</datatype>
+    </attribute>
+    <attribute>
+      <name>Intended Use Case</name>
+      <value>Calibration</value>
+      <datatype>string</datatype>
+    </attribute>
+    <attribute>
+      <name>Intended Use Case</name>
+      <value>Sensitivity Analysis</value>
+      <datatype>string</datatype>
+    </attribute>
+    <attribute>
+      <name>Intended Use Case</name>
+      <value>New Construction EE</value>
+      <datatype>string</datatype>
+    </attribute>
+    <attribute>
+      <name>Intended Use Case</name>
+      <value>Retrofit EE</value>
+      <datatype>string</datatype>
+    </attribute>
+  </attributes>
+  <files>
+    <file>
+      <version>
+        <software_program>OpenStudio</software_program>
+        <identifier>1.10.4</identifier>
+        <min_compatible>1.10.1</min_compatible>
+      </version>
+      <filename>measure.rb</filename>
+      <filetype>rb</filetype>
+      <usage_type>script</usage_type>
+      <checksum>088A9A18</checksum>
+    </file>
+  </files>
+</measure>

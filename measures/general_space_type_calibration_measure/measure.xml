@@ -1,0 +1,121 @@
+<measure>
+  <schema_version>3.0</schema_version>
+  <name>general_space_type_calibration_measure</name>
+  <uid>af156383-cfe2-4798-b581-08a4cccb7894</uid>
+  <version_id>bf58bb16-52f7-426c-a542-3af287a3e108</version_id>
+  <version_modified>20170607T220252Z</version_modified>
+  <xml_checksum>DEC0D835</xml_checksum>
+  <class_name>GeneralSpaceTypeCalibrationMeasure</class_name>
+  <display_name> General Space Type Calibration Measure</display_name>
+  <description>This is a general purpose measure to calibrate space type elements.</description>
+  <modeler_description>It will have a single loop through space types. Initially it will be used for calibration of people, infiltration, and outdoor air. It doesn't have to hit the space type json file since it is just adjusting by a multiplier.</modeler_description>
+  <arguments>
+    <argument>
+      <name>multiplier_occ</name>
+      <display_name>Occupancy Multiplier</display_name>
+      <description>For each space type multiply the default number of people by this value.</description>
+      <type>Double</type>
+      <required>true</required>
+      <model_dependent>false</model_dependent>
+      <default_value>1</default_value>
+    </argument>
+    <argument>
+      <name>multiplier_infiltration</name>
+      <display_name>Infiltration Multiplier</display_name>
+      <description>For each space type multiply the default infiltration value by this.</description>
+      <type>Double</type>
+      <required>true</required>
+      <model_dependent>false</model_dependent>
+      <default_value>1</default_value>
+    </argument>
+    <argument>
+      <name>multiplier_ventilation</name>
+      <display_name>Ventilation Multiplier</display_name>
+      <description>For each space type multiply the default infiltration value by this.</description>
+      <type>Double</type>
+      <required>true</required>
+      <model_dependent>false</model_dependent>
+      <default_value>1</default_value>
+    </argument>
+  </arguments>
+  <outputs/>
+  <provenances/>
+  <tags>
+    <tag>Whole Building.Space Types</tag>
+  </tags>
+  <attributes>
+    <attribute>
+      <name>Intended Software Tool</name>
+      <value>Analysis Spreadsheet</value>
+      <datatype>string</datatype>
+    </attribute>
+    <attribute>
+      <name>Intended Use Case</name>
+      <value>Model Articulation</value>
+      <datatype>string</datatype>
+    </attribute>
+    <attribute>
+      <name>Intended Use Case</name>
+      <value>Calibration</value>
+      <datatype>string</datatype>
+    </attribute>
+    <attribute>
+      <name>Intended Use Case</name>
+      <value>Sensitivity Analysis</value>
+      <datatype>string</datatype>
+    </attribute>
+    <attribute>
+      <name>Measure Type</name>
+      <value>ModelMeasure</value>
+      <datatype>string</datatype>
+    </attribute>
+    <attribute>
+      <name>Intended Software Tool</name>
+      <value>Apply Measure Now</value>
+      <datatype>string</datatype>
+    </attribute>
+    <attribute>
+      <name>Intended Software Tool</name>
+      <value>OpenStudio Application</value>
+      <datatype>string</datatype>
+    </attribute>
+    <attribute>
+      <name>Intended Software Tool</name>
+      <value>Parametric Analysis Tool</value>
+      <datatype>string</datatype>
+    </attribute>
+    <attribute>
+      <name>Intended Software Tool</name>
+      <value>Analysis Spreadsheet</value>
+      <datatype>string</datatype>
+    </attribute>
+    <attribute>
+      <name>Intended Use Case</name>
+      <value>Model Articulation</value>
+      <datatype>string</datatype>
+    </attribute>
+    <attribute>
+      <name>Intended Use Case</name>
+      <value>Calibration</value>
+      <datatype>string</datatype>
+    </attribute>
+    <attribute>
+      <name>Intended Use Case</name>
+      <value>Sensitivity Analysis</value>
+      <datatype>string</datatype>
+    </attribute>
+  </attributes>
+  <files>
+    <file>
+      <version>
+        <software_program>OpenStudio</software_program>
+        <identifier>1.4.3</identifier>
+        <min_compatible>1.4.3</min_compatible>
+      </version>
+      <filename>measure.rb</filename>
+      <filetype>rb</filetype>
+      <usage_type>script</usage_type>
+      <checksum>D13DFC71</checksum>
+    </file>
+  </files>
+</measure>

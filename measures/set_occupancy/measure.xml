@@ -1,0 +1,115 @@
+<measure>
+  <schema_version>3.0</schema_version>
+  <name>set_occupancy</name>
+  <uid>cd27e720-b5ad-4c87-9737-dd019add71f8</uid>
+  <version_id>37e300be-4962-4c8b-8267-a47c5296d537</version_id>
+  <version_modified>20170607T193912Z</version_modified>
+  <xml_checksum>EA248FE1</xml_checksum>
+  <class_name>SetOccupancy</class_name>
+  <display_name>Set Occupancy</display_name>
+  <description>Set Occupancy</description>
+  <modeler_description>Set Occupancy</modeler_description>
+  <arguments>
+    <argument>
+      <name>zone_name</name>
+      <display_name>Zone Name</display_name>
+      <description>Zone Name</description>
+      <type>String</type>
+      <required>true</required>
+      <model_dependent>false</model_dependent>
+      <default_value>Seatorium Zone</default_value>
+    </argument>
+    <argument>
+      <name>calculation_method</name>
+      <display_name>Calculation Method</display_name>
+      <description>Calculation Method.</description>
+      <type>Choice</type>
+      <required>true</required>
+      <model_dependent>false</model_dependent>
+      <default_value>People</default_value>
+      <choices>
+        <choice>
+          <value>People</value>
+          <display_name>People</display_name>
+        </choice>
+        <choice>
+          <value>People/Area</value>
+          <display_name>People/Area</display_name>
+        </choice>
+        <choice>
+          <value>Area/People</value>
+          <display_name>Area/People</display_name>
+        </choice>
+      </choices>
+    </argument>
+    <argument>
+      <name>people_value</name>
+      <display_name>People Value</display_name>
+      <description>People Value.</description>
+      <type>Double</type>
+      <required>true</required>
+      <model_dependent>false</model_dependent>
+      <default_value>20</default_value>
+    </argument>
+  </arguments>
+  <outputs/>
+  <provenances/>
+  <tags>
+    <tag>People.Characteristics</tag>
+  </tags>
+  <attributes>
+    <attribute>
+      <name>Measure Type</name>
+      <value>ModelMeasure</value>
+      <datatype>string</datatype>
+    </attribute>
+    <attribute>
+      <name>Intended Software Tool</name>
+      <value>Apply Measure Now</value>
+      <datatype>string</datatype>
+    </attribute>
+    <attribute>
+      <name>Intended Software Tool</name>
+      <value>OpenStudio Application</value>
+      <datatype>string</datatype>
+    </attribute>
+    <attribute>
+      <name>Intended Software Tool</name>
+      <value>Parametric Analysis Tool</value>
+      <datatype>string</datatype>
+    </attribute>
+    <attribute>
+      <name>Intended Software Tool</name>
+      <value>Analysis Spreadsheet</value>
+      <datatype>string</datatype>
+    </attribute>
+    <attribute>
+      <name>Intended Use Case</name>
+      <value>Model Articulation</value>
+      <datatype>string</datatype>
+    </attribute>
+    <attribute>
+      <name>Intended Use Case</name>
+      <value>Calibration</value>
+      <datatype>string</datatype>
+    </attribute>
+    <attribute>
+      <name>Intended Use Case</name>
+      <value>Sensitivity Analysis</value>
+      <datatype>string</datatype>
+    </attribute>
+  </attributes>
+  <files>
+    <file>
+      <version>
+        <software_program>OpenStudio</software_program>
+        <identifier>1.10.0</identifier>
+        <min_compatible>1.10.0</min_compatible>
+      </version>
+      <filename>measure.rb</filename>
+      <filetype>rb</filetype>
+      <usage_type>script</usage_type>
+      <checksum>C7E7B8DA</checksum>
+    </file>
+  </files>
+</measure>
