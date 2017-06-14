@@ -2,6 +2,12 @@
 
 # start the measure
 class GeneralSpaceTypeCalibrationMeasure < OpenStudio::Ruleset::ModelUserScript
+
+  # require all .rb files in resources folder
+  Dir[File.dirname(__FILE__) + '/resources/*.rb'].each {|file| require file }
+  # resource file modules
+  include OsLib_HelperMethods
+  
   # human readable name
   def name
     return " General Space Type Calibration Measure"
@@ -16,9 +22,6 @@ class GeneralSpaceTypeCalibrationMeasure < OpenStudio::Ruleset::ModelUserScript
   def modeler_description
     return "It will have a single loop through space types. Initially it will be used for calibration of people, infiltration, and outdoor air. It doesn't have to hit the space type json file since it is just adjusting by a multiplier."
   end
-
- # resource file modules
-  include OsLib_HelperMethods
   
   # define the arguments that the user will input
   def arguments(model)

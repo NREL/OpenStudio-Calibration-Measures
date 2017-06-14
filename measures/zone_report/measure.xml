@@ -2,8 +2,8 @@
   <schema_version>3.0</schema_version>
   <name>zone_report</name>
   <uid>f3531642-27ce-4624-95ab-0bfcd5b9f5fe</uid>
-  <version_id>24300d2d-64c9-4bad-99be-3329e0fae1ca</version_id>
-  <version_modified>20170608T193530Z</version_modified>
+  <version_id>acdc2281-6395-43d6-8767-b93381b147e4</version_id>
+  <version_modified>20170613T153819Z</version_modified>
   <xml_checksum>2C8A3EEF</xml_checksum>
   <class_name>ZoneReport</class_name>
   <display_name>Zone Report</display_name>
@@ -44,18 +44,6 @@
       <filetype>in</filetype>
       <usage_type>resource</usage_type>
       <checksum>9863EEC5</checksum>
-    </file>
-    <file>
-      <filename>gas electric_mark_load.osm</filename>
-      <filetype>osm</filetype>
-      <usage_type>test</usage_type>
-      <checksum>1F5C6B63</checksum>
-    </file>
-    <file>
-      <filename>ZoneReport_Test.rb</filename>
-      <filetype>rb</filetype>
-      <usage_type>test</usage_type>
-      <checksum>6CF87C6E</checksum>
     </file>
   </files>
 </measure>

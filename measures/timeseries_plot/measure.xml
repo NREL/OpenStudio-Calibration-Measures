@@ -2,7 +2,8 @@
   <schema_version>3.0</schema_version>
   <name>timeseries_plot</name>
   <uid>6804217d-4737-45f3-82df-b81393c29ce7</uid>
-  <version_id>b1d2166e-a839-4085-aa75-1e2cdaf48ca2</version_id>
+  <version_id>7f6f3698-09af-4939-ae12-9eae8a900e66</version_id>
+  <version_modified>20170613T153819Z</version_modified>
   <xml_checksum>FB31B85E</xml_checksum>
   <class_name>TimeseriesPlot</class_name>
   <display_name> Timeseries Plot</display_name>
@@ -74,6 +75,7 @@
       <default_value>RUN PERIOD 1</default_value>
     </argument>
   </arguments>
+  <outputs/>
   <provenances/>
   <tags>
     <tag>Reporting.Troubleshooting</tag>
@@ -116,18 +118,6 @@
     </attribute>
   </attributes>
   <files>
-    <file>
-      <filename>timeseries_plot_test.rb</filename>
-      <filetype>rb</filetype>
-      <usage_type>test</usage_type>
-      <checksum>2178AD66</checksum>
-    </file>
-    <file>
-      <filename>test_model.osm</filename>
-      <filetype>osm</filetype>
-      <usage_type>test</usage_type>
-      <checksum>29409699</checksum>
-    </file>
     <file>
       <filename>report.html.erb</filename>
       <filetype>erb</filetype>

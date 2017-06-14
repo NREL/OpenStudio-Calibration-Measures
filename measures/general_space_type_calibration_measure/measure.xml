@@ -2,8 +2,8 @@
   <schema_version>3.0</schema_version>
   <name>general_space_type_calibration_measure</name>
   <uid>af156383-cfe2-4798-b581-08a4cccb7894</uid>
-  <version_id>bf58bb16-52f7-426c-a542-3af287a3e108</version_id>
-  <version_modified>20170607T220252Z</version_modified>
+  <version_id>1820032f-c8b0-4172-bd7a-7affc34ff196</version_id>
+  <version_modified>20170613T162506Z</version_modified>
   <xml_checksum>DEC0D835</xml_checksum>
   <class_name>GeneralSpaceTypeCalibrationMeasure</class_name>
   <display_name> General Space Type Calibration Measure</display_name>
@@ -107,6 +107,12 @@
   </attributes>
   <files>
     <file>
+      <filename>os_lib_helper_methods.rb</filename>
+      <filetype>rb</filetype>
+      <usage_type>resource</usage_type>
+      <checksum>02263B97</checksum>
+    </file>
+    <file>
       <version>
         <software_program>OpenStudio</software_program>
         <identifier>1.4.3</identifier>
@@ -115,7 +121,7 @@
       <filename>measure.rb</filename>
       <filetype>rb</filetype>
       <usage_type>script</usage_type>
-      <checksum>D13DFC71</checksum>
+      <checksum>01ACFE04</checksum>
     </file>
   </files>
 </measure>
