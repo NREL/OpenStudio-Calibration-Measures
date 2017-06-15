@@ -2,8 +2,8 @@
   <schema_version>3.0</schema_version>
   <name>general_calibration_measure</name>
   <uid>af156383-cfe2-4798-b581-08a4cccb8884</uid>
-  <version_id>bd910e97-0608-4680-8e39-e88b1be27263</version_id>
-  <version_modified>20170615T151736Z</version_modified>
+  <version_id>d462aac7-bb85-4c82-9316-8c1bc360d95b</version_id>
+  <version_modified>20170615T161507Z</version_modified>
   <xml_checksum>DEC0D835</xml_checksum>
   <class_name>GeneralCalibrationMeasure</class_name>
   <display_name>General Calibration Measure</display_name>
@@ -19,7 +19,7 @@
       <default_value>*All SpaceTypes*</default_value>
       <choices>
         <choice>
-          <value>{dba01093-d2ad-4382-b23a-4e48c175ea5f}</value>
+          <value>{9d495a30-ac06-4840-a837-fea20d7bb59f}</value>
           <display_name>*All SpaceTypes*</display_name>
         </choice>
         <choice>
@@ -29,7 +29,7 @@
       </choices>
     </argument>
     <argument>
-      <name>spaces</name>
+      <name>space</name>
       <display_name>Apply the Measure to a SINGLE Space, ALL the Spaces or NONE.</display_name>
       <type>Choice</type>
       <required>true</required>
@@ -37,7 +37,7 @@
       <default_value>*All Spaces*</default_value>
       <choices>
         <choice>
-          <value>{dba01093-d2ad-4382-b23a-4e48c175ea5f}</value>
+          <value>{9d495a30-ac06-4840-a837-fea20d7bb59f}</value>
           <display_name>*All Spaces*</display_name>
         </choice>
         <choice>
@@ -151,7 +151,7 @@
       <filename>measure.rb</filename>
       <filetype>rb</filetype>
       <usage_type>script</usage_type>
-      <checksum>381194A8</checksum>
+      <checksum>832BF157</checksum>
     </file>
   </files>
 </measure>

@@ -78,7 +78,7 @@ class GeneralCalibrationMeasure < OpenStudio::Ruleset::ModelUserScript
     space_display_names << "*None*"
 
     #make a choice argument for space type
-    space = OpenStudio::Ruleset::OSArgument::makeChoiceArgument("spaces", space_handles, space_display_names)
+    space = OpenStudio::Ruleset::OSArgument::makeChoiceArgument("space", space_handles, space_display_names)
     space.setDisplayName("Apply the Measure to a SINGLE Space, ALL the Spaces or NONE.")
     space.setDefaultValue("*All Spaces*") #if no space type is chosen this will run on the entire building
     args << space
@@ -112,57 +112,66 @@ class GeneralCalibrationMeasure < OpenStudio::Ruleset::ModelUserScript
     super(model, runner, user_arguments)
 
     # assign the user inputs to variables
-    object = runner.getOptionalWorkspaceObjectChoiceValue("space_type",user_arguments,model)
+    space_type_object = runner.getOptionalWorkspaceObjectChoiceValue("space_type",user_arguments,model)
+    space_type_handle = runner.getStringArgumentValue("space_type",user_arguments)
+    space_object = runner.getOptionalWorkspaceObjectChoiceValue("space",user_arguments,model)
+    space_handle = runner.getStringArgumentValue("space",user_arguments)
     multiplier_occ = runner.getDoubleArgumentValue("multiplier_occ",user_arguments)
     multiplier_infiltration = runner.getDoubleArgumentValue("multiplier_infiltration",user_arguments)
     multiplier_ventilation = runner.getDoubleArgumentValue("multiplier_ventilation",user_arguments)
         
-    #check the space_type for reasonableness and see if measure should run on space type or on the entire building
-    apply_to_building = false
-    apply_to_spaces = false
+    #find objects to change
     space_types = []
     spaces = []
-    space_type = nil
-    if object.empty?
-      runner.registerInfo("space_type is empty")
-      #handle = runner.getStringArgumentValue("space_type",user_arguments)
-      #if handle.empty?
-      #  runner.registerError("No space type was chosen.")
-      #else
-      #  runner.registerError("The selected space type with handle '#{handle}' was not found in the model. It may have been removed by another measure.")
-      #end
-      #return false
-    else
-      if not object.get.to_SpaceType.empty?
-        space_type = object.get.to_SpaceType.get
-      elsif not object.get.to_Building.empty?
-        apply_to_building = true
+    building = model.getBuilding
+    building_handle = building.handle.to_s
+    runner.registerInfo("space_type_handle: #{space_type_handle}")
+    runner.registerInfo("space_handle: #{space_handle}")
+    #setup space_types
+    if space_type_handle == building_handle
+      #Use ALL SpaceTypes
+      runner.registerInfo("Applying change to ALL SpaceTypes")
+      space_types = model.getSpaceTypes
+    elsif space_type_handle == 0.to_s
+      #SpaceTypes set to NONE so do nothing
+      runner.registerInfo("Applying change to NONE SpaceTypes")
+    elsif not space_type_handle.empty?
+      #Single SpaceType handle found, check if object is good    
+      if not space_type_object.get.to_SpaceType.empty?
+      runner.registerInfo("Applying change to #{space_type_object.get.name.to_s} SpaceType")
+        space_types << space_type_object.get.to_SpaceType.get
       else
-        runner.registerError("Script Error - argument not showing up as space type or building.")
-        return false
+        runner.registerError("SpaceType with handle #{space_type_handle} could not be found.")
       end
+    else
+      runner.registerError("SpaceType handle is empty.")
+      return false
+    end
+    
+    #setup spaces
+    if space_handle == building_handle
+      #Use ALL Spaces
+      runner.registerInfo("Applying change to ALL Spaces")
+      spaces = model.getSpaces
+    elsif space_handle == 0.to_s
+      #Spaces set to NONE so do nothing
+      runner.registerInfo("Applying change to NONE Spaces")
+    elsif not space_handle.empty?
+      #Single Space handle found, check if object is good    
+      if not space_object.get.to_Space.empty?
+      runner.registerInfo("Applying change to #{space_object.get.name.to_s} Space")
+        spaces << space_object.get.to_Space.get
+      else
+        runner.registerError("Space with handle #{space_handle} could not be found.")
+      end
+    else
+      runner.registerError("Space handle is empty.")
+      return false
     end
     
     altered_people_definitions = {} # key is def, value is new value
     altered_infiltration_objects = {}# key is def, value is new value
     altered_outdoor_air_objects = {}# key is def, value is new value
-
-    #get space types to apply changes to
-    if apply_to_building
-      space_types = model.getSpaceTypes
-    else
-      space_types = []
-      space_types << space_type #only run on a single space type
-    end
-
-    #get spaces in model
-    # if apply_to_spaces
-      # spaces = model.getSpaces
-    # else
-      # if not space_type.spaces.empty?
-        # spaces = space_type.spaces #only run on a single space type
-      # end
-    # end
     
     # report initial condition of model
     runner.registerInitialCondition("Applying Variable % Changes to #{space_types.size} space types and #{spaces.size} spaces.")
@@ -173,29 +182,28 @@ class GeneralCalibrationMeasure < OpenStudio::Ruleset::ModelUserScript
 
       # modify occupancy
       space_type.people.each do |people_inst|
-
         # get and alter definition
         people_def = people_inst.peopleDefinition
         next if altered_people_definitions[people_def]
         if people_def.peopleperSpaceFloorArea.is_initialized
+          runner.registerInfo("Applying #{multiplier_occ} % Changes to #{people_def.name.get} PeopleperSpaceFloorArea.")
           people_def.setPeopleperSpaceFloorArea(people_def.peopleperSpaceFloorArea.get * multiplier_occ)
         end
-
         # update hash
         altered_people_definitions[people_def] = people_def.peopleperSpaceFloorArea
-
       end
 
       # modify infiltration
       space_type.spaceInfiltrationDesignFlowRates.each do |infiltration|
         next if altered_infiltration_objects[infiltration]
         if infiltration.flowperExteriorSurfaceArea.is_initialized
+          runner.registerInfo("Applying #{multiplier_infiltration} % Changes to #{infiltration.name.get} FlowperExteriorSurfaceArea.")
           infiltration.setFlowperExteriorSurfaceArea(infiltration.flowperExteriorSurfaceArea.get * multiplier_infiltration)
         end
         if infiltration.airChangesperHour.is_initialized
+          runner.registerInfo("Applying #{multiplier_infiltration} % Changes to #{infiltration.name.get} AirChangesperHour.")
           infiltration.setAirChangesperHour(infiltration.airChangesperHour.get * multiplier_infiltration)
         end
-
         # add to hash
         altered_infiltration_objects[infiltration] = [infiltration.flowperExteriorSurfaceArea,infiltration.airChangesperHour]
       end
@@ -203,17 +211,17 @@ class GeneralCalibrationMeasure < OpenStudio::Ruleset::ModelUserScript
       # modify outdoor air
       if space_type.designSpecificationOutdoorAir.is_initialized
         outdoor_air = space_type.designSpecificationOutdoorAir.get
-
         # alter values if not already done
         next if altered_outdoor_air_objects[outdoor_air]
+        runner.registerInfo("Applying #{multiplier_ventilation} % Changes to #{outdoor_air.name.get} OutdoorAirFlowperPerson.")
         outdoor_air.setOutdoorAirFlowperPerson(outdoor_air.outdoorAirFlowperPerson * multiplier_ventilation)
+        runner.registerInfo("Applying #{multiplier_ventilation} % Changes to #{outdoor_air.name.get} OutdoorAirFlowperFloorArea.")
         outdoor_air.setOutdoorAirFlowperFloorArea(outdoor_air.outdoorAirFlowperFloorArea * multiplier_ventilation)
+        runner.registerInfo("Applying #{multiplier_ventilation} % Changes to #{outdoor_air.name.get} OutdoorAirFlowAirChangesperHour.")
         outdoor_air.setOutdoorAirFlowAirChangesperHour(outdoor_air.outdoorAirFlowAirChangesperHour * multiplier_ventilation)
-
         # add to hash
         altered_outdoor_air_objects[outdoor_air] = [outdoor_air.outdoorAirFlowperPerson,outdoor_air.outdoorAirFlowperFloorArea,outdoor_air.outdoorAirFlowAirChangesperHour]
       end
-
     end #end space_type loop
     
     # report initial condition of model
@@ -224,29 +232,28 @@ class GeneralCalibrationMeasure < OpenStudio::Ruleset::ModelUserScript
 
       # modify occupancy
       space.people.each do |people_inst|
-
         # get and alter definition
         people_def = people_inst.peopleDefinition
         next if altered_people_definitions[people_def]
         if people_def.peopleperSpaceFloorArea.is_initialized
+          runner.registerInfo("Applying #{multiplier_occ} % Changes to #{people_def.name.get} PeopleperSpaceFloorArea.")
           people_def.setPeopleperSpaceFloorArea(people_def.peopleperSpaceFloorArea.get * multiplier_occ)
         end
-
         # update hash
         altered_people_definitions[people_def] = people_def.peopleperSpaceFloorArea
-
       end
 
       # modify infiltration
       space.spaceInfiltrationDesignFlowRates.each do |infiltration|
         next if altered_infiltration_objects[infiltration]
         if infiltration.flowperExteriorSurfaceArea.is_initialized
+          runner.registerInfo("Applying #{multiplier_infiltration} % Changes to #{infiltration.name.get} FlowperExteriorSurfaceArea.")
           infiltration.setFlowperExteriorSurfaceArea(infiltration.flowperExteriorSurfaceArea.get * multiplier_infiltration)
         end
         if infiltration.airChangesperHour.is_initialized
+          runner.registerInfo("Applying #{multiplier_infiltration} % Changes to #{infiltration.name.get} AirChangesperHour.")
           infiltration.setAirChangesperHour(infiltration.airChangesperHour.get * multiplier_infiltration)
         end
-
         # add to hash
         altered_infiltration_objects[infiltration] = [infiltration.flowperExteriorSurfaceArea,infiltration.airChangesperHour]
       end
@@ -254,17 +261,17 @@ class GeneralCalibrationMeasure < OpenStudio::Ruleset::ModelUserScript
       # modify outdoor air
       if space.designSpecificationOutdoorAir.is_initialized
         outdoor_air = space.designSpecificationOutdoorAir.get
-
         # alter values if not already done
         next if altered_outdoor_air_objects[outdoor_air]
+        runner.registerInfo("Applying #{multiplier_ventilation} % Changes to #{outdoor_air.name.get} OutdoorAirFlowperPerson.")
         outdoor_air.setOutdoorAirFlowperPerson(outdoor_air.outdoorAirFlowperPerson * multiplier_ventilation)
+        runner.registerInfo("Applying #{multiplier_ventilation} % Changes to #{outdoor_air.name.get} OutdoorAirFlowperFloorArea.")
         outdoor_air.setOutdoorAirFlowperFloorArea(outdoor_air.outdoorAirFlowperFloorArea * multiplier_ventilation)
+        runner.registerInfo("Applying #{multiplier_ventilation} % Changes to #{outdoor_air.name.get} OutdoorAirFlowAirChangesperHour.")
         outdoor_air.setOutdoorAirFlowAirChangesperHour(outdoor_air.outdoorAirFlowAirChangesperHour * multiplier_ventilation)
-
         # add to hash
         altered_outdoor_air_objects[outdoor_air] = [outdoor_air.outdoorAirFlowperPerson,outdoor_air.outdoorAirFlowperFloorArea,outdoor_air.outdoorAirFlowAirChangesperHour]
       end
-
     end #end spaces loop
     
     # na if nothing in model to look at
