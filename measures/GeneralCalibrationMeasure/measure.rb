@@ -16,6 +16,12 @@ class GeneralCalibrationMeasure < OpenStudio::Ruleset::ModelUserScript
     return "It will be used for calibration of people, infiltration, and outdoor air. User can choose between a SINGLE SpaceType or ALL the SpaceTypes as well as a SINGLE Space or ALL the Spaces."
   end
   
+  def change_name(object, perc_change)
+    if perc_change != 0
+      object.setName("#{object.name.get} + #{perc_change.round(2)} % change")
+    end
+  end
+  
   # define the arguments that the user will input
   def arguments(model)
     args = OpenStudio::Ruleset::OSArgumentVector.new
@@ -188,6 +194,7 @@ class GeneralCalibrationMeasure < OpenStudio::Ruleset::ModelUserScript
         if people_def.peopleperSpaceFloorArea.is_initialized
           runner.registerInfo("Applying #{occ_perc_change} % Change to #{people_def.name.get} PeopleperSpaceFloorArea.")
           people_def.setPeopleperSpaceFloorArea(people_def.peopleperSpaceFloorArea.get + people_def.peopleperSpaceFloorArea.get * occ_perc_change * 0.01)
+          change_name(people_def, occ_perc_change)
         end
         # update hash
         altered_people_definitions[people_def] = people_def.peopleperSpaceFloorArea
@@ -199,10 +206,12 @@ class GeneralCalibrationMeasure < OpenStudio::Ruleset::ModelUserScript
         if infiltration.flowperExteriorSurfaceArea.is_initialized
           runner.registerInfo("Applying #{infil_perc_change} % Change to #{infiltration.name.get} FlowperExteriorSurfaceArea.")
           infiltration.setFlowperExteriorSurfaceArea(infiltration.flowperExteriorSurfaceArea.get + infiltration.flowperExteriorSurfaceArea.get * infil_perc_change * 0.01)
+          change_name(infiltration, infil_perc_change)
         end
         if infiltration.airChangesperHour.is_initialized
           runner.registerInfo("Applying #{infil_perc_change} % Change to #{infiltration.name.get} AirChangesperHour.")
           infiltration.setAirChangesperHour(infiltration.airChangesperHour.get + infiltration.airChangesperHour.get * infil_perc_change * 0.01)
+          change_name(infiltration, infil_perc_change)
         end
         # add to hash
         altered_infiltration_objects[infiltration] = [infiltration.flowperExteriorSurfaceArea,infiltration.airChangesperHour]
@@ -219,6 +228,7 @@ class GeneralCalibrationMeasure < OpenStudio::Ruleset::ModelUserScript
         outdoor_air.setOutdoorAirFlowperFloorArea(outdoor_air.outdoorAirFlowperFloorArea + outdoor_air.outdoorAirFlowperFloorArea * vent_perc_change * 0.01)
         runner.registerInfo("Applying #{vent_perc_change} % Change to #{outdoor_air.name.get} OutdoorAirFlowAirChangesperHour.")
         outdoor_air.setOutdoorAirFlowAirChangesperHour(outdoor_air.outdoorAirFlowAirChangesperHour + outdoor_air.outdoorAirFlowAirChangesperHour * vent_perc_change * 0.01)
+        change_name(outdoor_air, vent_perc_change)
         # add to hash
         altered_outdoor_air_objects[outdoor_air] = [outdoor_air.outdoorAirFlowperPerson,outdoor_air.outdoorAirFlowperFloorArea,outdoor_air.outdoorAirFlowAirChangesperHour]
       end
@@ -238,6 +248,7 @@ class GeneralCalibrationMeasure < OpenStudio::Ruleset::ModelUserScript
         if people_def.peopleperSpaceFloorArea.is_initialized
           runner.registerInfo("Applying #{occ_perc_change} % Change to #{people_def.name.get} PeopleperSpaceFloorArea.")
           people_def.setPeopleperSpaceFloorArea(people_def.peopleperSpaceFloorArea.get + people_def.peopleperSpaceFloorArea.get * occ_perc_change * 0.01)
+          change_name(people_def, occ_perc_change)
         end
         # update hash
         altered_people_definitions[people_def] = people_def.peopleperSpaceFloorArea
@@ -249,10 +260,12 @@ class GeneralCalibrationMeasure < OpenStudio::Ruleset::ModelUserScript
         if infiltration.flowperExteriorSurfaceArea.is_initialized
           runner.registerInfo("Applying #{infil_perc_change} % Change to #{infiltration.name.get} FlowperExteriorSurfaceArea.")
           infiltration.setFlowperExteriorSurfaceArea(infiltration.flowperExteriorSurfaceArea.get + infiltration.flowperExteriorSurfaceArea.get * infil_perc_change * 0.01)
+          change_name(infiltration, infil_perc_change)
         end
         if infiltration.airChangesperHour.is_initialized
           runner.registerInfo("Applying #{infil_perc_change} % Change to #{infiltration.name.get} AirChangesperHour.")
           infiltration.setAirChangesperHour(infiltration.airChangesperHour.get + infiltration.airChangesperHour.get * infil_perc_change * 0.01)
+          change_name(infiltration, infil_perc_change)
         end
         # add to hash
         altered_infiltration_objects[infiltration] = [infiltration.flowperExteriorSurfaceArea,infiltration.airChangesperHour]
@@ -269,6 +282,7 @@ class GeneralCalibrationMeasure < OpenStudio::Ruleset::ModelUserScript
         outdoor_air.setOutdoorAirFlowperFloorArea(outdoor_air.outdoorAirFlowperFloorArea + outdoor_air.outdoorAirFlowperFloorArea * vent_perc_change * 0.01)
         runner.registerInfo("Applying #{vent_perc_change} % Change to #{outdoor_air.name.get} OutdoorAirFlowAirChangesperHour.")
         outdoor_air.setOutdoorAirFlowAirChangesperHour(outdoor_air.outdoorAirFlowAirChangesperHour + outdoor_air.outdoorAirFlowAirChangesperHour * vent_perc_change * 0.01)
+        change_name(outdoor_air, vent_perc_change)
         # add to hash
         altered_outdoor_air_objects[outdoor_air] = [outdoor_air.outdoorAirFlowperPerson,outdoor_air.outdoorAirFlowperFloorArea,outdoor_air.outdoorAirFlowAirChangesperHour]
       end
