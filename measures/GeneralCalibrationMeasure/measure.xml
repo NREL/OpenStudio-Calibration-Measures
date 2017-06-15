@@ -1,15 +1,33 @@
 <measure>
   <schema_version>3.0</schema_version>
-  <name>general_space_type_calibration_measure</name>
-  <uid>af156383-cfe2-4798-b581-08a4cccb7894</uid>
-  <version_id>1820032f-c8b0-4172-bd7a-7affc34ff196</version_id>
-  <version_modified>20170613T162506Z</version_modified>
+  <name>GeneralCalibrationMeasure</name>
+  <uid>af156383-cfe2-4798-b581-08a4cccb8884</uid>
+  <version_id>196f407f-99a7-45a8-af54-62ca007e88e1</version_id>
+  <version_modified>20170614T203459Z</version_modified>
   <xml_checksum>DEC0D835</xml_checksum>
-  <class_name>GeneralSpaceTypeCalibrationMeasure</class_name>
-  <display_name> General Space Type Calibration Measure</display_name>
-  <description>This is a general purpose measure to calibrate space type elements.</description>
-  <modeler_description>It will have a single loop through space types. Initially it will be used for calibration of people, infiltration, and outdoor air. It doesn't have to hit the space type json file since it is just adjusting by a multiplier.</modeler_description>
+  <class_name>GeneralCalibrationMeasure</class_name>
+  <display_name>General Calibration Measure</display_name>
+  <description>This is a general purpose measure to calibrate space and space type elements.</description>
+  <modeler_description>It will be used for calibration of people, infiltration, and outdoor air.</modeler_description>
   <arguments>
+    <argument>
+      <name>space_type</name>
+      <display_name>Apply the Measure to a Specific Space Type or to the Entire Model.</display_name>
+      <type>Choice</type>
+      <required>true</required>
+      <model_dependent>false</model_dependent>
+      <default_value>*Entire Building*</default_value>
+      <choices>
+        <choice>
+          <value>{a202c075-44b2-4525-b7e9-826a78d1ec0a}</value>
+          <display_name>*Entire Building*</display_name>
+        </choice>
+        <choice>
+          <value>0</value>
+          <display_name>*None*</display_name>
+        </choice>
+      </choices>
+    </argument>
     <argument>
       <name>multiplier_occ</name>
       <display_name>Occupancy Multiplier</display_name>
@@ -115,13 +133,13 @@
     <file>
       <version>
         <software_program>OpenStudio</software_program>
-        <identifier>1.4.3</identifier>
-        <min_compatible>1.4.3</min_compatible>
+        <identifier>2.1.0</identifier>
+        <min_compatible>2.1.0</min_compatible>
       </version>
       <filename>measure.rb</filename>
       <filetype>rb</filetype>
       <usage_type>script</usage_type>
-      <checksum>01ACFE04</checksum>
+      <checksum>59FC9C35</checksum>
     </file>
   </files>
 </measure>
