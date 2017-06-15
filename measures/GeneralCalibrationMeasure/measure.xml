@@ -1,26 +1,44 @@
 <measure>
   <schema_version>3.0</schema_version>
-  <name>GeneralCalibrationMeasure</name>
+  <name>general_calibration_measure</name>
   <uid>af156383-cfe2-4798-b581-08a4cccb8884</uid>
-  <version_id>196f407f-99a7-45a8-af54-62ca007e88e1</version_id>
-  <version_modified>20170614T203459Z</version_modified>
+  <version_id>bd910e97-0608-4680-8e39-e88b1be27263</version_id>
+  <version_modified>20170615T151736Z</version_modified>
   <xml_checksum>DEC0D835</xml_checksum>
   <class_name>GeneralCalibrationMeasure</class_name>
   <display_name>General Calibration Measure</display_name>
   <description>This is a general purpose measure to calibrate space and space type elements.</description>
-  <modeler_description>It will be used for calibration of people, infiltration, and outdoor air.</modeler_description>
+  <modeler_description>It will be used for calibration of people, infiltration, and outdoor air. User can choose between a SINGLE SpaceType or ALL the SpaceTypes as well as a SINGLE Space or ALL the Spaces.</modeler_description>
   <arguments>
     <argument>
       <name>space_type</name>
-      <display_name>Apply the Measure to a Specific Space Type or to the Entire Model.</display_name>
+      <display_name>Apply the Measure to a SINGLE SpaceType, ALL the SpaceTypes or NONE.</display_name>
       <type>Choice</type>
       <required>true</required>
       <model_dependent>false</model_dependent>
-      <default_value>*Entire Building*</default_value>
+      <default_value>*All SpaceTypes*</default_value>
       <choices>
         <choice>
-          <value>{a202c075-44b2-4525-b7e9-826a78d1ec0a}</value>
-          <display_name>*Entire Building*</display_name>
+          <value>{dba01093-d2ad-4382-b23a-4e48c175ea5f}</value>
+          <display_name>*All SpaceTypes*</display_name>
+        </choice>
+        <choice>
+          <value>0</value>
+          <display_name>*None*</display_name>
+        </choice>
+      </choices>
+    </argument>
+    <argument>
+      <name>spaces</name>
+      <display_name>Apply the Measure to a SINGLE Space, ALL the Spaces or NONE.</display_name>
+      <type>Choice</type>
+      <required>true</required>
+      <model_dependent>false</model_dependent>
+      <default_value>*All Spaces*</default_value>
+      <choices>
+        <choice>
+          <value>{dba01093-d2ad-4382-b23a-4e48c175ea5f}</value>
+          <display_name>*All Spaces*</display_name>
         </choice>
         <choice>
           <value>0</value>
@@ -125,12 +143,6 @@
   </attributes>
   <files>
     <file>
-      <filename>os_lib_helper_methods.rb</filename>
-      <filetype>rb</filetype>
-      <usage_type>resource</usage_type>
-      <checksum>02263B97</checksum>
-    </file>
-    <file>
       <version>
         <software_program>OpenStudio</software_program>
         <identifier>2.1.0</identifier>
@@ -139,7 +151,7 @@
       <filename>measure.rb</filename>
       <filetype>rb</filetype>
       <usage_type>script</usage_type>
-      <checksum>59FC9C35</checksum>
+      <checksum>381194A8</checksum>
     </file>
   </files>
 </measure>

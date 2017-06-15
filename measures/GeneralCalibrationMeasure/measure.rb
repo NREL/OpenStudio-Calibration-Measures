@@ -13,7 +13,7 @@ class GeneralCalibrationMeasure < OpenStudio::Ruleset::ModelUserScript
 
   # human readable description of modeling approach
   def modeler_description
-    return "It will be used for calibration of people, infiltration, and outdoor air."
+    return "It will be used for calibration of people, infiltration, and outdoor air. User can choose between a SINGLE SpaceType or ALL the SpaceTypes as well as a SINGLE Space or ALL the Spaces."
   end
   
   # define the arguments that the user will input
@@ -43,15 +43,45 @@ class GeneralCalibrationMeasure < OpenStudio::Ruleset::ModelUserScript
     #add building to string vector with space type
     building = model.getBuilding
     space_type_handles << building.handle.to_s
-    space_type_display_names << "*Entire Building*"
+    space_type_display_names << "*All SpaceTypes*"
     space_type_handles << "0"
     space_type_display_names << "*None*"
 
     #make a choice argument for space type
     space_type = OpenStudio::Ruleset::OSArgument::makeChoiceArgument("space_type", space_type_handles, space_type_display_names)
-    space_type.setDisplayName("Apply the Measure to a Specific Space Type or to the Entire Model.")
-    space_type.setDefaultValue("*Entire Building*") #if no space type is chosen this will run on the entire building
+    space_type.setDisplayName("Apply the Measure to a SINGLE SpaceType, ALL the SpaceTypes or NONE.")
+    space_type.setDefaultValue("*All SpaceTypes*") #if no space type is chosen this will run on the entire building
     args << space_type
+  
+    #make a choice argument for model objects
+    space_handles = OpenStudio::StringVector.new
+    space_display_names = OpenStudio::StringVector.new
+
+    #putting model object and names into hash
+    space_args = model.getSpaces
+    space_args_hash = {}
+    space_args.each do |space_arg|
+      space_args_hash[space_arg.name.to_s] = space_arg
+    end
+
+    #looping through sorted hash of model objects
+    space_args_hash.sort.map do |key,value|
+      space_handles << value.handle.to_s
+      space_display_names << key
+    end
+
+    #add building to string vector with spaces
+    building = model.getBuilding
+    space_handles << building.handle.to_s
+    space_display_names << "*All Spaces*"
+    space_handles << "0"
+    space_display_names << "*None*"
+
+    #make a choice argument for space type
+    space = OpenStudio::Ruleset::OSArgument::makeChoiceArgument("spaces", space_handles, space_display_names)
+    space.setDisplayName("Apply the Measure to a SINGLE Space, ALL the Spaces or NONE.")
+    space.setDefaultValue("*All Spaces*") #if no space type is chosen this will run on the entire building
+    args << space
     
     # occupancy multiplier
     multiplier_occ = OpenStudio::Ruleset::OSArgument.makeDoubleArgument("multiplier_occ", true)
