@@ -1,13 +1,13 @@
 <measure>
   <schema_version>3.0</schema_version>
-  <name>general_calibration_measure</name>
-  <uid>af156383-cfe2-4798-b581-08a4cccb8884</uid>
-  <version_id>19231aee-f6ec-4b76-b862-dcda6e06c601</version_id>
-  <version_modified>20170615T230238Z</version_modified>
+  <name>general_calibration_measure_percent_change</name>
+  <uid>0f583ac1-fa7e-48bc-9f80-12ed17180669</uid>
+  <version_id>fdb30345-9896-49f4-bc67-6a8edace5a26</version_id>
+  <version_modified>20170615T235832Z</version_modified>
   <xml_checksum>DEC0D835</xml_checksum>
-  <class_name>GeneralCalibrationMeasure</class_name>
-  <display_name>General Calibration Measure</display_name>
-  <description>This is a general purpose measure to calibrate space and space type elements.</description>
+  <class_name>GeneralCalibrationMeasurePercentChange</class_name>
+  <display_name>General Calibration Measure Percent Change</display_name>
+  <description>This is a general purpose measure to calibrate space and space type elements with a percent change.</description>
   <modeler_description>It will be used for calibration of people, infiltration, and outdoor air. User can choose between a SINGLE SpaceType or ALL the SpaceTypes as well as a SINGLE Space or ALL the Spaces.</modeler_description>
   <arguments>
     <argument>
@@ -19,7 +19,7 @@
       <default_value>*All SpaceTypes*</default_value>
       <choices>
         <choice>
-          <value>{9e0f89b4-d729-4046-b93e-4665bfe2e848}</value>
+          <value>{01c5505b-5bcc-416f-95d6-b5ece8d7759c}</value>
           <display_name>*All SpaceTypes*</display_name>
         </choice>
         <choice>
@@ -37,7 +37,7 @@
       <default_value>*All Spaces*</default_value>
       <choices>
         <choice>
-          <value>{9e0f89b4-d729-4046-b93e-4665bfe2e848}</value>
+          <value>{01c5505b-5bcc-416f-95d6-b5ece8d7759c}</value>
           <display_name>*All Spaces*</display_name>
         </choice>
         <choice>
@@ -160,7 +160,7 @@
       <filename>measure.rb</filename>
       <filetype>rb</filetype>
       <usage_type>script</usage_type>
-      <checksum>8150CB81</checksum>
+      <checksum>FFFDDC72</checksum>
     </file>
   </files>
 </measure>

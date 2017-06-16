@@ -91,25 +91,32 @@ class GeneralCalibrationMeasure < OpenStudio::Ruleset::ModelUserScript
     
     # occupancy % change
     occ_perc_change = OpenStudio::Ruleset::OSArgument.makeDoubleArgument("occ_perc_change", true)
-    occ_perc_change.setDisplayName("Occupancy Multiplier")
-    occ_perc_change.setDescription("Percent Change in the default number of people by this value.")
+    occ_perc_change.setDisplayName("Percent Change in the default number of people.")
+    occ_perc_change.setDescription("Percent Change in the default number of people.")
     occ_perc_change.setDefaultValue(0.0)
     args << occ_perc_change
 
     # infiltration % change
     infil_perc_change = OpenStudio::Ruleset::OSArgument.makeDoubleArgument("infil_perc_change", true)
-    infil_perc_change.setDisplayName("Infiltration Multiplier")
-    infil_perc_change.setDescription("Percent Change in the default infiltration value by this.")
+    infil_perc_change.setDisplayName("Percent Change in the default infiltration.")
+    infil_perc_change.setDescription("Percent Change in the default infiltration.")
     infil_perc_change.setDefaultValue(0.0)
     args << infil_perc_change
 
     # ventilation % change
     vent_perc_change = OpenStudio::Ruleset::OSArgument.makeDoubleArgument("vent_perc_change", true)
-    vent_perc_change.setDisplayName("Ventilation Multiplier")
-    vent_perc_change.setDescription("Percent Change in the default Ventilation value by this.")
+    vent_perc_change.setDisplayName("Percent Change in the default Ventilation.")
+    vent_perc_change.setDescription("Percent Change in the default Ventilation.")
     vent_perc_change.setDefaultValue(0.0)
     args << vent_perc_change
 
+    # internalMass % change
+    mass_perc_change = OpenStudio::Ruleset::OSArgument.makeDoubleArgument("mass_perc_change", true)
+    mass_perc_change.setDisplayName("Percent Change in the default Internal Mass.")
+    mass_perc_change.setDescription("Percent Change in the default Internal Mass.")
+    mass_perc_change.setDefaultValue(0.0)
+    args << mass_perc_change
+    
     return args
   end
 
@@ -125,7 +132,8 @@ class GeneralCalibrationMeasure < OpenStudio::Ruleset::ModelUserScript
     occ_perc_change = runner.getDoubleArgumentValue("occ_perc_change",user_arguments)
     infil_perc_change = runner.getDoubleArgumentValue("infil_perc_change",user_arguments)
     vent_perc_change = runner.getDoubleArgumentValue("vent_perc_change",user_arguments)
-        
+    mass_perc_change = runner.getDoubleArgumentValue("mass_perc_change",user_arguments)
+    
     #find objects to change
     space_types = []
     spaces = []
@@ -175,9 +183,10 @@ class GeneralCalibrationMeasure < OpenStudio::Ruleset::ModelUserScript
       return false
     end
     
-    altered_people_definitions = {} # key is def, value is new value
-    altered_infiltration_objects = {}# key is def, value is new value
-    altered_outdoor_air_objects = {}# key is def, value is new value
+    altered_people_definitions = []
+    altered_infiltration_objects = []
+    altered_outdoor_air_objects = []
+    altered_internalmass_objects = []
     
     # report initial condition of model
     runner.registerInitialCondition("Applying Variable % Changes to #{space_types.size} space types and #{spaces.size} spaces.")
@@ -190,19 +199,27 @@ class GeneralCalibrationMeasure < OpenStudio::Ruleset::ModelUserScript
       space_type.people.each do |people_inst|
         # get and alter definition
         people_def = people_inst.peopleDefinition
-        next if altered_people_definitions[people_def]
+        runner.registerInfo("people_def: #{people_def.to_s}")
+        if altered_people_definitions.include? people_def.handle.to_s
+          runner.registerInfo("people_def: #{people_def.to_s} NEXT")
+          next
+        end
         if people_def.peopleperSpaceFloorArea.is_initialized
           runner.registerInfo("Applying #{occ_perc_change} % Change to #{people_def.name.get} PeopleperSpaceFloorArea.")
           people_def.setPeopleperSpaceFloorArea(people_def.peopleperSpaceFloorArea.get + people_def.peopleperSpaceFloorArea.get * occ_perc_change * 0.01)
           change_name(people_def, occ_perc_change)
         end
         # update hash
-        altered_people_definitions[people_def] = people_def.peopleperSpaceFloorArea
+        altered_people_definitions << people_def.handle.to_s
       end
 
       # modify infiltration
       space_type.spaceInfiltrationDesignFlowRates.each do |infiltration|
-        next if altered_infiltration_objects[infiltration]
+      runner.registerInfo("infiltration: #{infiltration.to_s}")
+        if altered_infiltration_objects.include? infiltration.handle.to_s
+          runner.registerInfo("infiltration: #{infiltration.to_s} NEXT")
+          next
+        end
         if infiltration.flowperExteriorSurfaceArea.is_initialized
           runner.registerInfo("Applying #{infil_perc_change} % Change to #{infiltration.name.get} FlowperExteriorSurfaceArea.")
           infiltration.setFlowperExteriorSurfaceArea(infiltration.flowperExteriorSurfaceArea.get + infiltration.flowperExteriorSurfaceArea.get * infil_perc_change * 0.01)
@@ -214,14 +231,18 @@ class GeneralCalibrationMeasure < OpenStudio::Ruleset::ModelUserScript
           change_name(infiltration, infil_perc_change)
         end
         # add to hash
-        altered_infiltration_objects[infiltration] = [infiltration.flowperExteriorSurfaceArea,infiltration.airChangesperHour]
+        altered_infiltration_objects << infiltration.handle.to_s
       end
 
       # modify outdoor air
       if space_type.designSpecificationOutdoorAir.is_initialized
         outdoor_air = space_type.designSpecificationOutdoorAir.get
+        runner.registerInfo("outdoor_air: #{outdoor_air.to_s}")
         # alter values if not already done
-        next if altered_outdoor_air_objects[outdoor_air]
+        if altered_outdoor_air_objects.include? outdoor_air.handle.to_s
+          runner.registerInfo("outdoor_air: #{outdoor_air.to_s} NEXT")
+          next
+        end
         runner.registerInfo("Applying #{vent_perc_change} % Change to #{outdoor_air.name.get} OutdoorAirFlowperPerson.")
         outdoor_air.setOutdoorAirFlowperPerson(outdoor_air.outdoorAirFlowperPerson + outdoor_air.outdoorAirFlowperPerson * vent_perc_change * 0.01)
         runner.registerInfo("Applying #{vent_perc_change} % Change to #{outdoor_air.name.get} OutdoorAirFlowperFloorArea.")
@@ -230,33 +251,73 @@ class GeneralCalibrationMeasure < OpenStudio::Ruleset::ModelUserScript
         outdoor_air.setOutdoorAirFlowAirChangesperHour(outdoor_air.outdoorAirFlowAirChangesperHour + outdoor_air.outdoorAirFlowAirChangesperHour * vent_perc_change * 0.01)
         change_name(outdoor_air, vent_perc_change)
         # add to hash
-        altered_outdoor_air_objects[outdoor_air] = [outdoor_air.outdoorAirFlowperPerson,outdoor_air.outdoorAirFlowperFloorArea,outdoor_air.outdoorAirFlowAirChangesperHour]
+        altered_outdoor_air_objects << outdoor_air.handle.to_s
+      end
+      
+      # modify internal mass
+      space_type.internalMass.each do |internalmass|
+        # get and alter definition
+        internalmass_def = internalmass.internalMassDefinition
+        runner.registerInfo("internalmass_def: #{internalmass_def.to_s}")
+        if altered_internalmass_objects.include? internalmass_def.handle.to_s
+          runner.registerInfo("internalmass_def: #{internalmass_def.to_s} NEXT")
+          next
+        end
+        if internalmass_def.surfaceAreaperSpaceFloorArea.is_initialized
+          runner.registerInfo("Applying #{mass_perc_change} % Change to #{internalmass_def.name.get} surfaceAreaperSpaceFloorArea.")
+          internalmass_def.setSurfaceAreaperSpaceFloorArea(internalmass_def.surfaceAreaperSpaceFloorArea.get + internalmass_def.surfaceAreaperSpaceFloorArea.get * mass_perc_change * 0.01)
+          change_name(internalmass_def, mass_perc_change)
+        end
+        if internalmass_def.surfaceArea.is_initialized
+          runner.registerInfo("Applying #{mass_perc_change} % Change to #{internalmass_def.name.get} surfaceArea.")
+          internalmass_def.setSurfaceArea(internalmass_def.surfaceArea.get + internalmass_def.surfaceArea.get * mass_perc_change * 0.01)
+          change_name(internalmass_def, mass_perc_change)
+        end
+        if internalmass_def.surfaceAreaperPerson.is_initialized
+          runner.registerInfo("Applying #{mass_perc_change} % Change to #{internalmass_def.name.get} surfaceAreaperPerson.")
+          internalmass_def.setSurfaceAreaperPerson(internalmass_def.surfaceAreaperPerson.get + internalmass_def.surfaceAreaperPerson.get * mass_perc_change * 0.01)
+          change_name(internalmass_def, mass_perc_change)
+        end
+        # update hash
+        altered_internalmass_objects << internalmass_def.handle.to_s
       end
     end #end space_type loop
+        
+    runner.registerInfo("altered_people_definitions: #{altered_people_definitions}")
+    runner.registerInfo("altered_infiltration_objects: #{altered_infiltration_objects}")
+    runner.registerInfo("altered_outdoor_air_objects: #{altered_outdoor_air_objects}")
+    runner.registerInfo("altered_internalmass_objects: #{altered_internalmass_objects}")    
     
     # report initial condition of model
     runner.registerInfo("Applying Variable % Changes to #{spaces.size} spaces.")
 
     # loop through space types
     spaces.each do |space|
-
       # modify occupancy
       space.people.each do |people_inst|
         # get and alter definition
         people_def = people_inst.peopleDefinition
-        next if altered_people_definitions[people_def]
+        runner.registerInfo("people_def: #{people_def.to_s}")
+        if altered_people_definitions.include? people_def.handle.to_s
+          runner.registerInfo("people_def: #{people_def.to_s} NEXT")
+          next
+        end
         if people_def.peopleperSpaceFloorArea.is_initialized
           runner.registerInfo("Applying #{occ_perc_change} % Change to #{people_def.name.get} PeopleperSpaceFloorArea.")
           people_def.setPeopleperSpaceFloorArea(people_def.peopleperSpaceFloorArea.get + people_def.peopleperSpaceFloorArea.get * occ_perc_change * 0.01)
           change_name(people_def, occ_perc_change)
         end
         # update hash
-        altered_people_definitions[people_def] = people_def.peopleperSpaceFloorArea
+        altered_people_definitions << people_def.handle.to_s
       end
 
       # modify infiltration
       space.spaceInfiltrationDesignFlowRates.each do |infiltration|
-        next if altered_infiltration_objects[infiltration]
+      runner.registerInfo("infiltration: #{infiltration.to_s}")
+        if altered_infiltration_objects.include? infiltration.handle.to_s
+          runner.registerInfo("infiltration: #{infiltration.to_s} NEXT")
+          next
+        end
         if infiltration.flowperExteriorSurfaceArea.is_initialized
           runner.registerInfo("Applying #{infil_perc_change} % Change to #{infiltration.name.get} FlowperExteriorSurfaceArea.")
           infiltration.setFlowperExteriorSurfaceArea(infiltration.flowperExteriorSurfaceArea.get + infiltration.flowperExteriorSurfaceArea.get * infil_perc_change * 0.01)
@@ -268,14 +329,18 @@ class GeneralCalibrationMeasure < OpenStudio::Ruleset::ModelUserScript
           change_name(infiltration, infil_perc_change)
         end
         # add to hash
-        altered_infiltration_objects[infiltration] = [infiltration.flowperExteriorSurfaceArea,infiltration.airChangesperHour]
+        altered_infiltration_objects << infiltration.handle.to_s
       end
 
       # modify outdoor air
       if space.designSpecificationOutdoorAir.is_initialized
         outdoor_air = space.designSpecificationOutdoorAir.get
+        runner.registerInfo("outdoor_air: #{outdoor_air.to_s}")
         # alter values if not already done
-        next if altered_outdoor_air_objects[outdoor_air]
+        if altered_outdoor_air_objects.include? outdoor_air.handle.to_s
+          runner.registerInfo("outdoor_air: #{outdoor_air.to_s} NEXT")
+          next
+        end
         runner.registerInfo("Applying #{vent_perc_change} % Change to #{outdoor_air.name.get} OutdoorAirFlowperPerson.")
         outdoor_air.setOutdoorAirFlowperPerson(outdoor_air.outdoorAirFlowperPerson + outdoor_air.outdoorAirFlowperPerson * vent_perc_change * 0.01)
         runner.registerInfo("Applying #{vent_perc_change} % Change to #{outdoor_air.name.get} OutdoorAirFlowperFloorArea.")
@@ -284,18 +349,52 @@ class GeneralCalibrationMeasure < OpenStudio::Ruleset::ModelUserScript
         outdoor_air.setOutdoorAirFlowAirChangesperHour(outdoor_air.outdoorAirFlowAirChangesperHour + outdoor_air.outdoorAirFlowAirChangesperHour * vent_perc_change * 0.01)
         change_name(outdoor_air, vent_perc_change)
         # add to hash
-        altered_outdoor_air_objects[outdoor_air] = [outdoor_air.outdoorAirFlowperPerson,outdoor_air.outdoorAirFlowperFloorArea,outdoor_air.outdoorAirFlowAirChangesperHour]
+        altered_outdoor_air_objects << outdoor_air.handle.to_s
+      end
+      
+      # modify internal mass
+      space.internalMass.each do |internalmass|
+        # get and alter definition
+        internalmass_def = internalmass.internalMassDefinition
+        runner.registerInfo("internalmass_def: #{internalmass_def.to_s}")
+        if altered_internalmass_objects.include? internalmass_def.handle.to_s
+          runner.registerInfo("internalmass_def: #{internalmass_def.to_s} NEXT")
+          next
+        end
+        if internalmass_def.surfaceAreaperSpaceFloorArea.is_initialized
+          runner.registerInfo("Applying #{mass_perc_change} % Change to #{internalmass_def.name.get} surfaceAreaperSpaceFloorArea.")
+          internalmass_def.setSurfaceAreaperSpaceFloorArea(internalmass_def.surfaceAreaperSpaceFloorArea.get + internalmass_def.surfaceAreaperSpaceFloorArea.get * mass_perc_change * 0.01)
+          change_name(internalmass_def, mass_perc_change)
+        end
+        if internalmass_def.surfaceArea.is_initialized
+          runner.registerInfo("Applying #{mass_perc_change} % Change to #{internalmass_def.name.get} surfaceArea.")
+          internalmass_def.setSurfaceArea(internalmass_def.surfaceArea.get + internalmass_def.surfaceArea.get * mass_perc_change * 0.01)
+          change_name(internalmass_def, mass_perc_change)
+        end
+        if internalmass_def.surfaceAreaperPerson.is_initialized
+          runner.registerInfo("Applying #{mass_perc_change} % Change to #{internalmass_def.name.get} surfaceAreaperPerson.")
+          internalmass_def.setSurfaceAreaperPerson(internalmass_def.surfaceAreaperPerson.get + internalmass_def.surfaceAreaperPerson.get * mass_perc_change * 0.01)
+          change_name(internalmass_def, mass_perc_change)
+        end
+        # update hash
+        altered_internalmass_objects << internalmass_def.handle.to_s
       end
     end #end spaces loop
     
+    runner.registerInfo("altered_people_definitions: #{altered_people_definitions}")
+    runner.registerInfo("altered_infiltration_objects: #{altered_infiltration_objects}")
+    runner.registerInfo("altered_outdoor_air_objects: #{altered_outdoor_air_objects}")
+    runner.registerInfo("altered_internalmass_objects: #{altered_internalmass_objects}")    
+    
+    
     # na if nothing in model to look at
-    if altered_people_definitions.size + altered_people_definitions.size + altered_people_definitions.size == 0
+    if altered_people_definitions.size + altered_people_definitions.size + altered_people_definitions.size + altered_internalmass_objects.size == 0
       runner.registerAsNotApplicable("No objects to alter were found in the model")
       return true
     end
 
     # report final condition of model
-    runner.registerFinalCondition("#{altered_people_definitions.size} people objects were altered. #{altered_infiltration_objects.size} infiltration objects were altered. #{altered_outdoor_air_objects.size} ventilation objects were altered.")
+    runner.registerFinalCondition("#{altered_people_definitions.size} people objects were altered. #{altered_infiltration_objects.size} infiltration objects were altered. #{altered_outdoor_air_objects.size} ventilation objects were altered. #{altered_internalmass_objects.size} internal mass objects were altered.")
 
     return true
 
