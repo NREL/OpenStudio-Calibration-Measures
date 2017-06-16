@@ -1,13 +1,13 @@
 <measure>
   <schema_version>3.0</schema_version>
-  <name>general_calibration_measure</name>
+  <name>general_calibration_measure_multiplier</name>
   <uid>af156383-cfe2-4798-b581-08a4cccb8884</uid>
-  <version_id>19231aee-f6ec-4b76-b862-dcda6e06c601</version_id>
-  <version_modified>20170615T230238Z</version_modified>
+  <version_id>1d15e7b9-1edd-4003-b437-3acd1cf62948</version_id>
+  <version_modified>20170616T000744Z</version_modified>
   <xml_checksum>DEC0D835</xml_checksum>
-  <class_name>GeneralCalibrationMeasure</class_name>
-  <display_name>General Calibration Measure</display_name>
-  <description>This is a general purpose measure to calibrate space and space type elements.</description>
+  <class_name>GeneralCalibrationMeasureMultiplier</class_name>
+  <display_name>General Calibration Measure Multiplier</display_name>
+  <description>This is a general purpose measure to calibrate space and space type elements with a Multiplier.</description>
   <modeler_description>It will be used for calibration of people, infiltration, and outdoor air. User can choose between a SINGLE SpaceType or ALL the SpaceTypes as well as a SINGLE Space or ALL the Spaces.</modeler_description>
   <arguments>
     <argument>
@@ -19,7 +19,7 @@
       <default_value>*All SpaceTypes*</default_value>
       <choices>
         <choice>
-          <value>{9e0f89b4-d729-4046-b93e-4665bfe2e848}</value>
+          <value>{a36fb840-00eb-4e81-b87d-f6bce2807e97}</value>
           <display_name>*All SpaceTypes*</display_name>
         </choice>
         <choice>
@@ -37,7 +37,7 @@
       <default_value>*All Spaces*</default_value>
       <choices>
         <choice>
-          <value>{9e0f89b4-d729-4046-b93e-4665bfe2e848}</value>
+          <value>{a36fb840-00eb-4e81-b87d-f6bce2807e97}</value>
           <display_name>*All Spaces*</display_name>
         </choice>
         <choice>
@@ -160,7 +160,7 @@
       <filename>measure.rb</filename>
       <filetype>rb</filetype>
       <usage_type>script</usage_type>
-      <checksum>8150CB81</checksum>
+      <checksum>7EAB5149</checksum>
     </file>
   </files>
 </measure>
