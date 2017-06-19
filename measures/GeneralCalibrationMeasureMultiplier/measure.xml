@@ -2,8 +2,8 @@
   <schema_version>3.0</schema_version>
   <name>general_calibration_measure_multiplier</name>
   <uid>af156383-cfe2-4798-b581-08a4cccb8884</uid>
-  <version_id>bbcb69d4-c28e-4bb2-b53e-8f296d418039</version_id>
-  <version_modified>20170619T195919Z</version_modified>
+  <version_id>0a7e791d-e1c3-49f3-8a87-567663e1b9ea</version_id>
+  <version_modified>20170619T203102Z</version_modified>
   <xml_checksum>DEC0D835</xml_checksum>
   <class_name>GeneralCalibrationMeasureMultiplier</class_name>
   <display_name>General Calibration Measure Multiplier</display_name>
@@ -19,7 +19,7 @@
       <default_value>*All SpaceTypes*</default_value>
       <choices>
         <choice>
-          <value>{b6fedb76-2f06-40e2-83e3-b3f1bb033e7d}</value>
+          <value>{6a42a14c-8f7c-4021-b34c-de236b979f84}</value>
           <display_name>*All SpaceTypes*</display_name>
         </choice>
         <choice>
@@ -37,7 +37,7 @@
       <default_value>*All Spaces*</default_value>
       <choices>
         <choice>
-          <value>{b6fedb76-2f06-40e2-83e3-b3f1bb033e7d}</value>
+          <value>{6a42a14c-8f7c-4021-b34c-de236b979f84}</value>
           <display_name>*All Spaces*</display_name>
         </choice>
         <choice>
@@ -77,24 +77,6 @@
       <name>GasEquipment_multiplier</name>
       <display_name>Multiplier for Gas Equipment.</display_name>
       <description>Multiplier for Gas Equipment.</description>
-      <type>Double</type>
-      <required>true</required>
-      <model_dependent>false</model_dependent>
-      <default_value>1</default_value>
-    </argument>
-    <argument>
-      <name>SteamEquipment_multiplier</name>
-      <display_name>Multiplier for Steam Equipment.</display_name>
-      <description>Multiplier for Steam Equipment.</description>
-      <type>Double</type>
-      <required>true</required>
-      <model_dependent>false</model_dependent>
-      <default_value>1</default_value>
-    </argument>
-    <argument>
-      <name>WaterUseEquipment_multiplier</name>
-      <display_name>Multiplier for WaterUseEquipmentDefinition.</display_name>
-      <description>Multiplier for WaterUseEquipmentDefinition.</description>
       <type>Double</type>
       <required>true</required>
       <model_dependent>false</model_dependent>
@@ -223,7 +205,7 @@
       <filename>measure.rb</filename>
       <filetype>rb</filetype>
       <usage_type>script</usage_type>
-      <checksum>0F7B30F8</checksum>
+      <checksum>F39975B9</checksum>
     </file>
   </files>
 </measure>

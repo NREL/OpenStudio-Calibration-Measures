@@ -117,20 +117,6 @@ class GeneralCalibrationMeasureMultiplier < OpenStudio::Ruleset::ModelUserScript
     gas_equip_multiplier.setDefaultValue(1.0)
     args << gas_equip_multiplier
     
-   # Steam Equipment multiplier
-    steam_equip_multiplier = OpenStudio::Ruleset::OSArgument.makeDoubleArgument("SteamEquipment_multiplier", true)
-    steam_equip_multiplier.setDisplayName("Multiplier for Steam Equipment.")
-    steam_equip_multiplier.setDescription("Multiplier for Steam Equipment.")
-    steam_equip_multiplier.setDefaultValue(1.0)
-    args << steam_equip_multiplier
-    
-   # WaterUseEquipment_multiplier
-    wateruse_equip_multiplier = OpenStudio::Ruleset::OSArgument.makeDoubleArgument("WaterUseEquipment_multiplier", true)
-    wateruse_equip_multiplier.setDisplayName("Multiplier for WaterUseEquipmentDefinition.")
-    wateruse_equip_multiplier.setDescription("Multiplier for WaterUseEquipmentDefinition.")
-    wateruse_equip_multiplier.setDefaultValue(1.0)
-    args << wateruse_equip_multiplier
-    
     # OtherEquipment multiplier
     other_equip_multiplier = OpenStudio::Ruleset::OSArgument.makeDoubleArgument("OtherEquipment_multiplier", true)
     other_equip_multiplier.setDisplayName("Multiplier for OtherEquipment.")
@@ -184,8 +170,6 @@ class GeneralCalibrationMeasureMultiplier < OpenStudio::Ruleset::ModelUserScript
     mass_multiplier = runner.getDoubleArgumentValue("InternalMass_multiplier",user_arguments)
     electric_equip_multiplier = runner.getDoubleArgumentValue("ElectricEquipment_multiplier",user_arguments)
     gas_equip_multiplier = runner.getDoubleArgumentValue("GasEquipment_multiplier",user_arguments)
-    steam_equip_multiplier = runner.getDoubleArgumentValue("SteamEquipment_multiplier",user_arguments)
-    wateruse_equip_multiplier = runner.getDoubleArgumentValue("WaterUseEquipment_multiplier",user_arguments)
     other_equip_multiplier = runner.getDoubleArgumentValue("OtherEquipment_multiplier",user_arguments)
     lights_multiplier = runner.getDoubleArgumentValue("Lights_multiplier",user_arguments)
     luminaire_multiplier = runner.getDoubleArgumentValue("Luminaire_multiplier",user_arguments)
@@ -247,9 +231,7 @@ class GeneralCalibrationMeasureMultiplier < OpenStudio::Ruleset::ModelUserScript
     altered_luminaires_objects = []
     altered_electric_equip_objects = []
     altered_gas_equip_objects = []
-    altered_steam_equip_objects = []
     altered_other_equip_objects = []
-    altered_waterUse_equip_definitions = []
     
     # report initial condition of model
     runner.registerInitialCondition("Applying Multiplier to #{space_types.size} space types and #{spaces.size} spaces.")
@@ -309,20 +291,6 @@ class GeneralCalibrationMeasureMultiplier < OpenStudio::Ruleset::ModelUserScript
             change_name(equip, gas_equip_multiplier)
           # update hash
           altered_gas_equip_objects << equip.handle.to_s
-        else
-          runner.registerInfo("Skipping change to #{equip.name.get}")
-        end
-      end
-      
-      # modify steam equip
-      space_type.steamEquipment.each do |equip|
-        # get and alter multiplier
-        if !altered_steam_equip_objects.include? equip.handle.to_s
-            runner.registerInfo("Applying #{steam_equip_multiplier}x multiplier to #{equip.name.get}.")
-            equip.setMultiplier(steam_equip_multiplier)
-            change_name(equip, steam_equip_multiplier)
-          # update hash
-          altered_steam_equip_objects << equip.handle.to_s
         else
           runner.registerInfo("Skipping change to #{equip.name.get}")
         end
@@ -431,7 +399,6 @@ class GeneralCalibrationMeasureMultiplier < OpenStudio::Ruleset::ModelUserScript
     runner.registerInfo("altered_luminaires_objects: #{altered_luminaires_objects}") 
     runner.registerInfo("altered_electric_equip_objects: #{altered_electric_equip_objects}") 
     runner.registerInfo("altered_gas_equip_objects: #{altered_gas_equip_objects}") 
-    runner.registerInfo("altered_steam_equip_objects: #{altered_steam_equip_objects}") 
     runner.registerInfo("altered_other_equip_objects: #{altered_other_equip_objects}")     
     runner.registerInfo("altered_people_objects: #{altered_people_objects}")
     runner.registerInfo("altered_infiltration_objects: #{altered_infiltration_objects}")
@@ -495,20 +462,6 @@ class GeneralCalibrationMeasureMultiplier < OpenStudio::Ruleset::ModelUserScript
             change_name(equip, gas_equip_multiplier)
           # update hash
           altered_gas_equip_objects << equip.handle.to_s
-        else
-          runner.registerInfo("Skipping change to #{equip.name.get}")
-        end
-      end
-      
-      # modify steam equip
-      space.steamEquipment.each do |equip|
-        # get and alter multiplier
-        if !altered_steam_equip_objects.include? equip.handle.to_s
-            runner.registerInfo("Applying #{steam_equip_multiplier}x multiplier to #{equip.name.get}.")
-            equip.setMultiplier(steam_equip_multiplier)
-            change_name(equip, steam_equip_multiplier)
-          # update hash
-          altered_steam_equip_objects << equip.handle.to_s
         else
           runner.registerInfo("Skipping change to #{equip.name.get}")
         end
@@ -598,21 +551,6 @@ class GeneralCalibrationMeasureMultiplier < OpenStudio::Ruleset::ModelUserScript
         end
       end
       
-      # modify waterUse equip
-      space.waterUseEquipment.each do |equip|
-        equip_def = equip.waterUseEquipmentDefinition
-        # get and alter multiplier
-        if !altered_waterUse_equip_definitions.include? equip_def.handle.to_s
-            runner.registerInfo("Applying #{wateruse_equip_multiplier}x multiplier to #{equip_def.name.get}.")
-            equip_def.setPeakFlowRate(equip_def.peakFlowRate * wateruse_equip_multiplier)
-            change_name(equip_def, wateruse_equip_multiplier)
-          # update hash
-          altered_waterUse_equip_definitions << equip_def.handle.to_s
-        else
-          runner.registerInfo("Skipping change to #{equip_def.name.get}")
-        end
-      end
-      
       # modify internal mass
       space.internalMass.each do |internalmass|
         # get and alter multiplier
@@ -632,22 +570,20 @@ class GeneralCalibrationMeasureMultiplier < OpenStudio::Ruleset::ModelUserScript
     runner.registerInfo("altered_luminaires_objects: #{altered_luminaires_objects}") 
     runner.registerInfo("altered_electric_equip_objects: #{altered_electric_equip_objects}") 
     runner.registerInfo("altered_gas_equip_objects: #{altered_gas_equip_objects}") 
-    runner.registerInfo("altered_steam_equip_objects: #{altered_steam_equip_objects}") 
-    runner.registerInfo("altered_other_equip_objects: #{altered_other_equip_objects}") 
-    runner.registerInfo("altered_waterUse_equip_definitions: #{altered_waterUse_equip_definitions}")     
+    runner.registerInfo("altered_other_equip_objects: #{altered_other_equip_objects}")  
     runner.registerInfo("altered_people_objects: #{altered_people_objects}")
     runner.registerInfo("altered_infiltration_objects: #{altered_infiltration_objects}")
     runner.registerInfo("altered_outdoor_air_objects: #{altered_outdoor_air_objects}")
     runner.registerInfo("altered_internalmass_objects: #{altered_internalmass_objects}")    
 
     # na if nothing in model to look at
-    if altered_lights_objects.size + altered_luminaires_objects.size + altered_electric_equip_objects.size + altered_gas_equip_objects.size +  altered_steam_equip_objects.size + altered_other_equip_objects.size + altered_waterUse_equip_definitions.size + altered_people_objects.size + altered_people_objects.size + altered_people_objects.size + altered_internalmass_objects.size == 0
+    if altered_lights_objects.size + altered_luminaires_objects.size + altered_electric_equip_objects.size + altered_gas_equip_objects.size + altered_other_equip_objects.size + altered_people_objects.size + altered_people_objects.size + altered_people_objects.size + altered_internalmass_objects.size == 0
       runner.registerAsNotApplicable("No objects to alter were found in the model")
       return true
     end
 
     # report final condition of model
-    runner.registerFinalCondition("#{altered_lights_objects.size} light objects were altered. #{altered_luminaires_objects.size} luminaire objects were altered. #{altered_electric_equip_objects.size} electric Equipment objects were altered. #{altered_gas_equip_objects.size} gas Equipment objects were altered. #{altered_steam_equip_objects.size} steamEquipment objects were altered. #{altered_other_equip_objects.size} otherEquipment objects were altered. #{altered_waterUse_equip_definitions.size} waterUse objects were altered. #{altered_people_objects.size} people objects were altered. #{altered_infiltration_objects.size} infiltration objects were altered. #{altered_outdoor_air_objects.size} ventilation objects were altered. #{altered_internalmass_objects.size} internal mass objects were altered.")
+    runner.registerFinalCondition("#{altered_lights_objects.size} light objects were altered. #{altered_luminaires_objects.size} luminaire objects were altered. #{altered_electric_equip_objects.size} electric Equipment objects were altered. #{altered_gas_equip_objects.size} gas Equipment objects were altered. #{altered_other_equip_objects.size} otherEquipment objects were altered. #{altered_people_objects.size} people objects were altered. #{altered_infiltration_objects.size} infiltration objects were altered. #{altered_outdoor_air_objects.size} ventilation objects were altered. #{altered_internalmass_objects.size} internal mass objects were altered.")
 
     return true
 
