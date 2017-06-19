@@ -2,13 +2,13 @@
   <schema_version>3.0</schema_version>
   <name>general_calibration_measure_multiplier</name>
   <uid>af156383-cfe2-4798-b581-08a4cccb8884</uid>
-  <version_id>1d15e7b9-1edd-4003-b437-3acd1cf62948</version_id>
-  <version_modified>20170616T000744Z</version_modified>
+  <version_id>bbcb69d4-c28e-4bb2-b53e-8f296d418039</version_id>
+  <version_modified>20170619T195919Z</version_modified>
   <xml_checksum>DEC0D835</xml_checksum>
   <class_name>GeneralCalibrationMeasureMultiplier</class_name>
   <display_name>General Calibration Measure Multiplier</display_name>
   <description>This is a general purpose measure to calibrate space and space type elements with a Multiplier.</description>
-  <modeler_description>It will be used for calibration of people, infiltration, and outdoor air. User can choose between a SINGLE SpaceType or ALL the SpaceTypes as well as a SINGLE Space or ALL the Spaces.</modeler_description>
+  <modeler_description>It will be used for calibration of space and spaceType loads as well as infiltration, and outdoor air. User can choose between a SINGLE SpaceType or ALL the SpaceTypes as well as a SINGLE Space or ALL the Spaces.</modeler_description>
   <arguments>
     <argument>
       <name>space_type</name>
@@ -19,7 +19,7 @@
       <default_value>*All SpaceTypes*</default_value>
       <choices>
         <choice>
-          <value>{a36fb840-00eb-4e81-b87d-f6bce2807e97}</value>
+          <value>{b6fedb76-2f06-40e2-83e3-b3f1bb033e7d}</value>
           <display_name>*All SpaceTypes*</display_name>
         </choice>
         <choice>
@@ -37,7 +37,7 @@
       <default_value>*All Spaces*</default_value>
       <choices>
         <choice>
-          <value>{a36fb840-00eb-4e81-b87d-f6bce2807e97}</value>
+          <value>{b6fedb76-2f06-40e2-83e3-b3f1bb033e7d}</value>
           <display_name>*All Spaces*</display_name>
         </choice>
         <choice>
@@ -47,40 +47,103 @@
       </choices>
     </argument>
     <argument>
-      <name>occ_perc_change</name>
-      <display_name>Percent Change in the default number of people.</display_name>
-      <description>Percent Change in the default number of people.</description>
+      <name>Lights_multiplier</name>
+      <display_name>Multiplier for Lights.</display_name>
+      <description>Multiplier for Lights.</description>
       <type>Double</type>
       <required>true</required>
       <model_dependent>false</model_dependent>
-      <default_value>0</default_value>
+      <default_value>1</default_value>
     </argument>
     <argument>
-      <name>infil_perc_change</name>
-      <display_name>Percent Change in the default infiltration.</display_name>
-      <description>Percent Change in the default infiltration.</description>
+      <name>Luminaire_multiplier</name>
+      <display_name>Multiplier for Luminaire.</display_name>
+      <description>Multiplier for Luminaire.</description>
       <type>Double</type>
       <required>true</required>
       <model_dependent>false</model_dependent>
-      <default_value>0</default_value>
+      <default_value>1</default_value>
     </argument>
     <argument>
-      <name>vent_perc_change</name>
-      <display_name>Percent Change in the default Ventilation.</display_name>
-      <description>Percent Change in the default Ventilation.</description>
+      <name>ElectricEquipment_multiplier</name>
+      <display_name>Multiplier for Electric Equipment.</display_name>
+      <description>Multiplier for Electric Equipment.</description>
       <type>Double</type>
       <required>true</required>
       <model_dependent>false</model_dependent>
-      <default_value>0</default_value>
+      <default_value>1</default_value>
     </argument>
     <argument>
-      <name>mass_perc_change</name>
-      <display_name>Percent Change in the default Internal Mass.</display_name>
-      <description>Percent Change in the default Internal Mass.</description>
+      <name>GasEquipment_multiplier</name>
+      <display_name>Multiplier for Gas Equipment.</display_name>
+      <description>Multiplier for Gas Equipment.</description>
       <type>Double</type>
       <required>true</required>
       <model_dependent>false</model_dependent>
-      <default_value>0</default_value>
+      <default_value>1</default_value>
+    </argument>
+    <argument>
+      <name>SteamEquipment_multiplier</name>
+      <display_name>Multiplier for Steam Equipment.</display_name>
+      <description>Multiplier for Steam Equipment.</description>
+      <type>Double</type>
+      <required>true</required>
+      <model_dependent>false</model_dependent>
+      <default_value>1</default_value>
+    </argument>
+    <argument>
+      <name>WaterUseEquipment_multiplier</name>
+      <display_name>Multiplier for WaterUseEquipmentDefinition.</display_name>
+      <description>Multiplier for WaterUseEquipmentDefinition.</description>
+      <type>Double</type>
+      <required>true</required>
+      <model_dependent>false</model_dependent>
+      <default_value>1</default_value>
+    </argument>
+    <argument>
+      <name>OtherEquipment_multiplier</name>
+      <display_name>Multiplier for OtherEquipment.</display_name>
+      <description>Multiplier for OtherEquipment.</description>
+      <type>Double</type>
+      <required>true</required>
+      <model_dependent>false</model_dependent>
+      <default_value>1</default_value>
+    </argument>
+    <argument>
+      <name>People_multiplier</name>
+      <display_name>Multiplier for number of people.</display_name>
+      <description>Multiplier for number of people.</description>
+      <type>Double</type>
+      <required>true</required>
+      <model_dependent>false</model_dependent>
+      <default_value>1</default_value>
+    </argument>
+    <argument>
+      <name>InternalMass_multiplier</name>
+      <display_name>Multiplier for Internal Mass.</display_name>
+      <description>Multiplier for Internal Mass.</description>
+      <type>Double</type>
+      <required>true</required>
+      <model_dependent>false</model_dependent>
+      <default_value>1</default_value>
+    </argument>
+    <argument>
+      <name>Infiltration_multiplier</name>
+      <display_name>Multiplier for infiltration.</display_name>
+      <description>Multiplier for infiltration.</description>
+      <type>Double</type>
+      <required>true</required>
+      <model_dependent>false</model_dependent>
+      <default_value>1</default_value>
+    </argument>
+    <argument>
+      <name>Ventilation_multiplier</name>
+      <display_name>Multiplier for Ventilation.</display_name>
+      <description>Multiplier for Ventilation.</description>
+      <type>Double</type>
+      <required>true</required>
+      <model_dependent>false</model_dependent>
+      <default_value>1</default_value>
     </argument>
   </arguments>
   <outputs/>
@@ -160,7 +223,7 @@
       <filename>measure.rb</filename>
       <filetype>rb</filetype>
       <usage_type>script</usage_type>
-      <checksum>7EAB5149</checksum>
+      <checksum>0F7B30F8</checksum>
     </file>
   </files>
 </measure>

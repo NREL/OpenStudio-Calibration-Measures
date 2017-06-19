@@ -13,12 +13,12 @@ class GeneralCalibrationMeasureMultiplier < OpenStudio::Ruleset::ModelUserScript
 
   # human readable description of modeling approach
   def modeler_description
-    return "It will be used for calibration of people, infiltration, and outdoor air. User can choose between a SINGLE SpaceType or ALL the SpaceTypes as well as a SINGLE Space or ALL the Spaces."
+    return "It will be used for calibration of space and spaceType loads as well as infiltration, and outdoor air. User can choose between a SINGLE SpaceType or ALL the SpaceTypes as well as a SINGLE Space or ALL the Spaces."
   end
   
-  def change_name(object, perc_change)
-    if perc_change != 0
-      object.setName("#{object.name.get} + #{perc_change.round(2)} % change")
+  def change_name(object, multiplier)
+    if multiplier != 1
+      object.setName("#{object.name.get} #{multiplier.round(2)}x Multiplier")
     end
   end
   
@@ -88,34 +88,83 @@ class GeneralCalibrationMeasureMultiplier < OpenStudio::Ruleset::ModelUserScript
     space.setDisplayName("Apply the Measure to a SINGLE Space, ALL the Spaces or NONE.")
     space.setDefaultValue("*All Spaces*") #if no space type is chosen this will run on the entire building
     args << space
+        
+    # Lights multiplier
+    lights_multiplier = OpenStudio::Ruleset::OSArgument.makeDoubleArgument("Lights_multiplier", true)
+    lights_multiplier.setDisplayName("Multiplier for Lights.")
+    lights_multiplier.setDescription("Multiplier for Lights.")
+    lights_multiplier.setDefaultValue(1.0)
+    args << lights_multiplier
     
-    # occupancy % change
-    occ_perc_change = OpenStudio::Ruleset::OSArgument.makeDoubleArgument("occ_perc_change", true)
-    occ_perc_change.setDisplayName("Percent Change in the default number of people.")
-    occ_perc_change.setDescription("Percent Change in the default number of people.")
-    occ_perc_change.setDefaultValue(0.0)
-    args << occ_perc_change
+    # Luminaire multiplier
+    luminaire_multiplier = OpenStudio::Ruleset::OSArgument.makeDoubleArgument("Luminaire_multiplier", true)
+    luminaire_multiplier.setDisplayName("Multiplier for Luminaire.")
+    luminaire_multiplier.setDescription("Multiplier for Luminaire.")
+    luminaire_multiplier.setDefaultValue(1.0)
+    args << luminaire_multiplier
+    
+    # Electric Equipment multiplier
+    electric_equip_multiplier = OpenStudio::Ruleset::OSArgument.makeDoubleArgument("ElectricEquipment_multiplier", true)
+    electric_equip_multiplier.setDisplayName("Multiplier for Electric Equipment.")
+    electric_equip_multiplier.setDescription("Multiplier for Electric Equipment.")
+    electric_equip_multiplier.setDefaultValue(1.0)
+    args << electric_equip_multiplier
+    
+    # Gas Equipment multiplier
+    gas_equip_multiplier = OpenStudio::Ruleset::OSArgument.makeDoubleArgument("GasEquipment_multiplier", true)
+    gas_equip_multiplier.setDisplayName("Multiplier for Gas Equipment.")
+    gas_equip_multiplier.setDescription("Multiplier for Gas Equipment.")
+    gas_equip_multiplier.setDefaultValue(1.0)
+    args << gas_equip_multiplier
+    
+   # Steam Equipment multiplier
+    steam_equip_multiplier = OpenStudio::Ruleset::OSArgument.makeDoubleArgument("SteamEquipment_multiplier", true)
+    steam_equip_multiplier.setDisplayName("Multiplier for Steam Equipment.")
+    steam_equip_multiplier.setDescription("Multiplier for Steam Equipment.")
+    steam_equip_multiplier.setDefaultValue(1.0)
+    args << steam_equip_multiplier
+    
+   # WaterUseEquipment_multiplier
+    wateruse_equip_multiplier = OpenStudio::Ruleset::OSArgument.makeDoubleArgument("WaterUseEquipment_multiplier", true)
+    wateruse_equip_multiplier.setDisplayName("Multiplier for WaterUseEquipmentDefinition.")
+    wateruse_equip_multiplier.setDescription("Multiplier for WaterUseEquipmentDefinition.")
+    wateruse_equip_multiplier.setDefaultValue(1.0)
+    args << wateruse_equip_multiplier
+    
+    # OtherEquipment multiplier
+    other_equip_multiplier = OpenStudio::Ruleset::OSArgument.makeDoubleArgument("OtherEquipment_multiplier", true)
+    other_equip_multiplier.setDisplayName("Multiplier for OtherEquipment.")
+    other_equip_multiplier.setDescription("Multiplier for OtherEquipment.")
+    other_equip_multiplier.setDefaultValue(1.0)
+    args << other_equip_multiplier
+    
+    # occupancy multiplier
+    occ_multiplier = OpenStudio::Ruleset::OSArgument.makeDoubleArgument("People_multiplier", true)
+    occ_multiplier.setDisplayName("Multiplier for number of people.")
+    occ_multiplier.setDescription("Multiplier for number of people.")
+    occ_multiplier.setDefaultValue(1.0)
+    args << occ_multiplier
 
-    # infiltration % change
-    infil_perc_change = OpenStudio::Ruleset::OSArgument.makeDoubleArgument("infil_perc_change", true)
-    infil_perc_change.setDisplayName("Percent Change in the default infiltration.")
-    infil_perc_change.setDescription("Percent Change in the default infiltration.")
-    infil_perc_change.setDefaultValue(0.0)
-    args << infil_perc_change
+    # internalMass multiplier
+    mass_multiplier = OpenStudio::Ruleset::OSArgument.makeDoubleArgument("InternalMass_multiplier", true)
+    mass_multiplier.setDisplayName("Multiplier for Internal Mass.")
+    mass_multiplier.setDescription("Multiplier for Internal Mass.")
+    mass_multiplier.setDefaultValue(1.0)
+    args << mass_multiplier
+    
+    # infiltration multiplier
+    infil_multiplier = OpenStudio::Ruleset::OSArgument.makeDoubleArgument("Infiltration_multiplier", true)
+    infil_multiplier.setDisplayName("Multiplier for infiltration.")
+    infil_multiplier.setDescription("Multiplier for infiltration.")
+    infil_multiplier.setDefaultValue(1.0)
+    args << infil_multiplier
 
-    # ventilation % change
-    vent_perc_change = OpenStudio::Ruleset::OSArgument.makeDoubleArgument("vent_perc_change", true)
-    vent_perc_change.setDisplayName("Percent Change in the default Ventilation.")
-    vent_perc_change.setDescription("Percent Change in the default Ventilation.")
-    vent_perc_change.setDefaultValue(0.0)
-    args << vent_perc_change
-
-    # internalMass % change
-    mass_perc_change = OpenStudio::Ruleset::OSArgument.makeDoubleArgument("mass_perc_change", true)
-    mass_perc_change.setDisplayName("Percent Change in the default Internal Mass.")
-    mass_perc_change.setDescription("Percent Change in the default Internal Mass.")
-    mass_perc_change.setDefaultValue(0.0)
-    args << mass_perc_change
+    # ventilation multiplier
+    vent_multiplier = OpenStudio::Ruleset::OSArgument.makeDoubleArgument("Ventilation_multiplier", true)
+    vent_multiplier.setDisplayName("Multiplier for Ventilation.")
+    vent_multiplier.setDescription("Multiplier for Ventilation.")
+    vent_multiplier.setDefaultValue(1.0)
+    args << vent_multiplier
     
     return args
   end
@@ -129,10 +178,17 @@ class GeneralCalibrationMeasureMultiplier < OpenStudio::Ruleset::ModelUserScript
     space_type_handle = runner.getStringArgumentValue("space_type",user_arguments)
     space_object = runner.getOptionalWorkspaceObjectChoiceValue("space",user_arguments,model)
     space_handle = runner.getStringArgumentValue("space",user_arguments)
-    occ_perc_change = runner.getDoubleArgumentValue("occ_perc_change",user_arguments)
-    infil_perc_change = runner.getDoubleArgumentValue("infil_perc_change",user_arguments)
-    vent_perc_change = runner.getDoubleArgumentValue("vent_perc_change",user_arguments)
-    mass_perc_change = runner.getDoubleArgumentValue("mass_perc_change",user_arguments)
+    occ_multiplier = runner.getDoubleArgumentValue("People_multiplier",user_arguments)
+    infil_multiplier = runner.getDoubleArgumentValue("Infiltration_multiplier",user_arguments)
+    vent_multiplier = runner.getDoubleArgumentValue("Ventilation_multiplier",user_arguments)
+    mass_multiplier = runner.getDoubleArgumentValue("InternalMass_multiplier",user_arguments)
+    electric_equip_multiplier = runner.getDoubleArgumentValue("ElectricEquipment_multiplier",user_arguments)
+    gas_equip_multiplier = runner.getDoubleArgumentValue("GasEquipment_multiplier",user_arguments)
+    steam_equip_multiplier = runner.getDoubleArgumentValue("SteamEquipment_multiplier",user_arguments)
+    wateruse_equip_multiplier = runner.getDoubleArgumentValue("WaterUseEquipment_multiplier",user_arguments)
+    other_equip_multiplier = runner.getDoubleArgumentValue("OtherEquipment_multiplier",user_arguments)
+    lights_multiplier = runner.getDoubleArgumentValue("Lights_multiplier",user_arguments)
+    luminaire_multiplier = runner.getDoubleArgumentValue("Luminaire_multiplier",user_arguments)
     
     #find objects to change
     space_types = []
@@ -183,42 +239,120 @@ class GeneralCalibrationMeasureMultiplier < OpenStudio::Ruleset::ModelUserScript
       return false
     end
     
-    altered_people_definitions = []
+    altered_people_objects = []
     altered_infiltration_objects = []
     altered_outdoor_air_objects = []
     altered_internalmass_objects = []
+    altered_lights_objects = []
+    altered_luminaires_objects = []
+    altered_electric_equip_objects = []
+    altered_gas_equip_objects = []
+    altered_steam_equip_objects = []
+    altered_other_equip_objects = []
+    altered_waterUse_equip_definitions = []
     
     # report initial condition of model
-    runner.registerInitialCondition("Applying Variable % Changes to #{space_types.size} space types and #{spaces.size} spaces.")
-    runner.registerInfo("Applying Variable % Changes to #{space_types.size} space types.")
+    runner.registerInitialCondition("Applying Multiplier to #{space_types.size} space types and #{spaces.size} spaces.")
+    runner.registerInfo("Applying Multiplier to #{space_types.size} space types.")
 
     # loop through space types
     space_types.each do |space_type|
 
-      # modify occupancy
-      space_type.people.each do |people_inst|
-        # get and alter definition
-        people_def = people_inst.peopleDefinition
-        if !altered_people_definitions.include? people_def.handle.to_s
-          if people_def.peopleperSpaceFloorArea.is_initialized
-            runner.registerInfo("Applying #{occ_perc_change} % Change to #{people_def.name.get} PeopleperSpaceFloorArea.")
-            people_def.setPeopleperSpaceFloorArea(people_def.peopleperSpaceFloorArea.get + people_def.peopleperSpaceFloorArea.get * occ_perc_change * 0.01)
-            change_name(people_def, occ_perc_change)
-          end
-          if people_def.numberofPeople.is_initialized
-            runner.registerInfo("Applying #{occ_perc_change} % Change to #{people_def.name.get} numberofPeople.")
-            people_def.setNumberofPeople(people_def.numberofPeople.get + people_def.numberofPeople.get * occ_perc_change * 0.01)
-            change_name(people_def, occ_perc_change)
-          end
-          if people_def.spaceFloorAreaperPerson.is_initialized
-            runner.registerInfo("Applying #{occ_perc_change} % Change to #{people_def.name.get} spaceFloorAreaperPerson.")
-            people_def.setSpaceFloorAreaperPerson(people_def.spaceFloorAreaperPerson.get + people_def.spaceFloorAreaperPerson.get * occ_perc_change * 0.01)
-            change_name(people_def, occ_perc_change)
-          end
+      # modify lights
+      space_type.lights.each do |light|
+        # get and alter multiplier
+        if !altered_lights_objects.include? light.handle.to_s
+            runner.registerInfo("Applying #{lights_multiplier}x multiplier to #{light.name.get}.")
+            light.setMultiplier(lights_multiplier)
+            change_name(light, lights_multiplier)
           # update hash
-          altered_people_definitions << people_def.handle.to_s
+          altered_lights_objects << light.handle.to_s
         else
-          runner.registerInfo("Skipping change to #{people_def.name.get}")
+          runner.registerInfo("Skipping change to #{light.name.get}")
+        end
+      end
+      
+      # modify luminaire
+      space_type.luminaires.each do |light|
+        # get and alter multiplier
+        if !altered_luminaires_objects.include? light.handle.to_s
+            runner.registerInfo("Applying #{luminaire_multiplier}x multiplier to #{light.name.get}.")
+            light.setMultiplier(luminaire_multiplier)
+            change_name(light, luminaire_multiplier)
+          # update hash
+          altered_luminaires_objects << light.handle.to_s
+        else
+          runner.registerInfo("Skipping change to #{light.name.get}")
+        end
+      end
+      
+      # modify electric equip
+      space_type.electricEquipment.each do |equip|
+        # get and alter multiplier
+        if !altered_electric_equip_objects.include? equip.handle.to_s
+            runner.registerInfo("Applying #{electric_equip_multiplier}x multiplier to #{equip.name.get}.")
+            equip.setMultiplier(electric_equip_multiplier)
+            change_name(equip, electric_equip_multiplier)
+          # update hash
+          altered_electric_equip_objects << equip.handle.to_s
+        else
+          runner.registerInfo("Skipping change to #{equip.name.get}")
+        end
+      end
+      
+      # modify gas equip
+      space_type.gasEquipment.each do |equip|
+        # get and alter multiplier
+        if !altered_gas_equip_objects.include? equip.handle.to_s
+            runner.registerInfo("Applying #{gas_equip_multiplier}x multiplier to #{equip.name.get}.")
+            equip.setMultiplier(gas_equip_multiplier)
+            change_name(equip, gas_equip_multiplier)
+          # update hash
+          altered_gas_equip_objects << equip.handle.to_s
+        else
+          runner.registerInfo("Skipping change to #{equip.name.get}")
+        end
+      end
+      
+      # modify steam equip
+      space_type.steamEquipment.each do |equip|
+        # get and alter multiplier
+        if !altered_steam_equip_objects.include? equip.handle.to_s
+            runner.registerInfo("Applying #{steam_equip_multiplier}x multiplier to #{equip.name.get}.")
+            equip.setMultiplier(steam_equip_multiplier)
+            change_name(equip, steam_equip_multiplier)
+          # update hash
+          altered_steam_equip_objects << equip.handle.to_s
+        else
+          runner.registerInfo("Skipping change to #{equip.name.get}")
+        end
+      end
+      
+      # modify other equip
+      space_type.otherEquipment.each do |equip|
+        # get and alter multiplier
+        if !altered_other_equip_objects.include? equip.handle.to_s
+            runner.registerInfo("Applying #{other_equip_multiplier}x multiplier to #{equip.name.get}.")
+            equip.setMultiplier(other_equip_multiplier)
+            change_name(equip, other_equip_multiplier)
+          # update hash
+          altered_other_equip_objects << equip.handle.to_s
+        else
+          runner.registerInfo("Skipping change to #{equip.name.get}")
+        end
+      end
+            
+      # modify occupancy
+      space_type.people.each do |peps|
+        # get and alter multiplier
+        if !altered_people_objects.include? peps.handle.to_s
+            runner.registerInfo("Applying #{occ_multiplier}x multiplier to #{peps.name.get}.")
+            peps.setMultiplier(occ_multiplier)
+            change_name(peps, occ_multiplier)
+          # update hash
+          altered_people_objects << peps.handle.to_s
+        else
+          runner.registerInfo("Skipping change to #{peps.name.get}")
         end
       end
 
@@ -226,29 +360,29 @@ class GeneralCalibrationMeasureMultiplier < OpenStudio::Ruleset::ModelUserScript
       space_type.spaceInfiltrationDesignFlowRates.each do |infiltration|
         if !altered_infiltration_objects.include? infiltration.handle.to_s
           if infiltration.flowperExteriorSurfaceArea.is_initialized
-            runner.registerInfo("Applying #{infil_perc_change} % Change to #{infiltration.name.get} FlowperExteriorSurfaceArea.")
-            infiltration.setFlowperExteriorSurfaceArea(infiltration.flowperExteriorSurfaceArea.get + infiltration.flowperExteriorSurfaceArea.get * infil_perc_change * 0.01)
-            change_name(infiltration, infil_perc_change)
+            runner.registerInfo("Applying #{infil_multiplier}x Multiplier to #{infiltration.name.get} FlowperExteriorSurfaceArea.")
+            infiltration.setFlowperExteriorSurfaceArea(infiltration.flowperExteriorSurfaceArea.get * infil_multiplier)
+            change_name(infiltration, infil_multiplier)
           end
           if infiltration.airChangesperHour.is_initialized
-            runner.registerInfo("Applying #{infil_perc_change} % Change to #{infiltration.name.get} AirChangesperHour.")
-            infiltration.setAirChangesperHour(infiltration.airChangesperHour.get + infiltration.airChangesperHour.get * infil_perc_change * 0.01)
-            change_name(infiltration, infil_perc_change)
+            runner.registerInfo("Applying #{infil_multiplier}x Multiplier to #{infiltration.name.get} AirChangesperHour.")
+            infiltration.setAirChangesperHour(infiltration.airChangesperHour.get * infil_multiplier)
+            change_name(infiltration, infil_multiplier)
           end    
           if infiltration.designFlowRate.is_initialized
-            runner.registerInfo("Applying #{infil_perc_change} % Change to #{infiltration.name.get} designFlowRate.")
-            infiltration.setDesignFlowRate(infiltration.designFlowRate.get + infiltration.designFlowRate.get * infil_perc_change * 0.01)
-            change_name(infiltration, infil_perc_change)
+            runner.registerInfo("Applying #{infil_multiplier}x Multiplier to #{infiltration.name.get} designFlowRate.")
+            infiltration.setDesignFlowRate(infiltration.designFlowRate.get * infil_multiplier)
+            change_name(infiltration, infil_multiplier)
           end 
           if infiltration.flowperSpaceFloorArea.is_initialized
-            runner.registerInfo("Applying #{infil_perc_change} % Change to #{infiltration.name.get} flowperSpaceFloorArea.")
-            infiltration.setFlowperSpaceFloorArea(infiltration.flowperSpaceFloorArea.get + infiltration.flowperSpaceFloorArea.get * infil_perc_change * 0.01)
-            change_name(infiltration, infil_perc_change)
+            runner.registerInfo("Applying #{infil_multiplier}x Multiplier to #{infiltration.name.get} flowperSpaceFloorArea.")
+            infiltration.setFlowperSpaceFloorArea(infiltration.flowperSpaceFloorArea.get * infil_multiplier)
+            change_name(infiltration, infil_multiplier)
           end  
           if infiltration.flowperExteriorWallArea.is_initialized
-            runner.registerInfo("Applying #{infil_perc_change} % Change to #{infiltration.name.get} flowperExteriorWallArea.")
-            infiltration.setFlowperExteriorWallArea(infiltration.flowperExteriorWallArea.get + infiltration.flowperExteriorWallArea.get * infil_perc_change * 0.01)
-            change_name(infiltration, infil_perc_change)
+            runner.registerInfo("Applying #{infil_multiplier}x Multiplier to #{infiltration.name.get} flowperExteriorWallArea.")
+            infiltration.setFlowperExteriorWallArea(infiltration.flowperExteriorWallArea.get * infil_multiplier)
+            change_name(infiltration, infil_multiplier)
           end           
           # add to hash
           altered_infiltration_objects << infiltration.handle.to_s
@@ -262,15 +396,15 @@ class GeneralCalibrationMeasureMultiplier < OpenStudio::Ruleset::ModelUserScript
         outdoor_air = space_type.designSpecificationOutdoorAir.get
         # alter values if not already done
         if !altered_outdoor_air_objects.include? outdoor_air.handle.to_s
-          runner.registerInfo("Applying #{vent_perc_change} % Change to #{outdoor_air.name.get} OutdoorAirFlowperPerson.")
-          outdoor_air.setOutdoorAirFlowperPerson(outdoor_air.outdoorAirFlowperPerson + outdoor_air.outdoorAirFlowperPerson * vent_perc_change * 0.01)
-          runner.registerInfo("Applying #{vent_perc_change} % Change to #{outdoor_air.name.get} OutdoorAirFlowperFloorArea.")
-          outdoor_air.setOutdoorAirFlowperFloorArea(outdoor_air.outdoorAirFlowperFloorArea + outdoor_air.outdoorAirFlowperFloorArea * vent_perc_change * 0.01)
-          runner.registerInfo("Applying #{vent_perc_change} % Change to #{outdoor_air.name.get} OutdoorAirFlowAirChangesperHour.")
-          outdoor_air.setOutdoorAirFlowAirChangesperHour(outdoor_air.outdoorAirFlowAirChangesperHour + outdoor_air.outdoorAirFlowAirChangesperHour * vent_perc_change * 0.01)
-          runner.registerInfo("Applying #{vent_perc_change} % Change to #{outdoor_air.name.get} OutdoorAirFlowRate.")
-          outdoor_air.setOutdoorAirFlowRate(outdoor_air.outdoorAirFlowRate + outdoor_air.outdoorAirFlowRate * vent_perc_change * 0.01)
-          change_name(outdoor_air, vent_perc_change)
+          runner.registerInfo("Applying #{vent_multiplier}x Multiplier to #{outdoor_air.name.get} OutdoorAirFlowperPerson.")
+          outdoor_air.setOutdoorAirFlowperPerson(outdoor_air.outdoorAirFlowperPerson * vent_multiplier)
+          runner.registerInfo("Applying #{vent_multiplier}x Multiplier to #{outdoor_air.name.get} OutdoorAirFlowperFloorArea.")
+          outdoor_air.setOutdoorAirFlowperFloorArea(outdoor_air.outdoorAirFlowperFloorArea * vent_multiplier)
+          runner.registerInfo("Applying #{vent_multiplier}x Multiplier to #{outdoor_air.name.get} OutdoorAirFlowAirChangesperHour.")
+          outdoor_air.setOutdoorAirFlowAirChangesperHour(outdoor_air.outdoorAirFlowAirChangesperHour * vent_multiplier)
+          runner.registerInfo("Applying #{vent_multiplier}x Multiplier to #{outdoor_air.name.get} OutdoorAirFlowRate.")
+          outdoor_air.setOutdoorAirFlowRate(outdoor_air.outdoorAirFlowRate * vent_multiplier)
+          change_name(outdoor_air, vent_multiplier)
           # add to hash
           altered_outdoor_air_objects << outdoor_air.handle.to_s
         else
@@ -280,66 +414,131 @@ class GeneralCalibrationMeasureMultiplier < OpenStudio::Ruleset::ModelUserScript
       
       # modify internal mass
       space_type.internalMass.each do |internalmass|
-        # get and alter definition
-        internalmass_def = internalmass.internalMassDefinition
-        if !altered_internalmass_objects.include? internalmass_def.handle.to_s
-          if internalmass_def.surfaceAreaperSpaceFloorArea.is_initialized
-            runner.registerInfo("Applying #{mass_perc_change} % Change to #{internalmass_def.name.get} surfaceAreaperSpaceFloorArea.")
-            internalmass_def.setSurfaceAreaperSpaceFloorArea(internalmass_def.surfaceAreaperSpaceFloorArea.get + internalmass_def.surfaceAreaperSpaceFloorArea.get * mass_perc_change * 0.01)
-            change_name(internalmass_def, mass_perc_change)
-          end
-          if internalmass_def.surfaceArea.is_initialized
-            runner.registerInfo("Applying #{mass_perc_change} % Change to #{internalmass_def.name.get} surfaceArea.")
-            internalmass_def.setSurfaceArea(internalmass_def.surfaceArea.get + internalmass_def.surfaceArea.get * mass_perc_change * 0.01)
-            change_name(internalmass_def, mass_perc_change)
-          end
-          if internalmass_def.surfaceAreaperPerson.is_initialized
-            runner.registerInfo("Applying #{mass_perc_change} % Change to #{internalmass_def.name.get} surfaceAreaperPerson.")
-            internalmass_def.setSurfaceAreaperPerson(internalmass_def.surfaceAreaperPerson.get + internalmass_def.surfaceAreaperPerson.get * mass_perc_change * 0.01)
-            change_name(internalmass_def, mass_perc_change)
-          end
+        # get and alter multiplier
+        if !altered_internalmass_objects.include? internalmass.handle.to_s
+            runner.registerInfo("Applying #{mass_multiplier}x multiplier to #{internalmass.name.get}.")
+            internalmass.setMultiplier(mass_multiplier)
+            change_name(internalmass, mass_multiplier)
           # update hash
-          altered_internalmass_objects << internalmass_def.handle.to_s
+          altered_internalmass_objects << internalmass.handle.to_s
         else
-          runner.registerInfo("Skipping change to #{internalmass_def.name.get}")  
+          runner.registerInfo("Skipping change to #{internalmass.name.get}")
         end
       end
     end #end space_type loop
-        
-    runner.registerInfo("altered_people_definitions: #{altered_people_definitions}")
+    
+    runner.registerInfo("altered_lights_objects: #{altered_lights_objects}") 
+    runner.registerInfo("altered_luminaires_objects: #{altered_luminaires_objects}") 
+    runner.registerInfo("altered_electric_equip_objects: #{altered_electric_equip_objects}") 
+    runner.registerInfo("altered_gas_equip_objects: #{altered_gas_equip_objects}") 
+    runner.registerInfo("altered_steam_equip_objects: #{altered_steam_equip_objects}") 
+    runner.registerInfo("altered_other_equip_objects: #{altered_other_equip_objects}")     
+    runner.registerInfo("altered_people_objects: #{altered_people_objects}")
     runner.registerInfo("altered_infiltration_objects: #{altered_infiltration_objects}")
     runner.registerInfo("altered_outdoor_air_objects: #{altered_outdoor_air_objects}")
     runner.registerInfo("altered_internalmass_objects: #{altered_internalmass_objects}")    
     
     # report initial condition of model
-    runner.registerInfo("Applying Variable % Changes to #{spaces.size} spaces.")
+    runner.registerInfo("Applying Variable Multipliers to #{spaces.size} spaces.")
 
     # loop through space types
     spaces.each do |space|
-      # modify occupancy
-      space.people.each do |people_inst|
-        # get and alter definition
-        people_def = people_inst.peopleDefinition
-        if !altered_people_definitions.include? people_def.handle.to_s
-          if people_def.peopleperSpaceFloorArea.is_initialized
-            runner.registerInfo("Applying #{occ_perc_change} % Change to #{people_def.name.get} PeopleperSpaceFloorArea.")
-            people_def.setPeopleperSpaceFloorArea(people_def.peopleperSpaceFloorArea.get + people_def.peopleperSpaceFloorArea.get * occ_perc_change * 0.01)
-            change_name(people_def, occ_perc_change)
-          end
-          if people_def.numberofPeople.is_initialized
-            runner.registerInfo("Applying #{occ_perc_change} % Change to #{people_def.name.get} numberofPeople.")
-            people_def.setNumberofPeople(people_def.numberofPeople.get + people_def.numberofPeople.get * occ_perc_change * 0.01)
-            change_name(people_def, occ_perc_change)
-          end
-          if people_def.spaceFloorAreaperPerson.is_initialized
-            runner.registerInfo("Applying #{occ_perc_change} % Change to #{people_def.name.get} spaceFloorAreaperPerson.")
-            people_def.setSpaceFloorAreaperPerson(people_def.spaceFloorAreaperPerson.get + people_def.spaceFloorAreaperPerson.get * occ_perc_change * 0.01)
-            change_name(people_def, occ_perc_change)
-          end
+    
+      # modify lights
+      space.lights.each do |light|
+        # get and alter multiplier
+        if !altered_lights_objects.include? light.handle.to_s
+            runner.registerInfo("Applying #{lights_multiplier}x multiplier to #{light.name.get}.")
+            light.setMultiplier(lights_multiplier)
+            change_name(light, lights_multiplier)
           # update hash
-          altered_people_definitions << people_def.handle.to_s
+          altered_lights_objects << light.handle.to_s
         else
-          runner.registerInfo("Skipping change to #{people_def.name.get}")  
+          runner.registerInfo("Skipping change to #{light.name.get}")
+        end
+      end
+      
+      # modify luminaire
+      space.luminaires.each do |light|
+        # get and alter multiplier
+        if !altered_luminaires_objects.include? light.handle.to_s
+            runner.registerInfo("Applying #{luminaire_multiplier}x multiplier to #{light.name.get}.")
+            light.setMultiplier(luminaire_multiplier)
+            change_name(light, luminaire_multiplier)
+          # update hash
+          altered_luminaires_objects << light.handle.to_s
+        else
+          runner.registerInfo("Skipping change to #{light.name.get}")
+        end
+      end
+      
+            # modify electric equip
+      space.electricEquipment.each do |equip|
+        # get and alter multiplier
+        if !altered_electric_equip_objects.include? equip.handle.to_s
+            runner.registerInfo("Applying #{electric_equip_multiplier}x multiplier to #{equip.name.get}.")
+            equip.setMultiplier(electric_equip_multiplier)
+            change_name(equip, electric_equip_multiplier)
+          # update hash
+          altered_electric_equip_objects << equip.handle.to_s
+        else
+          runner.registerInfo("Skipping change to #{equip.name.get}")
+        end
+      end
+      
+      # modify gas equip
+      space.gasEquipment.each do |equip|
+        # get and alter multiplier
+        if !altered_gas_equip_objects.include? equip.handle.to_s
+            runner.registerInfo("Applying #{gas_equip_multiplier}x multiplier to #{equip.name.get}.")
+            equip.setMultiplier(gas_equip_multiplier)
+            change_name(equip, gas_equip_multiplier)
+          # update hash
+          altered_gas_equip_objects << equip.handle.to_s
+        else
+          runner.registerInfo("Skipping change to #{equip.name.get}")
+        end
+      end
+      
+      # modify steam equip
+      space.steamEquipment.each do |equip|
+        # get and alter multiplier
+        if !altered_steam_equip_objects.include? equip.handle.to_s
+            runner.registerInfo("Applying #{steam_equip_multiplier}x multiplier to #{equip.name.get}.")
+            equip.setMultiplier(steam_equip_multiplier)
+            change_name(equip, steam_equip_multiplier)
+          # update hash
+          altered_steam_equip_objects << equip.handle.to_s
+        else
+          runner.registerInfo("Skipping change to #{equip.name.get}")
+        end
+      end
+      
+      # modify other equip
+      space.otherEquipment.each do |equip|
+        # get and alter multiplier
+        if !altered_other_equip_objects.include? equip.handle.to_s
+            runner.registerInfo("Applying #{other_equip_multiplier}x multiplier to #{equip.name.get}.")
+            equip.setMultiplier(other_equip_multiplier)
+            change_name(equip, other_equip_multiplier)
+          # update hash
+          altered_other_equip_objects << equip.handle.to_s
+        else
+          runner.registerInfo("Skipping change to #{equip.name.get}")
+        end
+      end
+      
+      # modify occupancy
+      space.people.each do |peps|
+        # get and alter multiplier
+        if !altered_people_objects.include? peps.handle.to_s
+            runner.registerInfo("Applying #{occ_multiplier}x multiplier to #{peps.name.get}.")
+            peps.setMultiplier(occ_multiplier)
+            change_name(peps, occ_multiplier)
+          # update hash
+          altered_people_objects << peps.handle.to_s
+        else
+          runner.registerInfo("Skipping change to #{peps.name.get}")
         end
       end
 
@@ -347,29 +546,29 @@ class GeneralCalibrationMeasureMultiplier < OpenStudio::Ruleset::ModelUserScript
       space.spaceInfiltrationDesignFlowRates.each do |infiltration|
         if !altered_infiltration_objects.include? infiltration.handle.to_s
           if infiltration.flowperExteriorSurfaceArea.is_initialized
-            runner.registerInfo("Applying #{infil_perc_change} % Change to #{infiltration.name.get} FlowperExteriorSurfaceArea.")
-            infiltration.setFlowperExteriorSurfaceArea(infiltration.flowperExteriorSurfaceArea.get + infiltration.flowperExteriorSurfaceArea.get * infil_perc_change * 0.01)
-            change_name(infiltration, infil_perc_change)
+            runner.registerInfo("Applying #{infil_multiplier}x Multiplier to #{infiltration.name.get} FlowperExteriorSurfaceArea.")
+            infiltration.setFlowperExteriorSurfaceArea(infiltration.flowperExteriorSurfaceArea.get * infil_multiplier)
+            change_name(infiltration, infil_multiplier)
           end
           if infiltration.airChangesperHour.is_initialized
-            runner.registerInfo("Applying #{infil_perc_change} % Change to #{infiltration.name.get} AirChangesperHour.")
-            infiltration.setAirChangesperHour(infiltration.airChangesperHour.get + infiltration.airChangesperHour.get * infil_perc_change * 0.01)
-            change_name(infiltration, infil_perc_change)
+            runner.registerInfo("Applying #{infil_multiplier}x Multiplier to #{infiltration.name.get} AirChangesperHour.")
+            infiltration.setAirChangesperHour(infiltration.airChangesperHour.get * infil_multiplier)
+            change_name(infiltration, infil_multiplier)
           end
           if infiltration.designFlowRate.is_initialized
-            runner.registerInfo("Applying #{infil_perc_change} % Change to #{infiltration.name.get} designFlowRate.")
-            infiltration.setDesignFlowRate(infiltration.designFlowRate.get + infiltration.designFlowRate.get * infil_perc_change * 0.01)
-            change_name(infiltration, infil_perc_change)
+            runner.registerInfo("Applying #{infil_multiplier}x Multiplier to #{infiltration.name.get} designFlowRate.")
+            infiltration.setDesignFlowRate(infiltration.designFlowRate.get * infil_multiplier)
+            change_name(infiltration, infil_multiplier)
           end 
           if infiltration.flowperSpaceFloorArea.is_initialized
-            runner.registerInfo("Applying #{infil_perc_change} % Change to #{infiltration.name.get} flowperSpaceFloorArea.")
-            infiltration.setFlowperSpaceFloorArea(infiltration.flowperSpaceFloorArea.get + infiltration.flowperSpaceFloorArea.get * infil_perc_change * 0.01)
-            change_name(infiltration, infil_perc_change)
+            runner.registerInfo("Applying #{infil_multiplier}x Multiplier to #{infiltration.name.get} flowperSpaceFloorArea.")
+            infiltration.setFlowperSpaceFloorArea(infiltration.flowperSpaceFloorArea.get * infil_multiplier)
+            change_name(infiltration, infil_multiplier)
           end  
           if infiltration.flowperExteriorWallArea.is_initialized
-            runner.registerInfo("Applying #{infil_perc_change} % Change to #{infiltration.name.get} flowperExteriorWallArea.")
-            infiltration.setFlowperExteriorWallArea(infiltration.flowperExteriorWallArea.get + infiltration.flowperExteriorWallArea.get * infil_perc_change * 0.01)
-            change_name(infiltration, infil_perc_change)
+            runner.registerInfo("Applying #{infil_multiplier}x Multiplier to #{infiltration.name.get} flowperExteriorWallArea.")
+            infiltration.setFlowperExteriorWallArea(infiltration.flowperExteriorWallArea.get * infil_multiplier)
+            change_name(infiltration, infil_multiplier)
           end          
           # add to hash
           altered_infiltration_objects << infiltration.handle.to_s
@@ -383,15 +582,15 @@ class GeneralCalibrationMeasureMultiplier < OpenStudio::Ruleset::ModelUserScript
         outdoor_air = space.designSpecificationOutdoorAir.get
         # alter values if not already done
         if !altered_outdoor_air_objects.include? outdoor_air.handle.to_s
-          runner.registerInfo("Applying #{vent_perc_change} % Change to #{outdoor_air.name.get} OutdoorAirFlowperPerson.")
-          outdoor_air.setOutdoorAirFlowperPerson(outdoor_air.outdoorAirFlowperPerson + outdoor_air.outdoorAirFlowperPerson * vent_perc_change * 0.01)
-          runner.registerInfo("Applying #{vent_perc_change} % Change to #{outdoor_air.name.get} OutdoorAirFlowperFloorArea.")
-          outdoor_air.setOutdoorAirFlowperFloorArea(outdoor_air.outdoorAirFlowperFloorArea + outdoor_air.outdoorAirFlowperFloorArea * vent_perc_change * 0.01)
-          runner.registerInfo("Applying #{vent_perc_change} % Change to #{outdoor_air.name.get} OutdoorAirFlowAirChangesperHour.")
-          outdoor_air.setOutdoorAirFlowAirChangesperHour(outdoor_air.outdoorAirFlowAirChangesperHour + outdoor_air.outdoorAirFlowAirChangesperHour * vent_perc_change * 0.01)
-          runner.registerInfo("Applying #{vent_perc_change} % Change to #{outdoor_air.name.get} OutdoorAirFlowRate.")
-          outdoor_air.setOutdoorAirFlowRate(outdoor_air.outdoorAirFlowRate + outdoor_air.outdoorAirFlowRate * vent_perc_change * 0.01)
-          change_name(outdoor_air, vent_perc_change) 
+          runner.registerInfo("Applying #{vent_multiplier}x Multiplier to #{outdoor_air.name.get} OutdoorAirFlowperPerson.")
+          outdoor_air.setOutdoorAirFlowperPerson(outdoor_air.outdoorAirFlowperPerson * vent_multiplier)
+          runner.registerInfo("Applying #{vent_multiplier}x Multiplier to #{outdoor_air.name.get} OutdoorAirFlowperFloorArea.")
+          outdoor_air.setOutdoorAirFlowperFloorArea(outdoor_air.outdoorAirFlowperFloorArea * vent_multiplier)
+          runner.registerInfo("Applying #{vent_multiplier}x Multiplier to #{outdoor_air.name.get} OutdoorAirFlowAirChangesperHour.")
+          outdoor_air.setOutdoorAirFlowAirChangesperHour(outdoor_air.outdoorAirFlowAirChangesperHour * vent_multiplier)
+          runner.registerInfo("Applying #{vent_multiplier}x Multiplier to #{outdoor_air.name.get} OutdoorAirFlowRate.")
+          outdoor_air.setOutdoorAirFlowRate(outdoor_air.outdoorAirFlowRate * vent_multiplier)
+          change_name(outdoor_air, vent_multiplier) 
           # add to hash
           altered_outdoor_air_objects << outdoor_air.handle.to_s
         else
@@ -399,48 +598,56 @@ class GeneralCalibrationMeasureMultiplier < OpenStudio::Ruleset::ModelUserScript
         end
       end
       
+      # modify waterUse equip
+      space.waterUseEquipment.each do |equip|
+        equip_def = equip.waterUseEquipmentDefinition
+        # get and alter multiplier
+        if !altered_waterUse_equip_definitions.include? equip_def.handle.to_s
+            runner.registerInfo("Applying #{wateruse_equip_multiplier}x multiplier to #{equip_def.name.get}.")
+            equip_def.setPeakFlowRate(equip_def.peakFlowRate * wateruse_equip_multiplier)
+            change_name(equip_def, wateruse_equip_multiplier)
+          # update hash
+          altered_waterUse_equip_definitions << equip_def.handle.to_s
+        else
+          runner.registerInfo("Skipping change to #{equip_def.name.get}")
+        end
+      end
+      
       # modify internal mass
       space.internalMass.each do |internalmass|
-        # get and alter definition
-        internalmass_def = internalmass.internalMassDefinition
-        if !altered_internalmass_objects.include? internalmass_def.handle.to_s
-          if internalmass_def.surfaceAreaperSpaceFloorArea.is_initialized
-            runner.registerInfo("Applying #{mass_perc_change} % Change to #{internalmass_def.name.get} surfaceAreaperSpaceFloorArea.")
-            internalmass_def.setSurfaceAreaperSpaceFloorArea(internalmass_def.surfaceAreaperSpaceFloorArea.get + internalmass_def.surfaceAreaperSpaceFloorArea.get * mass_perc_change * 0.01)
-            change_name(internalmass_def, mass_perc_change)
-          end
-          if internalmass_def.surfaceArea.is_initialized
-            runner.registerInfo("Applying #{mass_perc_change} % Change to #{internalmass_def.name.get} surfaceArea.")
-            internalmass_def.setSurfaceArea(internalmass_def.surfaceArea.get + internalmass_def.surfaceArea.get * mass_perc_change * 0.01)
-            change_name(internalmass_def, mass_perc_change)
-          end
-          if internalmass_def.surfaceAreaperPerson.is_initialized
-            runner.registerInfo("Applying #{mass_perc_change} % Change to #{internalmass_def.name.get} surfaceAreaperPerson.")
-            internalmass_def.setSurfaceAreaperPerson(internalmass_def.surfaceAreaperPerson.get + internalmass_def.surfaceAreaperPerson.get * mass_perc_change * 0.01)
-            change_name(internalmass_def, mass_perc_change)
-          end 
+        # get and alter multiplier
+        if !altered_internalmass_objects.include? internalmass.handle.to_s
+            runner.registerInfo("Applying #{mass_multiplier}x multiplier to #{internalmass.name.get}.")
+            internalmass.setMultiplier(mass_multiplier)
+            change_name(internalmass, mass_multiplier)
           # update hash
-          altered_internalmass_objects << internalmass_def.handle.to_s
+          altered_internalmass_objects << internalmass.handle.to_s
         else
-          runner.registerInfo("Skipping change to #{internalmass_def.name.get}")  
+          runner.registerInfo("Skipping change to #{internalmass.name.get}")
         end
       end
     end #end spaces loop
     
-    runner.registerInfo("altered_people_definitions: #{altered_people_definitions}")
+    runner.registerInfo("altered_lights_objects: #{altered_lights_objects}") 
+    runner.registerInfo("altered_luminaires_objects: #{altered_luminaires_objects}") 
+    runner.registerInfo("altered_electric_equip_objects: #{altered_electric_equip_objects}") 
+    runner.registerInfo("altered_gas_equip_objects: #{altered_gas_equip_objects}") 
+    runner.registerInfo("altered_steam_equip_objects: #{altered_steam_equip_objects}") 
+    runner.registerInfo("altered_other_equip_objects: #{altered_other_equip_objects}") 
+    runner.registerInfo("altered_waterUse_equip_definitions: #{altered_waterUse_equip_definitions}")     
+    runner.registerInfo("altered_people_objects: #{altered_people_objects}")
     runner.registerInfo("altered_infiltration_objects: #{altered_infiltration_objects}")
     runner.registerInfo("altered_outdoor_air_objects: #{altered_outdoor_air_objects}")
     runner.registerInfo("altered_internalmass_objects: #{altered_internalmass_objects}")    
-    
-    
+
     # na if nothing in model to look at
-    if altered_people_definitions.size + altered_people_definitions.size + altered_people_definitions.size + altered_internalmass_objects.size == 0
+    if altered_lights_objects.size + altered_luminaires_objects.size + altered_electric_equip_objects.size + altered_gas_equip_objects.size +  altered_steam_equip_objects.size + altered_other_equip_objects.size + altered_waterUse_equip_definitions.size + altered_people_objects.size + altered_people_objects.size + altered_people_objects.size + altered_internalmass_objects.size == 0
       runner.registerAsNotApplicable("No objects to alter were found in the model")
       return true
     end
 
     # report final condition of model
-    runner.registerFinalCondition("#{altered_people_definitions.size} people objects were altered. #{altered_infiltration_objects.size} infiltration objects were altered. #{altered_outdoor_air_objects.size} ventilation objects were altered. #{altered_internalmass_objects.size} internal mass objects were altered.")
+    runner.registerFinalCondition("#{altered_lights_objects.size} light objects were altered. #{altered_luminaires_objects.size} luminaire objects were altered. #{altered_electric_equip_objects.size} electric Equipment objects were altered. #{altered_gas_equip_objects.size} gas Equipment objects were altered. #{altered_steam_equip_objects.size} steamEquipment objects were altered. #{altered_other_equip_objects.size} otherEquipment objects were altered. #{altered_waterUse_equip_definitions.size} waterUse objects were altered. #{altered_people_objects.size} people objects were altered. #{altered_infiltration_objects.size} infiltration objects were altered. #{altered_outdoor_air_objects.size} ventilation objects were altered. #{altered_internalmass_objects.size} internal mass objects were altered.")
 
     return true
 
