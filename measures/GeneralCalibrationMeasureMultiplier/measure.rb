@@ -244,10 +244,10 @@ class GeneralCalibrationMeasureMultiplier < OpenStudio::Ruleset::ModelUserScript
       space_type.lights.each do |light|
         # get and alter multiplier
         if !altered_lights_objects.include? light.handle.to_s
-            runner.registerInfo("Applying #{lights_multiplier}x multiplier to #{light.name.get}.")
-            light.setMultiplier(lights_multiplier)
-            change_name(light, lights_multiplier)
-          # update hash
+          runner.registerInfo("Applying #{lights_multiplier}x multiplier to #{light.name.get}.")
+          light.setMultiplier(lights_multiplier)          
+          # update hash and change name
+          change_name(light, lights_multiplier)
           altered_lights_objects << light.handle.to_s
         else
           runner.registerInfo("Skipping change to #{light.name.get}")
@@ -258,10 +258,10 @@ class GeneralCalibrationMeasureMultiplier < OpenStudio::Ruleset::ModelUserScript
       space_type.luminaires.each do |light|
         # get and alter multiplier
         if !altered_luminaires_objects.include? light.handle.to_s
-            runner.registerInfo("Applying #{luminaire_multiplier}x multiplier to #{light.name.get}.")
-            light.setMultiplier(luminaire_multiplier)
-            change_name(light, luminaire_multiplier)
-          # update hash
+          runner.registerInfo("Applying #{luminaire_multiplier}x multiplier to #{light.name.get}.")
+          light.setMultiplier(luminaire_multiplier)          
+          # update hash and change name
+          change_name(light, luminaire_multiplier)
           altered_luminaires_objects << light.handle.to_s
         else
           runner.registerInfo("Skipping change to #{light.name.get}")
@@ -272,10 +272,10 @@ class GeneralCalibrationMeasureMultiplier < OpenStudio::Ruleset::ModelUserScript
       space_type.electricEquipment.each do |equip|
         # get and alter multiplier
         if !altered_electric_equip_objects.include? equip.handle.to_s
-            runner.registerInfo("Applying #{electric_equip_multiplier}x multiplier to #{equip.name.get}.")
-            equip.setMultiplier(electric_equip_multiplier)
-            change_name(equip, electric_equip_multiplier)
-          # update hash
+          runner.registerInfo("Applying #{electric_equip_multiplier}x multiplier to #{equip.name.get}.")
+          equip.setMultiplier(electric_equip_multiplier)          
+          # update hash and change name
+          change_name(equip, electric_equip_multiplier)
           altered_electric_equip_objects << equip.handle.to_s
         else
           runner.registerInfo("Skipping change to #{equip.name.get}")
@@ -286,10 +286,10 @@ class GeneralCalibrationMeasureMultiplier < OpenStudio::Ruleset::ModelUserScript
       space_type.gasEquipment.each do |equip|
         # get and alter multiplier
         if !altered_gas_equip_objects.include? equip.handle.to_s
-            runner.registerInfo("Applying #{gas_equip_multiplier}x multiplier to #{equip.name.get}.")
-            equip.setMultiplier(gas_equip_multiplier)
-            change_name(equip, gas_equip_multiplier)
-          # update hash
+          runner.registerInfo("Applying #{gas_equip_multiplier}x multiplier to #{equip.name.get}.")
+          equip.setMultiplier(gas_equip_multiplier)          
+          # update hash and change name
+          change_name(equip, gas_equip_multiplier)
           altered_gas_equip_objects << equip.handle.to_s
         else
           runner.registerInfo("Skipping change to #{equip.name.get}")
@@ -300,10 +300,10 @@ class GeneralCalibrationMeasureMultiplier < OpenStudio::Ruleset::ModelUserScript
       space_type.otherEquipment.each do |equip|
         # get and alter multiplier
         if !altered_other_equip_objects.include? equip.handle.to_s
-            runner.registerInfo("Applying #{other_equip_multiplier}x multiplier to #{equip.name.get}.")
-            equip.setMultiplier(other_equip_multiplier)
-            change_name(equip, other_equip_multiplier)
-          # update hash
+          runner.registerInfo("Applying #{other_equip_multiplier}x multiplier to #{equip.name.get}.")
+          equip.setMultiplier(other_equip_multiplier)          
+          # update hash and change name
+          change_name(equip, other_equip_multiplier)
           altered_other_equip_objects << equip.handle.to_s
         else
           runner.registerInfo("Skipping change to #{equip.name.get}")
@@ -314,10 +314,10 @@ class GeneralCalibrationMeasureMultiplier < OpenStudio::Ruleset::ModelUserScript
       space_type.people.each do |peps|
         # get and alter multiplier
         if !altered_people_objects.include? peps.handle.to_s
-            runner.registerInfo("Applying #{occ_multiplier}x multiplier to #{peps.name.get}.")
-            peps.setMultiplier(occ_multiplier)
-            change_name(peps, occ_multiplier)
-          # update hash
+          runner.registerInfo("Applying #{occ_multiplier}x multiplier to #{peps.name.get}.")
+          peps.setMultiplier(occ_multiplier)          
+          # update hash and change name
+          change_name(peps, occ_multiplier)
           altered_people_objects << peps.handle.to_s
         else
           runner.registerInfo("Skipping change to #{peps.name.get}")
@@ -330,29 +330,25 @@ class GeneralCalibrationMeasureMultiplier < OpenStudio::Ruleset::ModelUserScript
           if infiltration.flowperExteriorSurfaceArea.is_initialized
             runner.registerInfo("Applying #{infil_multiplier}x Multiplier to #{infiltration.name.get} FlowperExteriorSurfaceArea.")
             infiltration.setFlowperExteriorSurfaceArea(infiltration.flowperExteriorSurfaceArea.get * infil_multiplier)
-            change_name(infiltration, infil_multiplier)
           end
           if infiltration.airChangesperHour.is_initialized
             runner.registerInfo("Applying #{infil_multiplier}x Multiplier to #{infiltration.name.get} AirChangesperHour.")
             infiltration.setAirChangesperHour(infiltration.airChangesperHour.get * infil_multiplier)
-            change_name(infiltration, infil_multiplier)
           end    
           if infiltration.designFlowRate.is_initialized
             runner.registerInfo("Applying #{infil_multiplier}x Multiplier to #{infiltration.name.get} designFlowRate.")
             infiltration.setDesignFlowRate(infiltration.designFlowRate.get * infil_multiplier)
-            change_name(infiltration, infil_multiplier)
           end 
           if infiltration.flowperSpaceFloorArea.is_initialized
             runner.registerInfo("Applying #{infil_multiplier}x Multiplier to #{infiltration.name.get} flowperSpaceFloorArea.")
             infiltration.setFlowperSpaceFloorArea(infiltration.flowperSpaceFloorArea.get * infil_multiplier)
-            change_name(infiltration, infil_multiplier)
           end  
           if infiltration.flowperExteriorWallArea.is_initialized
             runner.registerInfo("Applying #{infil_multiplier}x Multiplier to #{infiltration.name.get} flowperExteriorWallArea.")
             infiltration.setFlowperExteriorWallArea(infiltration.flowperExteriorWallArea.get * infil_multiplier)
-            change_name(infiltration, infil_multiplier)
           end           
-          # add to hash
+          # add to hash and change name
+          change_name(infiltration, infil_multiplier)
           altered_infiltration_objects << infiltration.handle.to_s
         else
           runner.registerInfo("Skipping change to #{infiltration.name.get}")  
@@ -372,8 +368,8 @@ class GeneralCalibrationMeasureMultiplier < OpenStudio::Ruleset::ModelUserScript
           outdoor_air.setOutdoorAirFlowAirChangesperHour(outdoor_air.outdoorAirFlowAirChangesperHour * vent_multiplier)
           runner.registerInfo("Applying #{vent_multiplier}x Multiplier to #{outdoor_air.name.get} OutdoorAirFlowRate.")
           outdoor_air.setOutdoorAirFlowRate(outdoor_air.outdoorAirFlowRate * vent_multiplier)
+          # add to hash and change name
           change_name(outdoor_air, vent_multiplier)
-          # add to hash
           altered_outdoor_air_objects << outdoor_air.handle.to_s
         else
           runner.registerInfo("Skipping change to #{outdoor_air.name.get}")  
@@ -384,10 +380,10 @@ class GeneralCalibrationMeasureMultiplier < OpenStudio::Ruleset::ModelUserScript
       space_type.internalMass.each do |internalmass|
         # get and alter multiplier
         if !altered_internalmass_objects.include? internalmass.handle.to_s
-            runner.registerInfo("Applying #{mass_multiplier}x multiplier to #{internalmass.name.get}.")
-            internalmass.setMultiplier(mass_multiplier)
-            change_name(internalmass, mass_multiplier)
-          # update hash
+          runner.registerInfo("Applying #{mass_multiplier}x multiplier to #{internalmass.name.get}.")
+          internalmass.setMultiplier(mass_multiplier)          
+          # update hash and change name
+          change_name(internalmass, mass_multiplier)
           altered_internalmass_objects << internalmass.handle.to_s
         else
           runner.registerInfo("Skipping change to #{internalmass.name.get}")
@@ -415,10 +411,10 @@ class GeneralCalibrationMeasureMultiplier < OpenStudio::Ruleset::ModelUserScript
       space.lights.each do |light|
         # get and alter multiplier
         if !altered_lights_objects.include? light.handle.to_s
-            runner.registerInfo("Applying #{lights_multiplier}x multiplier to #{light.name.get}.")
-            light.setMultiplier(lights_multiplier)
-            change_name(light, lights_multiplier)
-          # update hash
+          runner.registerInfo("Applying #{lights_multiplier}x multiplier to #{light.name.get}.")
+          light.setMultiplier(lights_multiplier)          
+          # update hash and change name
+          change_name(light, lights_multiplier)
           altered_lights_objects << light.handle.to_s
         else
           runner.registerInfo("Skipping change to #{light.name.get}")
@@ -429,10 +425,10 @@ class GeneralCalibrationMeasureMultiplier < OpenStudio::Ruleset::ModelUserScript
       space.luminaires.each do |light|
         # get and alter multiplier
         if !altered_luminaires_objects.include? light.handle.to_s
-            runner.registerInfo("Applying #{luminaire_multiplier}x multiplier to #{light.name.get}.")
-            light.setMultiplier(luminaire_multiplier)
-            change_name(light, luminaire_multiplier)
-          # update hash
+          runner.registerInfo("Applying #{luminaire_multiplier}x multiplier to #{light.name.get}.")
+          light.setMultiplier(luminaire_multiplier)          
+          # update hash and change name
+          change_name(light, luminaire_multiplier)
           altered_luminaires_objects << light.handle.to_s
         else
           runner.registerInfo("Skipping change to #{light.name.get}")
@@ -443,10 +439,10 @@ class GeneralCalibrationMeasureMultiplier < OpenStudio::Ruleset::ModelUserScript
       space.electricEquipment.each do |equip|
         # get and alter multiplier
         if !altered_electric_equip_objects.include? equip.handle.to_s
-            runner.registerInfo("Applying #{electric_equip_multiplier}x multiplier to #{equip.name.get}.")
-            equip.setMultiplier(electric_equip_multiplier)
-            change_name(equip, electric_equip_multiplier)
-          # update hash
+          runner.registerInfo("Applying #{electric_equip_multiplier}x multiplier to #{equip.name.get}.")
+          equip.setMultiplier(electric_equip_multiplier)          
+          # update hash and change name
+          change_name(equip, electric_equip_multiplier)
           altered_electric_equip_objects << equip.handle.to_s
         else
           runner.registerInfo("Skipping change to #{equip.name.get}")
@@ -457,10 +453,10 @@ class GeneralCalibrationMeasureMultiplier < OpenStudio::Ruleset::ModelUserScript
       space.gasEquipment.each do |equip|
         # get and alter multiplier
         if !altered_gas_equip_objects.include? equip.handle.to_s
-            runner.registerInfo("Applying #{gas_equip_multiplier}x multiplier to #{equip.name.get}.")
-            equip.setMultiplier(gas_equip_multiplier)
-            change_name(equip, gas_equip_multiplier)
-          # update hash
+          runner.registerInfo("Applying #{gas_equip_multiplier}x multiplier to #{equip.name.get}.")
+          equip.setMultiplier(gas_equip_multiplier)
+          # update hash and change name
+          change_name(equip, gas_equip_multiplier)
           altered_gas_equip_objects << equip.handle.to_s
         else
           runner.registerInfo("Skipping change to #{equip.name.get}")
@@ -471,10 +467,10 @@ class GeneralCalibrationMeasureMultiplier < OpenStudio::Ruleset::ModelUserScript
       space.otherEquipment.each do |equip|
         # get and alter multiplier
         if !altered_other_equip_objects.include? equip.handle.to_s
-            runner.registerInfo("Applying #{other_equip_multiplier}x multiplier to #{equip.name.get}.")
-            equip.setMultiplier(other_equip_multiplier)
-            change_name(equip, other_equip_multiplier)
-          # update hash
+          runner.registerInfo("Applying #{other_equip_multiplier}x multiplier to #{equip.name.get}.")
+          equip.setMultiplier(other_equip_multiplier)
+          # update hash and change name
+          change_name(equip, other_equip_multiplier)
           altered_other_equip_objects << equip.handle.to_s
         else
           runner.registerInfo("Skipping change to #{equip.name.get}")
@@ -485,10 +481,10 @@ class GeneralCalibrationMeasureMultiplier < OpenStudio::Ruleset::ModelUserScript
       space.people.each do |peps|
         # get and alter multiplier
         if !altered_people_objects.include? peps.handle.to_s
-            runner.registerInfo("Applying #{occ_multiplier}x multiplier to #{peps.name.get}.")
-            peps.setMultiplier(occ_multiplier)
-            change_name(peps, occ_multiplier)
-          # update hash
+          runner.registerInfo("Applying #{occ_multiplier}x multiplier to #{peps.name.get}.")
+          peps.setMultiplier(occ_multiplier)
+          # update hash and change name
+          change_name(peps, occ_multiplier)
           altered_people_objects << peps.handle.to_s
         else
           runner.registerInfo("Skipping change to #{peps.name.get}")
@@ -501,29 +497,25 @@ class GeneralCalibrationMeasureMultiplier < OpenStudio::Ruleset::ModelUserScript
           if infiltration.flowperExteriorSurfaceArea.is_initialized
             runner.registerInfo("Applying #{infil_multiplier}x Multiplier to #{infiltration.name.get} FlowperExteriorSurfaceArea.")
             infiltration.setFlowperExteriorSurfaceArea(infiltration.flowperExteriorSurfaceArea.get * infil_multiplier)
-            change_name(infiltration, infil_multiplier)
           end
           if infiltration.airChangesperHour.is_initialized
             runner.registerInfo("Applying #{infil_multiplier}x Multiplier to #{infiltration.name.get} AirChangesperHour.")
             infiltration.setAirChangesperHour(infiltration.airChangesperHour.get * infil_multiplier)
-            change_name(infiltration, infil_multiplier)
           end
           if infiltration.designFlowRate.is_initialized
             runner.registerInfo("Applying #{infil_multiplier}x Multiplier to #{infiltration.name.get} designFlowRate.")
             infiltration.setDesignFlowRate(infiltration.designFlowRate.get * infil_multiplier)
-            change_name(infiltration, infil_multiplier)
           end 
           if infiltration.flowperSpaceFloorArea.is_initialized
             runner.registerInfo("Applying #{infil_multiplier}x Multiplier to #{infiltration.name.get} flowperSpaceFloorArea.")
             infiltration.setFlowperSpaceFloorArea(infiltration.flowperSpaceFloorArea.get * infil_multiplier)
-            change_name(infiltration, infil_multiplier)
           end  
           if infiltration.flowperExteriorWallArea.is_initialized
             runner.registerInfo("Applying #{infil_multiplier}x Multiplier to #{infiltration.name.get} flowperExteriorWallArea.")
             infiltration.setFlowperExteriorWallArea(infiltration.flowperExteriorWallArea.get * infil_multiplier)
-            change_name(infiltration, infil_multiplier)
           end          
-          # add to hash
+          # add to hash and change name
+          change_name(infiltration, infil_multiplier)
           altered_infiltration_objects << infiltration.handle.to_s
         else
           runner.registerInfo("Skipping change to #{infiltration.name.get}")  
@@ -543,8 +535,8 @@ class GeneralCalibrationMeasureMultiplier < OpenStudio::Ruleset::ModelUserScript
           outdoor_air.setOutdoorAirFlowAirChangesperHour(outdoor_air.outdoorAirFlowAirChangesperHour * vent_multiplier)
           runner.registerInfo("Applying #{vent_multiplier}x Multiplier to #{outdoor_air.name.get} OutdoorAirFlowRate.")
           outdoor_air.setOutdoorAirFlowRate(outdoor_air.outdoorAirFlowRate * vent_multiplier)
-          change_name(outdoor_air, vent_multiplier) 
-          # add to hash
+          # add to hash and change name
+          change_name(outdoor_air, vent_multiplier)
           altered_outdoor_air_objects << outdoor_air.handle.to_s
         else
           runner.registerInfo("Skipping change to #{outdoor_air.name.get}")  
@@ -555,10 +547,10 @@ class GeneralCalibrationMeasureMultiplier < OpenStudio::Ruleset::ModelUserScript
       space.internalMass.each do |internalmass|
         # get and alter multiplier
         if !altered_internalmass_objects.include? internalmass.handle.to_s
-            runner.registerInfo("Applying #{mass_multiplier}x multiplier to #{internalmass.name.get}.")
-            internalmass.setMultiplier(mass_multiplier)
-            change_name(internalmass, mass_multiplier)
-          # update hash
+          runner.registerInfo("Applying #{mass_multiplier}x multiplier to #{internalmass.name.get}.")
+          internalmass.setMultiplier(mass_multiplier)
+          # update hash and change name
+          change_name(internalmass, mass_multiplier)
           altered_internalmass_objects << internalmass.handle.to_s
         else
           runner.registerInfo("Skipping change to #{internalmass.name.get}")
@@ -577,7 +569,7 @@ class GeneralCalibrationMeasureMultiplier < OpenStudio::Ruleset::ModelUserScript
     runner.registerInfo("altered_internalmass_objects: #{altered_internalmass_objects}")    
 
     # na if nothing in model to look at
-    if altered_lights_objects.size + altered_luminaires_objects.size + altered_electric_equip_objects.size + altered_gas_equip_objects.size + altered_other_equip_objects.size + altered_people_objects.size + altered_people_objects.size + altered_people_objects.size + altered_internalmass_objects.size == 0
+    if altered_lights_objects.size + altered_luminaires_objects.size + altered_electric_equip_objects.size + altered_gas_equip_objects.size + altered_other_equip_objects.size + altered_people_objects.size + altered_infiltration_objects.size + altered_outdoor_air_objects.size + altered_internalmass_objects.size == 0
       runner.registerAsNotApplicable("No objects to alter were found in the model")
       return true
     end

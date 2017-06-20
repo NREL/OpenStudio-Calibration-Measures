@@ -2,13 +2,13 @@
   <schema_version>3.0</schema_version>
   <name>general_calibration_measure_percent_change</name>
   <uid>0f583ac1-fa7e-48bc-9f80-12ed17180669</uid>
-  <version_id>fdb30345-9896-49f4-bc67-6a8edace5a26</version_id>
-  <version_modified>20170615T235832Z</version_modified>
+  <version_id>167cc2a8-2edd-4c2a-9c2b-b61f3309df24</version_id>
+  <version_modified>20170620T164748Z</version_modified>
   <xml_checksum>DEC0D835</xml_checksum>
   <class_name>GeneralCalibrationMeasurePercentChange</class_name>
   <display_name>General Calibration Measure Percent Change</display_name>
   <description>This is a general purpose measure to calibrate space and space type elements with a percent change.</description>
-  <modeler_description>It will be used for calibration of people, infiltration, and outdoor air. User can choose between a SINGLE SpaceType or ALL the SpaceTypes as well as a SINGLE Space or ALL the Spaces.</modeler_description>
+  <modeler_description>It will be used for calibration of space and spaceType loads as well as infiltration, and outdoor air. User can choose between a SINGLE SpaceType or ALL the SpaceTypes as well as a SINGLE Space or ALL the Spaces.</modeler_description>
   <arguments>
     <argument>
       <name>space_type</name>
@@ -19,7 +19,7 @@
       <default_value>*All SpaceTypes*</default_value>
       <choices>
         <choice>
-          <value>{01c5505b-5bcc-416f-95d6-b5ece8d7759c}</value>
+          <value>{d4cdf70f-06a6-4852-b202-a6ccfd49e1bc}</value>
           <display_name>*All SpaceTypes*</display_name>
         </choice>
         <choice>
@@ -37,7 +37,7 @@
       <default_value>*All Spaces*</default_value>
       <choices>
         <choice>
-          <value>{01c5505b-5bcc-416f-95d6-b5ece8d7759c}</value>
+          <value>{d4cdf70f-06a6-4852-b202-a6ccfd49e1bc}</value>
           <display_name>*All Spaces*</display_name>
         </choice>
         <choice>
@@ -47,27 +47,54 @@
       </choices>
     </argument>
     <argument>
-      <name>occ_perc_change</name>
-      <display_name>Percent Change in the default number of people.</display_name>
-      <description>Percent Change in the default number of people.</description>
+      <name>lights_perc_change</name>
+      <display_name>Percent Change in the default Lights Definition.</display_name>
+      <description>Percent Change in the default Lights Definition.</description>
       <type>Double</type>
       <required>true</required>
       <model_dependent>false</model_dependent>
       <default_value>0</default_value>
     </argument>
     <argument>
-      <name>infil_perc_change</name>
-      <display_name>Percent Change in the default infiltration.</display_name>
-      <description>Percent Change in the default infiltration.</description>
+      <name>luminaire_perc_change</name>
+      <display_name>Percent Change in the default Luminaire Definition.</display_name>
+      <description>Percent Change in the default Luminaire Definition.</description>
       <type>Double</type>
       <required>true</required>
       <model_dependent>false</model_dependent>
       <default_value>0</default_value>
     </argument>
     <argument>
-      <name>vent_perc_change</name>
-      <display_name>Percent Change in the default Ventilation.</display_name>
-      <description>Percent Change in the default Ventilation.</description>
+      <name>ElectricEquipment_perc_change</name>
+      <display_name>Percent Change in the default Electric Equipment Definition.</display_name>
+      <description>Percent Change in the default Electric Equipment Definition.</description>
+      <type>Double</type>
+      <required>true</required>
+      <model_dependent>false</model_dependent>
+      <default_value>0</default_value>
+    </argument>
+    <argument>
+      <name>GasEquipment_perc_change</name>
+      <display_name>Percent Change in the default Gas Equipment Definition.</display_name>
+      <description>Percent Change in the default Gas Equipment Definition.</description>
+      <type>Double</type>
+      <required>true</required>
+      <model_dependent>false</model_dependent>
+      <default_value>0</default_value>
+    </argument>
+    <argument>
+      <name>OtherEquipment_perc_change</name>
+      <display_name>Percent Change in the default OtherEquipment Definition.</display_name>
+      <description>Percent Change in the default OtherEquipment Definition.</description>
+      <type>Double</type>
+      <required>true</required>
+      <model_dependent>false</model_dependent>
+      <default_value>0</default_value>
+    </argument>
+    <argument>
+      <name>people_perc_change</name>
+      <display_name>Percent Change in the default People Definition.</display_name>
+      <description>Percent Change in the default People Definition.</description>
       <type>Double</type>
       <required>true</required>
       <model_dependent>false</model_dependent>
@@ -75,8 +102,26 @@
     </argument>
     <argument>
       <name>mass_perc_change</name>
-      <display_name>Percent Change in the default Internal Mass.</display_name>
-      <description>Percent Change in the default Internal Mass.</description>
+      <display_name>Percent Change in the default Internal Mass Definition.</display_name>
+      <description>Percent Change in the default Internal Mass Definition.</description>
+      <type>Double</type>
+      <required>true</required>
+      <model_dependent>false</model_dependent>
+      <default_value>0</default_value>
+    </argument>
+    <argument>
+      <name>infil_perc_change</name>
+      <display_name>Percent Change in the default Design Infiltration Outdoor Air.</display_name>
+      <description>Percent Change in the default Design Infiltration Outdoor Air.</description>
+      <type>Double</type>
+      <required>true</required>
+      <model_dependent>false</model_dependent>
+      <default_value>0</default_value>
+    </argument>
+    <argument>
+      <name>vent_perc_change</name>
+      <display_name>Percent Change in the default Design Specification Outdoor Air.</display_name>
+      <description>Percent Change in the default Design Specification Outdoor Air.</description>
       <type>Double</type>
       <required>true</required>
       <model_dependent>false</model_dependent>
@@ -160,7 +205,7 @@
       <filename>measure.rb</filename>
       <filetype>rb</filetype>
       <usage_type>script</usage_type>
-      <checksum>FFFDDC72</checksum>
+      <checksum>F6C634A7</checksum>
     </file>
   </files>
 </measure>
