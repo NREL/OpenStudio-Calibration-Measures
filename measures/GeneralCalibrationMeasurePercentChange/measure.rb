@@ -159,6 +159,11 @@ class GeneralCalibrationMeasurePercentChange < OpenStudio::Ruleset::ModelUserScr
   def run(model, runner, user_arguments)
     super(model, runner, user_arguments)
 
+    # use the built-in error checking
+    if !runner.validateUserArguments(arguments(model), user_arguments)
+      return false
+    end
+    
     # assign the user inputs to variables
     space_type_object = runner.getOptionalWorkspaceObjectChoiceValue("space_type",user_arguments,model)
     space_type_handle = runner.getStringArgumentValue("space_type",user_arguments)

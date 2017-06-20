@@ -22,6 +22,13 @@ class GeneralCalibrationMeasureMultiplier < OpenStudio::Ruleset::ModelUserScript
     end
   end
   
+  def check_multiplier(runner, multiplier)
+    if multiplier < 0
+      runner.registerError("Multiplier #{multiplier} cannot be negative.")
+      return false
+    end
+  end
+  
   # define the arguments that the user will input
   def arguments(model)
     args = OpenStudio::Ruleset::OSArgumentVector.new
@@ -94,6 +101,7 @@ class GeneralCalibrationMeasureMultiplier < OpenStudio::Ruleset::ModelUserScript
     lights_multiplier.setDisplayName("Multiplier for Lights.")
     lights_multiplier.setDescription("Multiplier for Lights.")
     lights_multiplier.setDefaultValue(1.0)
+    lights_multiplier.setMinValue(0.0)
     args << lights_multiplier
     
     # Luminaire multiplier
@@ -159,20 +167,34 @@ class GeneralCalibrationMeasureMultiplier < OpenStudio::Ruleset::ModelUserScript
   def run(model, runner, user_arguments)
     super(model, runner, user_arguments)
 
+    # use the built-in error checking
+    if !runner.validateUserArguments(arguments(model), user_arguments)
+      return false
+    end
+    
     # assign the user inputs to variables
     space_type_object = runner.getOptionalWorkspaceObjectChoiceValue("space_type",user_arguments,model)
     space_type_handle = runner.getStringArgumentValue("space_type",user_arguments)
     space_object = runner.getOptionalWorkspaceObjectChoiceValue("space",user_arguments,model)
     space_handle = runner.getStringArgumentValue("space",user_arguments)
     occ_multiplier = runner.getDoubleArgumentValue("People_multiplier",user_arguments)
+    check_multiplier(runner, occ_multiplier)
     infil_multiplier = runner.getDoubleArgumentValue("Infiltration_multiplier",user_arguments)
+    check_multiplier(runner, infil_multiplier)
     vent_multiplier = runner.getDoubleArgumentValue("Ventilation_multiplier",user_arguments)
+    check_multiplier(runner, vent_multiplier)
     mass_multiplier = runner.getDoubleArgumentValue("InternalMass_multiplier",user_arguments)
+    check_multiplier(runner, mass_multiplier)
     electric_equip_multiplier = runner.getDoubleArgumentValue("ElectricEquipment_multiplier",user_arguments)
+    check_multiplier(runner, electric_equip_multiplier)
     gas_equip_multiplier = runner.getDoubleArgumentValue("GasEquipment_multiplier",user_arguments)
+    check_multiplier(runner, gas_equip_multiplier)
     other_equip_multiplier = runner.getDoubleArgumentValue("OtherEquipment_multiplier",user_arguments)
+    check_multiplier(runner, other_equip_multiplier)
     lights_multiplier = runner.getDoubleArgumentValue("Lights_multiplier",user_arguments)
+    check_multiplier(runner, lights_multiplier)
     luminaire_multiplier = runner.getDoubleArgumentValue("Luminaire_multiplier",user_arguments)
+    check_multiplier(runner, luminaire_multiplier)
     
     #find objects to change
     space_types = []

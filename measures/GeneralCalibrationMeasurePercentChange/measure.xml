@@ -2,8 +2,8 @@
   <schema_version>3.0</schema_version>
   <name>general_calibration_measure_percent_change</name>
   <uid>0f583ac1-fa7e-48bc-9f80-12ed17180669</uid>
-  <version_id>167cc2a8-2edd-4c2a-9c2b-b61f3309df24</version_id>
-  <version_modified>20170620T164748Z</version_modified>
+  <version_id>1b6c9bcf-f072-4eec-8988-1be65ac88bc9</version_id>
+  <version_modified>20170620T172832Z</version_modified>
   <xml_checksum>DEC0D835</xml_checksum>
   <class_name>GeneralCalibrationMeasurePercentChange</class_name>
   <display_name>General Calibration Measure Percent Change</display_name>
@@ -19,7 +19,7 @@
       <default_value>*All SpaceTypes*</default_value>
       <choices>
         <choice>
-          <value>{d4cdf70f-06a6-4852-b202-a6ccfd49e1bc}</value>
+          <value>{496ff4a4-25fa-4662-8ba1-f92ad96e8a67}</value>
           <display_name>*All SpaceTypes*</display_name>
         </choice>
         <choice>
@@ -37,7 +37,7 @@
       <default_value>*All Spaces*</default_value>
       <choices>
         <choice>
-          <value>{d4cdf70f-06a6-4852-b202-a6ccfd49e1bc}</value>
+          <value>{496ff4a4-25fa-4662-8ba1-f92ad96e8a67}</value>
           <display_name>*All Spaces*</display_name>
         </choice>
         <choice>
@@ -205,7 +205,7 @@
       <filename>measure.rb</filename>
       <filetype>rb</filetype>
       <usage_type>script</usage_type>
-      <checksum>F6C634A7</checksum>
+      <checksum>554AE9A5</checksum>
     </file>
   </files>
 </measure>

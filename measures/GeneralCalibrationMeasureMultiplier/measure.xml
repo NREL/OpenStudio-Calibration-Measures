@@ -2,8 +2,8 @@
   <schema_version>3.0</schema_version>
   <name>general_calibration_measure_multiplier</name>
   <uid>af156383-cfe2-4798-b581-08a4cccb8884</uid>
-  <version_id>3bc21aab-352b-464d-a260-3c92e87d432a</version_id>
-  <version_modified>20170620T164748Z</version_modified>
+  <version_id>828ea689-43e7-4201-bf6e-12ac8dec8223</version_id>
+  <version_modified>20170620T172225Z</version_modified>
   <xml_checksum>DEC0D835</xml_checksum>
   <class_name>GeneralCalibrationMeasureMultiplier</class_name>
   <display_name>General Calibration Measure Multiplier</display_name>
@@ -19,7 +19,7 @@
       <default_value>*All SpaceTypes*</default_value>
       <choices>
         <choice>
-          <value>{c787eb14-2ec5-41ac-a078-b2be2ea8c07d}</value>
+          <value>{88429825-a9fc-4950-ab04-c4bbdbd74120}</value>
           <display_name>*All SpaceTypes*</display_name>
         </choice>
         <choice>
@@ -37,7 +37,7 @@
       <default_value>*All Spaces*</default_value>
       <choices>
         <choice>
-          <value>{c787eb14-2ec5-41ac-a078-b2be2ea8c07d}</value>
+          <value>{88429825-a9fc-4950-ab04-c4bbdbd74120}</value>
           <display_name>*All Spaces*</display_name>
         </choice>
         <choice>
@@ -205,7 +205,7 @@
       <filename>measure.rb</filename>
       <filetype>rb</filetype>
       <usage_type>script</usage_type>
-      <checksum>C1E5A31C</checksum>
+      <checksum>1CEECBAD</checksum>
     </file>
   </files>
 </measure>
