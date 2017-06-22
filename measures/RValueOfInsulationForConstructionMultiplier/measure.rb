@@ -1,19 +1,19 @@
 #start the measure
-class RValueOfInsulationForConstructionPercentageChange < OpenStudio::Ruleset::ModelUserScript
+class RValueOfInsulationForConstructionMultiplier < OpenStudio::Ruleset::ModelUserScript
 
   #define the name that a user will see
   def name
-    return "Change R-value of Insulation Layer for Construction By a Specified Percentage"
+    return "Change R-value of Insulation Layer for Construction By a Multiplier"
   end
 
-      # human readable description
+    # human readable description
   def description
-    return "Change R-value of Insulation Layer for Construction By a Specified Percentage"
+    return "Change R-value of Insulation Layer for Construction By a Multiplier"
   end
 
   # human readable description of modeling approach
   def modeler_description
-    return "Change R-value of Insulation Layer for Construction By a Specified Percentage"
+    return "Change R-value of Insulation Layer for Construction By a Multiplier"
   end
   
   #define the arguments that the user will input
@@ -46,10 +46,10 @@ class RValueOfInsulationForConstructionPercentageChange < OpenStudio::Ruleset::M
     args << construction
 
     #make an argument insulation R-value
-    r_value_prct_inc = OpenStudio::Ruleset::OSArgument::makeDoubleArgument("r_value_prct_inc",true)
-    r_value_prct_inc.setDisplayName("Percentage Change of R-value for Insulation Layer of Construction.")
-    r_value_prct_inc.setDefaultValue(0.0)
-    args << r_value_prct_inc
+    r_value_multplier = OpenStudio::Ruleset::OSArgument::makeDoubleArgument("r_value_multplier",true)
+    r_value_multplier.setDisplayName("Multiplier for R-value for Insulation Layer of Construction.")
+    r_value_multplier.setDefaultValue(1.0)
+    args << r_value_multplier
 
     return args
   end #end the arguments method
@@ -65,7 +65,7 @@ class RValueOfInsulationForConstructionPercentageChange < OpenStudio::Ruleset::M
 
     #assign the user inputs to variables
     construction = runner.getOptionalWorkspaceObjectChoiceValue("construction",user_arguments,model) #model is passed in because of argument type
-    r_value_prct_inc = runner.getDoubleArgumentValue("r_value_prct_inc",user_arguments)
+    r_value_multplier = runner.getDoubleArgumentValue("r_value_multplier",user_arguments)
 
     #check the construction for reasonableness
     if construction.empty?
@@ -86,7 +86,7 @@ class RValueOfInsulationForConstructionPercentageChange < OpenStudio::Ruleset::M
     end  #end of if construction.empty?
 
     #set limit for minimum insulation. This is used to limit input and for inferring insulation layer in construction.
-    min_expected_r_value_prct_inc_ip = 1 #ip units
+    min_expected_r_value_multplier_ip = 1 #ip units
 
     # report initial condition
     initial_r_value_ip = OpenStudio::convert(1.0/construction.thermalConductance.to_f,"m^2*K/W", "ft^2*h*R/Btu")
@@ -112,7 +112,7 @@ class RValueOfInsulationForConstructionPercentageChange < OpenStudio::Ruleset::M
       thermal_resistance_values << construction_layer_r_value
       counter = counter + 1
     end
-    if not thermal_resistance_values.max > OpenStudio::convert(min_expected_r_value_prct_inc_ip, "ft^2*h*R/Btu","m^2*K/W").get
+    if not thermal_resistance_values.max > OpenStudio::convert(min_expected_r_value_multplier_ip, "ft^2*h*R/Btu","m^2*K/W").get
       runner.registerAsNotApplicable("Construction '#{construction.name.to_s}' does not appear to have an insulation layer and was not altered.")
       return true
     end
@@ -120,7 +120,7 @@ class RValueOfInsulationForConstructionPercentageChange < OpenStudio::Ruleset::M
     # clone insulation material
     new_material = max_thermal_resistance_material.clone(model)
     new_material = new_material.to_OpaqueMaterial.get
-    new_material.setName("#{max_thermal_resistance_material.name.to_s}_R-value #{r_value_prct_inc.round(2)}% change") if r_value_prct_inc != 0
+    new_material.setName("#{max_thermal_resistance_material.name.to_s}_R-value #{r_value_multplier.round(2)}x Multiplier") if r_value_multplier != 1
     construction.eraseLayer(max_thermal_resistance_material_index)
     construction.insertLayer(max_thermal_resistance_material_index,new_material)
     runner.registerInfo("For construction'#{construction.name.to_s}', '#{max_thermal_resistance_material.name.to_s}' was altered.")
@@ -129,18 +129,18 @@ class RValueOfInsulationForConstructionPercentageChange < OpenStudio::Ruleset::M
     new_material_matt = new_material.to_Material
     if not new_material_matt.empty?
       starting_thickness = new_material_matt.get.thickness
-      target_thickness = starting_thickness * (1 + r_value_prct_inc/100)
+      target_thickness = starting_thickness * (r_value_multplier)
       final_thickness = new_material_matt.get.setThickness(target_thickness)
     end
     new_material_massless = new_material.to_MasslessOpaqueMaterial
     if not new_material_massless.empty?
       starting_thermal_resistance = new_material_massless.get.thermalResistance
-      final_thermal_resistance = new_material_massless.get.setThermalResistance(starting_thermal_resistance * (1 + r_value_prct_inc/100))
+      final_thermal_resistance = new_material_massless.get.setThermalResistance(starting_thermal_resistance * (r_value_multplier))
     end
     new_material_airgap = new_material.to_AirGap
     if not new_material_airgap.empty?
       starting_thermal_resistance = new_material_airgap.get.thermalResistance
-      final_thermal_resistance = new_material_airgap.get.setThermalResistance(starting_thermal_resistance * (1 + r_value_prct_inc/100))
+      final_thermal_resistance = new_material_airgap.get.setThermalResistance(starting_thermal_resistance * (r_value_multplier))
     end
 
     # report initial condition
@@ -154,4 +154,4 @@ class RValueOfInsulationForConstructionPercentageChange < OpenStudio::Ruleset::M
 end #end the measure
 
 #this allows the measure to be used by the application
-RValueOfInsulationForConstructionPercentageChange.new.registerWithApplication
+RValueOfInsulationForConstructionMultiplier.new.registerWithApplication
