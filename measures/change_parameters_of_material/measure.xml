@@ -2,8 +2,8 @@
   <schema_version>3.0</schema_version>
   <name>change_parameters_of_material</name>
   <uid>3c7a6751-bb54-4600-9410-8f042e1a413b</uid>
-  <version_id>ee2f3781-63d3-49c2-9846-b85a97ca1472</version_id>
-  <version_modified>20170622T192342Z</version_modified>
+  <version_id>5ef7f681-8ef1-4d73-8b57-92f1da4e0df4</version_id>
+  <version_modified>20170622T192547Z</version_modified>
   <xml_checksum>0BF71A3E</xml_checksum>
   <class_name>ChangeParametersOfMaterial</class_name>
   <display_name>Change Parameters Of Material (Layer 0 of Construction)</display_name>

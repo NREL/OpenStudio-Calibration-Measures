@@ -2,8 +2,8 @@
   <schema_version>3.0</schema_version>
   <name>change_r_value_of_insulation_for_construction_by_a_specified_percentage</name>
   <uid>3c7a6751-bb54-4600-9410-8f042e1a513b</uid>
-  <version_id>c77c5aa5-154d-443f-b7d0-fa73aa615607</version_id>
-  <version_modified>20170607T193911Z</version_modified>
+  <version_id>7b42f15b-acae-4f2e-9b09-a570aeacd3c8</version_id>
+  <version_modified>20170622T195537Z</version_modified>
   <xml_checksum>0BF71A3E</xml_checksum>
   <class_name>ChangeRValueOfInsulationForConstructionByASpecifiedPercentage</class_name>
   <display_name>Change R-value of Insulation for Construction By a Specified Percentage</display_name>
@@ -23,7 +23,7 @@
       <type>Double</type>
       <required>true</required>
       <model_dependent>false</model_dependent>
-      <default_value>30</default_value>
+      <default_value>0</default_value>
     </argument>
   </arguments>
   <outputs/>
@@ -108,7 +108,7 @@
       <filename>measure.rb</filename>
       <filetype>rb</filetype>
       <usage_type>script</usage_type>
-      <checksum>D25F0CC1</checksum>
+      <checksum>57ADDC8B</checksum>
     </file>
   </files>
 </measure>

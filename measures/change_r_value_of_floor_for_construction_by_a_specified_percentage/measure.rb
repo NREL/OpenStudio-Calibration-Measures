@@ -3,7 +3,7 @@ class ChangeRValueOfFloorForConstructionByASpecifiedPercentage < OpenStudio::Rul
 
   #define the name that a user will see
   def name
-    return "Change R-value of Insulation for Construction By a Specified Percentage"
+    return "Change R-value of Floor for Construction By a Specified Percentage"
   end
 
   #define the arguments that the user will input

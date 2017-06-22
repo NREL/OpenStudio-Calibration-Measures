@@ -38,7 +38,7 @@ class ChangeRValueOfInsulationForConstructionByASpecifiedPercentage < OpenStudio
     #make an argument insulation R-value
     r_value_prct_inc = OpenStudio::Ruleset::OSArgument::makeDoubleArgument("r_value_prct_inc",true)
     r_value_prct_inc.setDisplayName("Percentage Change of R-value for Insulation Layer of Construction.")
-    r_value_prct_inc.setDefaultValue(30.0)
+    r_value_prct_inc.setDefaultValue(0.0)
     args << r_value_prct_inc
 
     return args
@@ -75,19 +75,14 @@ class ChangeRValueOfInsulationForConstructionByASpecifiedPercentage < OpenStudio
       end
     end  #end of if construction.empty?
 
-    #check the R-value for reasonableness
-    if r_value_prct_inc <  -100
-      runner.registerError("Percentage change less than -100% is not valid.")
-      return false
-    end
-
     #set limit for minimum insulation. This is used to limit input and for inferring insulation layer in construction.
     min_expected_r_value_prct_inc_ip = 1 #ip units
 
     # report initial condition
     initial_r_value_ip = OpenStudio::convert(1.0/construction.thermalConductance.to_f,"m^2*K/W", "ft^2*h*R/Btu")
     runner.registerInitialCondition("The Initial R-value of #{construction.name} is #{initial_r_value_ip} (ft^2*h*R/Btu).")
-
+    runner.registerValue("initial_r_value_ip",initial_r_value_ip.to_f,"ft^2*h*R/Btu")
+    
     # todo - find and test insulation
     construction_layers = construction.layers
     max_thermal_resistance_material = ""
@@ -108,14 +103,14 @@ class ChangeRValueOfInsulationForConstructionByASpecifiedPercentage < OpenStudio
       counter = counter + 1
     end
     if not thermal_resistance_values.max > OpenStudio::convert(min_expected_r_value_prct_inc_ip, "ft^2*h*R/Btu","m^2*K/W").get
-      runner.registerNotAppicable("Construction '#{exterior_surface_construction.name.to_s}' does not appear to have an insulation layer and was not altered.")
+      runner.registerAsNotApplicable("Construction '#{construction.name.to_s}' does not appear to have an insulation layer and was not altered.")
       return true
     end
 
     # clone insulation material
     new_material = max_thermal_resistance_material.clone(model)
     new_material = new_material.to_OpaqueMaterial.get
-    new_material.setName("#{max_thermal_resistance_material.name.to_s}_R-value #{r_value_prct_inc.round(2)}% change")
+    new_material.setName("#{max_thermal_resistance_material.name.to_s}_R-value #{r_value_prct_inc.round(2)}% change") if r_value_prct_inc != 0
     construction.eraseLayer(max_thermal_resistance_material_index)
     construction.insertLayer(max_thermal_resistance_material_index,new_material)
     runner.registerInfo("For construction'#{construction.name.to_s}', '#{max_thermal_resistance_material.name.to_s}' was altered.")
@@ -141,7 +136,7 @@ class ChangeRValueOfInsulationForConstructionByASpecifiedPercentage < OpenStudio
     # report initial condition
     final_r_value_ip = OpenStudio::convert(1/construction.thermalConductance.to_f,"m^2*K/W", "ft^2*h*R/Btu")
     runner.registerFinalCondition("The Final R-value of #{construction.name} is #{final_r_value_ip} (ft^2*h*R/Btu).")
-    runner.registerValue("final_r_value_ip",final_r_value_ip.to_f,"")
+    runner.registerValue("final_r_value_ip",final_r_value_ip.to_f,"ft^2*h*R/Btu")
     return true
 
   end #end the run method

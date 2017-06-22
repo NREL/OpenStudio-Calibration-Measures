@@ -2,11 +2,11 @@
   <schema_version>3.0</schema_version>
   <name>change_r_value_of_floor_for_construction_by_a_specified_percentage</name>
   <uid>3c7a6751-bb54-4600-9410-8f042e1a514b</uid>
-  <version_id>cb0e702a-6752-4ab0-90df-a1713be35b0e</version_id>
-  <version_modified>20170607T193911Z</version_modified>
+  <version_id>7ed61384-50ec-44be-8a8f-1f07f1b369a9</version_id>
+  <version_modified>20170622T194841Z</version_modified>
   <xml_checksum>0BF71A3E</xml_checksum>
   <class_name>ChangeRValueOfFloorForConstructionByASpecifiedPercentage</class_name>
-  <display_name>Change R-value of Insulation for Construction By a Specified Percentage</display_name>
+  <display_name>Change R-value of Floor for Construction By a Specified Percentage</display_name>
   <description>Change the R value of the floor layer in selected construction by a percentage.</description>
   <modeler_description>Floor layer is inferred by finding the existing layer with the highest thermal resistance.</modeler_description>
   <arguments>
@@ -108,7 +108,7 @@
       <filename>measure.rb</filename>
       <filetype>rb</filetype>
       <usage_type>script</usage_type>
-      <checksum>6490BEC9</checksum>
+      <checksum>34A83C3F</checksum>
     </file>
   </files>
 </measure>
