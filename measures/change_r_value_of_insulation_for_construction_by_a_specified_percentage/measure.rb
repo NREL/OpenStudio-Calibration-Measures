@@ -85,8 +85,8 @@ class ChangeRValueOfInsulationForConstructionByASpecifiedPercentage < OpenStudio
     
     # todo - find and test insulation
     construction_layers = construction.layers
-    max_thermal_resistance_material = ""
-    max_thermal_resistance_material_index = ""
+    max_thermal_resistance_material = construction_layers[0]
+    max_thermal_resistance_material_index = 0
     counter = 0
     thermal_resistance_values = []
 
