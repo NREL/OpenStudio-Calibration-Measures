@@ -1,12 +1,12 @@
 <measure>
   <schema_version>3.0</schema_version>
-  <name>change_r_value_of_insulation_for_construction_by_a_specified_percentage</name>
+  <name>r_value_of_insulation_for_construction_percentage_change</name>
   <uid>3c7a6751-bb54-4600-9410-8f042e1a513b</uid>
-  <version_id>5706b029-b847-4475-8392-310fa733038a</version_id>
-  <version_modified>20170622T201409Z</version_modified>
+  <version_id>28336531-3650-41bd-8177-034562f8c850</version_id>
+  <version_modified>20170622T201751Z</version_modified>
   <xml_checksum>0BF71A3E</xml_checksum>
-  <class_name>ChangeRValueOfInsulationForConstructionByASpecifiedPercentage</class_name>
-  <display_name>Change R-value of Insulation for Construction By a Specified Percentage</display_name>
+  <class_name>RValueOfInsulationForConstructionPercentageChange</class_name>
+  <display_name>Change R-value of Insulation Layer for Construction By a Specified Percentage</display_name>
   <description>Change the R value of the insulation layer in selected construction by a percentage.</description>
   <modeler_description>Insulation layer is inferred by finding the existing layer with the highest thermal resistance.</modeler_description>
   <arguments>
@@ -108,7 +108,7 @@
       <filename>measure.rb</filename>
       <filetype>rb</filetype>
       <usage_type>script</usage_type>
-      <checksum>25D56211</checksum>
+      <checksum>71913018</checksum>
     </file>
   </files>
 </measure>

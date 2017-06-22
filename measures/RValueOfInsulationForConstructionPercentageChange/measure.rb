@@ -1,9 +1,9 @@
 #start the measure
-class ChangeRValueOfInsulationForConstructionByASpecifiedPercentage < OpenStudio::Ruleset::ModelUserScript
+class RValueOfInsulationForConstructionPercentageChange < OpenStudio::Ruleset::ModelUserScript
 
   #define the name that a user will see
   def name
-    return "Change R-value of Insulation for Construction By a Specified Percentage"
+    return "Change R-value of Insulation Layer for Construction By a Specified Percentage"
   end
 
   #define the arguments that the user will input
@@ -144,4 +144,4 @@ class ChangeRValueOfInsulationForConstructionByASpecifiedPercentage < OpenStudio
 end #end the measure
 
 #this allows the measure to be used by the application
-ChangeRValueOfInsulationForConstructionByASpecifiedPercentage.new.registerWithApplication
+RValueOfInsulationForConstructionPercentageChange.new.registerWithApplication
