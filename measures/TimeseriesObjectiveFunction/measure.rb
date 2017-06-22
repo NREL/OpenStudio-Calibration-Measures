@@ -64,39 +64,46 @@ class TimeseriesObjectiveFunction < OpenStudio::Ruleset::ReportingUserScript
     seconds.setDefaultValue(true)
     args << seconds
     
-    sql_key = OpenStudio::Ruleset::OSArgument.makeStringArgument("sql_key", true)
-    sql_key.setDisplayName("SQL key")
-    sql_key.setDescription("SQL key for the SQL query to find the variable in the SQL file")
+    sql_key = OpenStudio::Ruleset::OSArgument.makeStringArgument("key_value", true)
+    sql_key.setDisplayName("SQL key value")
+    sql_key.setDescription("SQL key value for the SQL query to find the variable in the SQL file")
     sql_key.setDefaultValue("")
     args << sql_key  
 
-    sql_var = OpenStudio::Ruleset::OSArgument.makeStringArgument("sql_var", true)
-    sql_var.setDisplayName("SQL var")
-    sql_var.setDescription("SQL var for the SQL query to find the variable in the SQL file")
+    sql_var = OpenStudio::Ruleset::OSArgument.makeStringArgument("timeseries_name", true)
+    sql_var.setDisplayName("TimeSeries Name")
+    sql_var.setDescription("TimeSeries Name for the SQL query to find the variable in the SQL file")
     sql_var.setDefaultValue("Facility Total Electric Demand Power")
     args << sql_var    
     
-    stp = OpenStudio::Ruleset::OSArgument.makeStringArgument("stp", true)
-    stp.setDisplayName("Timeseries Timestep")
-    stp.setDescription("Timeseries Timestep")
-    stp.setDefaultValue("Zone Timestep")
-    args << stp
+    reportfreq_chs = OpenStudio::StringVector.new
+    reportfreq_chs << 'HVAC System Timestep'
+    reportfreq_chs << 'Zone Timestep'
+    reportfreq_chs << 'Hourly'
+    reportfreq_chs << 'Daily'
+    reportfreq_chs << 'Monthly'
+    reportfreq_chs << 'RunPeriod'
+    reporting_frequency = OpenStudio::Ruleset::OSArgument::makeChoiceArgument('reporting_frequency', reportfreq_chs, true)
+    reporting_frequency.setDisplayName("Reporting Frequency")
+    reporting_frequency.setDescription("Reporting Frequency for SQL Query")
+    reporting_frequency.setDefaultValue("Zone Timestep")
+    args << reporting_frequency
     
-    env = OpenStudio::Ruleset::OSArgument.makeStringArgument("env", true)
-    env.setDisplayName("availableEnvPeriods")
-    env.setDescription("EnvPeriod for SQL query")
-    env.setDefaultValue("RUN PERIOD 1")
-    args << env
+    environment_period = OpenStudio::Ruleset::OSArgument.makeStringArgument("environment_period", true)
+    environment_period.setDisplayName("Environment Period")
+    environment_period.setDescription("Environment Period for SQL query")
+    environment_period.setDefaultValue("RUN PERIOD 1")
+    args << environment_period
     
     norm = OpenStudio::Ruleset::OSArgument.makeDoubleArgument("norm", true)
-    norm.setDisplayName("norm of the difference of csv and sql")
-    norm.setDescription("norm of the difference of csv and sql. 1 is absolute value. 2 is euclidean distance. 3 is raw difference.")
+    norm.setDisplayName("Norm of the difference of csv and sql")
+    norm.setDescription("Norm of the difference of csv and sql. 1 is absolute value. 2 is euclidean distance. 3 is raw difference.")
     norm.setDefaultValue(1)
     args << norm   
 
     scale = OpenStudio::Ruleset::OSArgument.makeDoubleArgument("scale", true)
-    scale.setDisplayName("scale factor to apply to the difference")
-    scale.setDescription("scale factor to apply to the difference")
+    scale.setDisplayName("Scale factor to apply to the difference")
+    scale.setDescription("Scale factor to apply to the difference (1 is no scale)")
     scale.setDefaultValue(1)
     args << scale     
 
@@ -181,8 +188,8 @@ class TimeseriesObjectiveFunction < OpenStudio::Ruleset::ReportingUserScript
     algorithm_download = runner.getBoolArgumentValue("algorithm_download", user_arguments)
     plot_flag = runner.getBoolArgumentValue("plot_flag", user_arguments)
     plot_name = runner.getStringArgumentValue("plot_name", user_arguments)
-    env = runner.getStringArgumentValue("env", user_arguments)
-    stp = runner.getStringArgumentValue("stp", user_arguments)
+    environment_period = runner.getStringArgumentValue("environment_period", user_arguments)
+    reporting_frequency = runner.getStringArgumentValue("reporting_frequency", user_arguments)
     
     # Method to translate from OpenStudio's time formatting
     # to Javascript time formatting
@@ -230,8 +237,8 @@ class TimeseriesObjectiveFunction < OpenStudio::Ruleset::ReportingUserScript
     csv = CSV.read(csv_name, :encoding => 'ISO-8859-1')
     #sql = OpenStudio::SqlFile.new(OpenStudio::Path.new('sim.sql'))
     sql = sqlFile
-    #env = sql.availableEnvPeriods[3]
-    runner.registerInfo("env: #{env}")
+    #environment_period = sql.availableEnvPeriods[3]
+    runner.registerInfo("environment_period: #{environment_period}")
     runner.registerInfo("map: #{map}")
     runner.registerInfo("")
     
@@ -355,11 +362,11 @@ class TimeseriesObjectiveFunction < OpenStudio::Ruleset::ReportingUserScript
         diff_index = map[hdr][:index]
         runner.registerInfo("var: #{var}")
         runner.registerInfo("key: #{key}")        
-        runner.registerInfo("sqlcall: #{env},#{stp},#{var},#{key}")  
-        if sql.timeSeries(env,stp,var,key).is_initialized
-          ser = sql.timeSeries(env,stp,var,key).get
+        runner.registerInfo("sqlcall: #{environment_period},#{reporting_frequency},#{var},#{key}")  
+        if sql.timeSeries(environment_period,reporting_frequency,var,key).is_initialized
+          ser = sql.timeSeries(environment_period,reporting_frequency,var,key).get
         else
-            runner.registerWarning("sql.timeSeries not initialized env: #{env},stp: #{stp},var: #{var},key: #{key}.")
+            runner.registerWarning("sql.timeSeries not initialized environment_period: #{environment_period},reporting_frequency: #{reporting_frequency},var: #{var},key: #{key}.")
           next
         end
         date_times = ser.dateTimes

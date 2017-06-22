@@ -2,8 +2,8 @@
   <schema_version>3.0</schema_version>
   <name>timeseries_objective_function</name>
   <uid>6804217d-4737-45f3-82df-b81393c29ce3</uid>
-  <version_id>3e771936-fad5-403c-8fcb-d3fab0d950a6</version_id>
-  <version_modified>20170622T160758Z</version_modified>
+  <version_id>9a52ac7b-849c-4ebb-a5de-96204a94819e</version_id>
+  <version_modified>20170622T165922Z</version_modified>
   <xml_checksum>FFE04372</xml_checksum>
   <class_name>TimeseriesObjectiveFunction</class_name>
   <display_name>TimeSeries Objective Function</display_name>
@@ -85,36 +85,62 @@
       </choices>
     </argument>
     <argument>
-      <name>sql_key</name>
-      <display_name>SQL key</display_name>
-      <description>SQL key for the SQL query to find the variable in the SQL file</description>
+      <name>key_value</name>
+      <display_name>SQL key value</display_name>
+      <description>SQL key value for the SQL query to find the variable in the SQL file</description>
       <type>String</type>
       <required>true</required>
       <model_dependent>false</model_dependent>
       <default_value></default_value>
     </argument>
     <argument>
-      <name>sql_var</name>
-      <display_name>SQL var</display_name>
-      <description>SQL var for the SQL query to find the variable in the SQL file</description>
+      <name>timeseries_name</name>
+      <display_name>TimeSeries Name</display_name>
+      <description>TimeSeries Name for the SQL query to find the variable in the SQL file</description>
       <type>String</type>
       <required>true</required>
       <model_dependent>false</model_dependent>
       <default_value>Facility Total Electric Demand Power</default_value>
     </argument>
     <argument>
-      <name>stp</name>
-      <display_name>Timeseries Timestep</display_name>
-      <description>Timeseries Timestep</description>
-      <type>String</type>
+      <name>reporting_frequency</name>
+      <display_name>Reporting Frequency</display_name>
+      <description>Reporting Frequency for SQL Query</description>
+      <type>Choice</type>
       <required>true</required>
       <model_dependent>false</model_dependent>
       <default_value>Zone Timestep</default_value>
+      <choices>
+        <choice>
+          <value>HVAC System Timestep</value>
+          <display_name>HVAC System Timestep</display_name>
+        </choice>
+        <choice>
+          <value>Zone Timestep</value>
+          <display_name>Zone Timestep</display_name>
+        </choice>
+        <choice>
+          <value>Hourly</value>
+          <display_name>Hourly</display_name>
+        </choice>
+        <choice>
+          <value>Daily</value>
+          <display_name>Daily</display_name>
+        </choice>
+        <choice>
+          <value>Monthly</value>
+          <display_name>Monthly</display_name>
+        </choice>
+        <choice>
+          <value>RunPeriod</value>
+          <display_name>RunPeriod</display_name>
+        </choice>
+      </choices>
     </argument>
     <argument>
-      <name>env</name>
-      <display_name>availableEnvPeriods</display_name>
-      <description>EnvPeriod for SQL query</description>
+      <name>environment_period</name>
+      <display_name>Environment Period</display_name>
+      <description>Environment Period for SQL query</description>
       <type>String</type>
       <required>true</required>
       <model_dependent>false</model_dependent>
@@ -122,8 +148,8 @@
     </argument>
     <argument>
       <name>norm</name>
-      <display_name>norm of the difference of csv and sql</display_name>
-      <description>norm of the difference of csv and sql. 1 is absolute value. 2 is euclidean distance. 3 is raw difference.</description>
+      <display_name>Norm of the difference of csv and sql</display_name>
+      <description>Norm of the difference of csv and sql. 1 is absolute value. 2 is euclidean distance. 3 is raw difference.</description>
       <type>Double</type>
       <required>true</required>
       <model_dependent>false</model_dependent>
@@ -131,8 +157,8 @@
     </argument>
     <argument>
       <name>scale</name>
-      <display_name>scale factor to apply to the difference</display_name>
-      <description>scale factor to apply to the difference</description>
+      <display_name>Scale factor to apply to the difference</display_name>
+      <description>Scale factor to apply to the difference (1 is no scale)</description>
       <type>Double</type>
       <required>true</required>
       <model_dependent>false</model_dependent>
@@ -281,7 +307,7 @@
       <filename>measure.rb</filename>
       <filetype>rb</filetype>
       <usage_type>script</usage_type>
-      <checksum>58657873</checksum>
+      <checksum>C110D1BE</checksum>
     </file>
   </files>
 </measure>
