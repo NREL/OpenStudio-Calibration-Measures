@@ -1,0 +1,326 @@
+<measure>
+  <schema_version>3.0</schema_version>
+  <name>timeseries_diff</name>
+  <uid>6804217d-4737-45f3-82df-b81393c29ce3</uid>
+  <version_id>9a0f81ba-a265-4cfd-9a16-48e2ea8f1334</version_id>
+  <version_modified>20170622T151121Z</version_modified>
+  <xml_checksum>FB31B85E</xml_checksum>
+  <class_name>TimeseriesDiff</class_name>
+  <display_name>timeseries diff</display_name>
+  <description>objective function</description>
+  <modeler_description>objective function</modeler_description>
+  <arguments>
+    <argument>
+      <name>csv_name</name>
+      <display_name>CSV file name</display_name>
+      <description>CSV file name.</description>
+      <type>String</type>
+      <required>true</required>
+      <model_dependent>false</model_dependent>
+      <default_value>mtr.csv</default_value>
+    </argument>
+    <argument>
+      <name>csv_time_header</name>
+      <display_name>CSV Time Header</display_name>
+      <description>CSV Time Header Value.</description>
+      <type>String</type>
+      <required>true</required>
+      <model_dependent>false</model_dependent>
+      <default_value>Date/Time</default_value>
+    </argument>
+    <argument>
+      <name>csv_var</name>
+      <display_name>CSV variable name</display_name>
+      <description>CSV variable name</description>
+      <type>String</type>
+      <required>true</required>
+      <model_dependent>false</model_dependent>
+      <default_value>Whole Building:Facility Total Electric Demand Power [W](TimeStep)</default_value>
+    </argument>
+    <argument>
+      <name>csv_var_dn</name>
+      <display_name>CSV variable display name</display_name>
+      <description>CSV variable display name</description>
+      <type>String</type>
+      <required>true</required>
+      <model_dependent>false</model_dependent>
+      <default_value></default_value>
+    </argument>
+    <argument>
+      <name>year</name>
+      <display_name>Year in csv data</display_name>
+      <description>Year in csv data => mm:dd:yy or mm:dd</description>
+      <type>Boolean</type>
+      <required>true</required>
+      <model_dependent>false</model_dependent>
+      <default_value>true</default_value>
+      <choices>
+        <choice>
+          <value>true</value>
+          <display_name>true</display_name>
+        </choice>
+        <choice>
+          <value>false</value>
+          <display_name>false</display_name>
+        </choice>
+      </choices>
+    </argument>
+    <argument>
+      <name>seconds</name>
+      <display_name>Seconds in csv data</display_name>
+      <description>Seconds in csv data => hh:mm:ss or hh:mm</description>
+      <type>Boolean</type>
+      <required>true</required>
+      <model_dependent>false</model_dependent>
+      <default_value>true</default_value>
+      <choices>
+        <choice>
+          <value>true</value>
+          <display_name>true</display_name>
+        </choice>
+        <choice>
+          <value>false</value>
+          <display_name>false</display_name>
+        </choice>
+      </choices>
+    </argument>
+    <argument>
+      <name>sql_key</name>
+      <display_name>SQL key</display_name>
+      <description>SQL key</description>
+      <type>String</type>
+      <required>true</required>
+      <model_dependent>false</model_dependent>
+      <default_value></default_value>
+    </argument>
+    <argument>
+      <name>sql_var</name>
+      <display_name>SQL var</display_name>
+      <description>SQL var</description>
+      <type>String</type>
+      <required>true</required>
+      <model_dependent>false</model_dependent>
+      <default_value>Facility Total Electric Demand Power</default_value>
+    </argument>
+    <argument>
+      <name>stp</name>
+      <display_name>Timeseries Timestep</display_name>
+      <description>Timeseries Timestep</description>
+      <type>String</type>
+      <required>true</required>
+      <model_dependent>false</model_dependent>
+      <default_value>Zone Timestep</default_value>
+    </argument>
+    <argument>
+      <name>env</name>
+      <display_name>availableEnvPeriods</display_name>
+      <description>availableEnvPeriods</description>
+      <type>String</type>
+      <required>true</required>
+      <model_dependent>false</model_dependent>
+      <default_value>RUN PERIOD 1</default_value>
+    </argument>
+    <argument>
+      <name>norm</name>
+      <display_name>norm of the difference of csv and sql</display_name>
+      <description>norm of the difference of csv and sql</description>
+      <type>Double</type>
+      <required>true</required>
+      <model_dependent>false</model_dependent>
+      <default_value>1</default_value>
+    </argument>
+    <argument>
+      <name>scale</name>
+      <display_name>scale factor to apply to the difference</display_name>
+      <description>scale factor to apply to the difference</description>
+      <type>Double</type>
+      <required>true</required>
+      <model_dependent>false</model_dependent>
+      <default_value>1</default_value>
+    </argument>
+    <argument>
+      <name>find_avail</name>
+      <display_name>find_avail</display_name>
+      <description>find_avail</description>
+      <type>Boolean</type>
+      <required>true</required>
+      <model_dependent>false</model_dependent>
+      <default_value>true</default_value>
+      <choices>
+        <choice>
+          <value>true</value>
+          <display_name>true</display_name>
+        </choice>
+        <choice>
+          <value>false</value>
+          <display_name>false</display_name>
+        </choice>
+      </choices>
+    </argument>
+    <argument>
+      <name>compute_diff</name>
+      <display_name>compute_diff</display_name>
+      <description>compute_diff</description>
+      <type>Boolean</type>
+      <required>true</required>
+      <model_dependent>false</model_dependent>
+      <default_value>true</default_value>
+      <choices>
+        <choice>
+          <value>true</value>
+          <display_name>true</display_name>
+        </choice>
+        <choice>
+          <value>false</value>
+          <display_name>false</display_name>
+        </choice>
+      </choices>
+    </argument>
+    <argument>
+      <name>verbose_messages</name>
+      <display_name>verbose_messages</display_name>
+      <description>verbose_messages</description>
+      <type>Boolean</type>
+      <required>true</required>
+      <model_dependent>false</model_dependent>
+      <default_value>true</default_value>
+      <choices>
+        <choice>
+          <value>true</value>
+          <display_name>true</display_name>
+        </choice>
+        <choice>
+          <value>false</value>
+          <display_name>false</display_name>
+        </choice>
+      </choices>
+    </argument>
+    <argument>
+      <name>algorithm_download</name>
+      <display_name>algorithm_download</display_name>
+      <description>algorithm_download</description>
+      <type>Boolean</type>
+      <required>true</required>
+      <model_dependent>false</model_dependent>
+      <default_value>false</default_value>
+      <choices>
+        <choice>
+          <value>true</value>
+          <display_name>true</display_name>
+        </choice>
+        <choice>
+          <value>false</value>
+          <display_name>false</display_name>
+        </choice>
+      </choices>
+    </argument>
+    <argument>
+      <name>plot_flag</name>
+      <display_name>plot_flag timeseries data</display_name>
+      <description>plot_flag timeseries data</description>
+      <type>Boolean</type>
+      <required>true</required>
+      <model_dependent>false</model_dependent>
+      <default_value>true</default_value>
+      <choices>
+        <choice>
+          <value>true</value>
+          <display_name>true</display_name>
+        </choice>
+        <choice>
+          <value>false</value>
+          <display_name>false</display_name>
+        </choice>
+      </choices>
+    </argument>
+    <argument>
+      <name>plot_name</name>
+      <display_name>Plot name</display_name>
+      <description>Plot name</description>
+      <type>String</type>
+      <required>true</required>
+      <model_dependent>false</model_dependent>
+      <default_value></default_value>
+    </argument>
+    <argument>
+      <name>warning_messages</name>
+      <display_name>warning_messages</display_name>
+      <description>warning_messages</description>
+      <type>Boolean</type>
+      <required>true</required>
+      <model_dependent>false</model_dependent>
+      <default_value>false</default_value>
+      <choices>
+        <choice>
+          <value>true</value>
+          <display_name>true</display_name>
+        </choice>
+        <choice>
+          <value>false</value>
+          <display_name>false</display_name>
+        </choice>
+      </choices>
+    </argument>
+  </arguments>
+  <outputs/>
+  <provenances/>
+  <tags>
+    <tag>Reporting.Troubleshooting</tag>
+  </tags>
+  <attributes>
+    <attribute>
+      <name>Intended Software Tool</name>
+      <value>OpenStudio Application</value>
+      <datatype>string</datatype>
+    </attribute>
+    <attribute>
+      <name>Intended Software Tool</name>
+      <value>Parametric Analysis Tool</value>
+      <datatype>string</datatype>
+    </attribute>
+    <attribute>
+      <name>Intended Software Tool</name>
+      <value>OpenStudio Application</value>
+      <datatype>string</datatype>
+    </attribute>
+    <attribute>
+      <name>Intended Software Tool</name>
+      <value>Parametric Analysis Tool</value>
+      <datatype>string</datatype>
+    </attribute>
+    <attribute>
+      <name>Measure Type</name>
+      <value>ReportingMeasure</value>
+      <datatype>string</datatype>
+    </attribute>
+    <attribute>
+      <name>Intended Software Tool</name>
+      <value>OpenStudio Application</value>
+      <datatype>string</datatype>
+    </attribute>
+    <attribute>
+      <name>Intended Software Tool</name>
+      <value>Parametric Analysis Tool</value>
+      <datatype>string</datatype>
+    </attribute>
+  </attributes>
+  <files>
+    <file>
+      <filename>report.html.erb</filename>
+      <filetype>erb</filetype>
+      <usage_type>resource</usage_type>
+      <checksum>D33AA622</checksum>
+    </file>
+    <file>
+      <version>
+        <software_program>OpenStudio</software_program>
+        <identifier>2.1.0</identifier>
+        <min_compatible>2.1.0</min_compatible>
+      </version>
+      <filename>measure.rb</filename>
+      <filetype>rb</filetype>
+      <usage_type>script</usage_type>
+      <checksum>7855EF8A</checksum>
+    </file>
+  </files>
+</measure>

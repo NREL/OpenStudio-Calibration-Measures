@@ -2,8 +2,8 @@
   <schema_version>3.0</schema_version>
   <name>adjust_thermostat_setpoints_by_degrees</name>
   <uid>6e1f34f9-92e1-44ea-9279-de0b9b64f6a1</uid>
-  <version_id>b4f0acd3-dc77-4669-a17b-55d6121a1672</version_id>
-  <version_modified>20170607T193910Z</version_modified>
+  <version_id>a615e89b-e901-4867-986e-e03b04dc7f46</version_id>
+  <version_modified>20170622T150612Z</version_modified>
   <xml_checksum>4F7846F2</xml_checksum>
   <class_name>AdjustThermostatSetpointsByDegrees</class_name>
   <display_name>Adjust Thermostat Setpoints by Degrees</display_name>
@@ -16,7 +16,7 @@
       <type>Double</type>
       <required>true</required>
       <model_dependent>false</model_dependent>
-      <default_value>1</default_value>
+      <default_value>0</default_value>
     </argument>
     <argument>
       <name>heating_adjustment</name>
@@ -24,7 +24,7 @@
       <type>Double</type>
       <required>true</required>
       <model_dependent>false</model_dependent>
-      <default_value>-1</default_value>
+      <default_value>0</default_value>
     </argument>
     <argument>
       <name>alter_design_days</name>
@@ -82,7 +82,7 @@
       <filename>measure.rb</filename>
       <filetype>rb</filetype>
       <usage_type>script</usage_type>
-      <checksum>349C960C</checksum>
+      <checksum>FA772B5E</checksum>
     </file>
   </files>
 </measure>

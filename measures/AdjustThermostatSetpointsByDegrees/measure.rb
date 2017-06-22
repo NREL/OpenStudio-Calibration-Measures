@@ -13,13 +13,13 @@ class AdjustThermostatSetpointsByDegrees < OpenStudio::Ruleset::ModelUserScript
     #make an argument for adjustment to cooling setpoint
     cooling_adjustment = OpenStudio::Ruleset::OSArgument::makeDoubleArgument("cooling_adjustment",true)
     cooling_adjustment.setDisplayName("Degrees Fahrenheit to Adjust Cooling Setpoint By.")
-    cooling_adjustment.setDefaultValue(1.0)
+    cooling_adjustment.setDefaultValue(0.0)
     args << cooling_adjustment
 
     #make an argument for adjustment to heating setpoint
     heating_adjustment = OpenStudio::Ruleset::OSArgument::makeDoubleArgument("heating_adjustment",true)
     heating_adjustment.setDisplayName("Degrees Fahrenheit to Adjust heating Setpoint By.")
-    heating_adjustment.setDefaultValue(-1.0)
+    heating_adjustment.setDefaultValue(0.0)
     args << heating_adjustment
 
     #make an argument for adjustment to heating setpoint
@@ -44,24 +44,6 @@ class AdjustThermostatSetpointsByDegrees < OpenStudio::Ruleset::ModelUserScript
     cooling_adjustment = runner.getDoubleArgumentValue("cooling_adjustment",user_arguments)
     heating_adjustment = runner.getDoubleArgumentValue("heating_adjustment",user_arguments)
     alter_design_days = runner.getBoolArgumentValue("alter_design_days",user_arguments)
-
-    #ruby test to see if first charter of string is uppercase letter
-    if cooling_adjustment < 0
-      runner.registerWarning("Lowering the cooling setpoint will increase energy use.")
-    elsif cooling_adjustment.abs > 50
-      runner.registerWarning("#{cooling_adjustment} is a larger than typical setpoint adjustment")
-    elsif cooling_adjustment.abs > 500
-      runner.registerError("#{cooling_adjustment} is a larger than typical setpoint adjustment")
-      return false
-    end
-    if heating_adjustment > 0
-      runner.registerWarning("Raising the heating setpoint will increase energy use.")
-    elsif heating_adjustment.abs > 50
-      runner.registerWarning("#{heating_adjustment} is a larger than typical setpoint adjustment")
-    elsif heating_adjustment.abs > 500
-      runner.registerError("#{heating_adjustment} is a larger than typical setpoint adjustment")
-      return false
-    end
 
     #setup OpenStudio units that we will need
     temperature_ip_unit = OpenStudio::createUnit("F").get
