@@ -6,21 +6,21 @@ require 'time'
 require 'json'
 
 # start the measure
-class TimeseriesDiff < OpenStudio::Ruleset::ReportingUserScript
+class TimeseriesObjectiveFunction < OpenStudio::Ruleset::ReportingUserScript
 
   # human readable name
   def name
-    return "timeseries diff"
+    return "TimeSeries Objective Function"
   end
 
   # human readable description
   def description
-    return "objective function"
+    return "Creates Objective Function from Timeseries Data"
   end
 
   # human readable description of modeling approach
   def modeler_description
-    return "objective function"
+    return "Creates Objective Function from Timeseries Data.  The measure applies a Norm at each timestep between the difference of CSV metered data and SQL model data. A timeseries plot can also be created.  Possible outputs are 'cvrmse', 'nmbe', 'simdata' = sum of the simulated data, 'csvdata' = sum of metered data, 'diff' = P Norm between the metered and simulated data if Norm is 1 or 2, else its just the Difference."
   end
 
   # define the arguments that the user will input
@@ -29,50 +29,50 @@ class TimeseriesDiff < OpenStudio::Ruleset::ReportingUserScript
 
     # the name of the sql file
     csv_name = OpenStudio::Ruleset::OSArgument.makeStringArgument("csv_name", true)
-    csv_name.setDisplayName("CSV file name")
+    csv_name.setDisplayName("CSV file name for the metered data")
     csv_name.setDescription("CSV file name.")
     csv_name.setDefaultValue("mtr.csv")
     args << csv_name
     
     csv_time_header = OpenStudio::Ruleset::OSArgument.makeStringArgument("csv_time_header", true)
     csv_time_header.setDisplayName("CSV Time Header")
-    csv_time_header.setDescription("CSV Time Header Value.")
+    csv_time_header.setDescription("CSV Time Header Value. Used to determine the timestamp column in the CSV file")
     csv_time_header.setDefaultValue("Date/Time")
     args << csv_time_header
     
     csv_var = OpenStudio::Ruleset::OSArgument.makeStringArgument("csv_var", true)
     csv_var.setDisplayName("CSV variable name")
-    csv_var.setDescription("CSV variable name")
+    csv_var.setDescription("CSV variable name. Used to determine the variable column in the CSV file")
     csv_var.setDefaultValue("Whole Building:Facility Total Electric Demand Power [W](TimeStep)")
     args << csv_var
     
     csv_var_dn = OpenStudio::Ruleset::OSArgument.makeStringArgument("csv_var_dn", true)
     csv_var_dn.setDisplayName("CSV variable display name")
-    csv_var_dn.setDescription("CSV variable display name")
+    csv_var_dn.setDescription("CSV variable display name. Not yet Implemented")
     csv_var_dn.setDefaultValue("")
     args << csv_var_dn
     
     years = OpenStudio::Ruleset::OSArgument.makeBoolArgument("year", true)
-    years.setDisplayName("Year in csv data")
-    years.setDescription("Year in csv data => mm:dd:yy or mm:dd")
+    years.setDisplayName("Year in csv data timestamp")
+    years.setDescription("Is the Year in the csv data timestamp => mm:dd:yy or mm:dd (true/false)")
     years.setDefaultValue(true)
     args << years
     
     seconds = OpenStudio::Ruleset::OSArgument.makeBoolArgument("seconds", true)
-    seconds.setDisplayName("Seconds in csv data")
-    seconds.setDescription("Seconds in csv data => hh:mm:ss or hh:mm")
+    seconds.setDisplayName("Seconds in csv data timestamp")
+    seconds.setDescription("Is the Seconds in the csv data timestamp => hh:mm:ss or hh:mm (true/false)")
     seconds.setDefaultValue(true)
     args << seconds
     
     sql_key = OpenStudio::Ruleset::OSArgument.makeStringArgument("sql_key", true)
     sql_key.setDisplayName("SQL key")
-    sql_key.setDescription("SQL key")
+    sql_key.setDescription("SQL key for the SQL query to find the variable in the SQL file")
     sql_key.setDefaultValue("")
     args << sql_key  
 
     sql_var = OpenStudio::Ruleset::OSArgument.makeStringArgument("sql_var", true)
     sql_var.setDisplayName("SQL var")
-    sql_var.setDescription("SQL var")
+    sql_var.setDescription("SQL var for the SQL query to find the variable in the SQL file")
     sql_var.setDefaultValue("Facility Total Electric Demand Power")
     args << sql_var    
     
@@ -84,13 +84,13 @@ class TimeseriesDiff < OpenStudio::Ruleset::ReportingUserScript
     
     env = OpenStudio::Ruleset::OSArgument.makeStringArgument("env", true)
     env.setDisplayName("availableEnvPeriods")
-    env.setDescription("availableEnvPeriods")
+    env.setDescription("EnvPeriod for SQL query")
     env.setDefaultValue("RUN PERIOD 1")
     args << env
     
     norm = OpenStudio::Ruleset::OSArgument.makeDoubleArgument("norm", true)
     norm.setDisplayName("norm of the difference of csv and sql")
-    norm.setDescription("norm of the difference of csv and sql")
+    norm.setDescription("norm of the difference of csv and sql. 1 is absolute value. 2 is euclidean distance. 3 is raw difference.")
     norm.setDefaultValue(1)
     args << norm   
 
@@ -101,45 +101,39 @@ class TimeseriesDiff < OpenStudio::Ruleset::ReportingUserScript
     args << scale     
 
     find_avail = OpenStudio::Ruleset::OSArgument.makeBoolArgument("find_avail", true)
-    find_avail.setDisplayName("find_avail")
-    find_avail.setDescription("find_avail")
+    find_avail.setDisplayName("Find Available data in the SQL file")
+    find_avail.setDescription("Will RegisterInfo all the 'EnvPeriod', 'ReportingFrequencies', 'VariableNames', 'KeyValues' in the SQL file.  Useful for debugging SQL issues.")
     find_avail.setDefaultValue(true)
     args << find_avail 
-
-    compute_diff = OpenStudio::Ruleset::OSArgument.makeBoolArgument("compute_diff", true)
-    compute_diff.setDisplayName("compute_diff")
-    compute_diff.setDescription("compute_diff")
-    compute_diff.setDefaultValue(true)
-    args << compute_diff
-    
-    verbose_messages = OpenStudio::Ruleset::OSArgument.makeBoolArgument("verbose_messages", true)
-    verbose_messages.setDisplayName("verbose_messages")
-    verbose_messages.setDescription("verbose_messages")
-    verbose_messages.setDefaultValue(true)
-    args << verbose_messages  
-    
+        
     algorithm_download = OpenStudio::Ruleset::OSArgument.makeBoolArgument("algorithm_download", true)
     algorithm_download.setDisplayName("algorithm_download")
-    algorithm_download.setDescription("algorithm_download")
+    algorithm_download.setDescription("Make JSON data available for algorithm_download (true/false)")
     algorithm_download.setDefaultValue(false)
     args << algorithm_download  
     
     plot_flag = OpenStudio::Ruleset::OSArgument.makeBoolArgument("plot_flag", true)
     plot_flag.setDisplayName("plot_flag timeseries data")
-    plot_flag.setDescription("plot_flag timeseries data")
+    plot_flag.setDescription("Create plot of timeseries data (true/false)")
     plot_flag.setDefaultValue(true)
     args << plot_flag
     
     plot_name = OpenStudio::Ruleset::OSArgument.makeStringArgument("plot_name", true)
     plot_name.setDisplayName("Plot name")
-    plot_name.setDescription("Plot name")
+    plot_name.setDescription("Name to include in reporting file name.")
     plot_name.setDefaultValue("")
     args << plot_name
     
+    verbose_messages = OpenStudio::Ruleset::OSArgument.makeBoolArgument("verbose_messages", true)
+    verbose_messages.setDisplayName("verbose_messages")
+    verbose_messages.setDescription("verbose messages.  Useful for debugging but MAJOR Performance Hit.")
+    verbose_messages.setDefaultValue(false)
+    args << verbose_messages 
+    
     warning_messages = OpenStudio::Ruleset::OSArgument.makeBoolArgument("warning_messages", true)
     warning_messages.setDisplayName("warning_messages")
-    warning_messages.setDescription("warning_messages")
-    warning_messages.setDefaultValue(false)
+    warning_messages.setDescription("Warn on missing data.")
+    warning_messages.setDefaultValue(true)
     args << warning_messages
 
     return args
@@ -182,7 +176,6 @@ class TimeseriesDiff < OpenStudio::Ruleset::ReportingUserScript
     norm = runner.getDoubleArgumentValue("norm", user_arguments)
     scale = runner.getDoubleArgumentValue("scale", user_arguments)
     find_avail = runner.getBoolArgumentValue("find_avail", user_arguments) 
-    compute_diff = runner.getBoolArgumentValue("compute_diff", user_arguments) 
     verbose_messages = runner.getBoolArgumentValue("verbose_messages", user_arguments)
     warning_messages = runner.getBoolArgumentValue("warning_messages", user_arguments)
     algorithm_download = runner.getBoolArgumentValue("algorithm_download", user_arguments)
@@ -581,4 +574,4 @@ class TimeseriesDiff < OpenStudio::Ruleset::ReportingUserScript
 end
 
 # register the measure to be used by the application
-TimeseriesDiff.new.registerWithApplication
+TimeseriesObjectiveFunction.new.registerWithApplication

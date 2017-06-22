@@ -8,7 +8,7 @@ class TimeseriesPlot < OpenStudio::Ruleset::ReportingUserScript
 
   # human readable name
   def name
-    return " Timeseries Plot"
+    return "Timeseries Plot"
   end
 
   # human readable description

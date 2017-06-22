@@ -2,11 +2,11 @@
   <schema_version>3.0</schema_version>
   <name>timeseries_plot</name>
   <uid>6804217d-4737-45f3-82df-b81393c29ce7</uid>
-  <version_id>7f6f3698-09af-4939-ae12-9eae8a900e66</version_id>
-  <version_modified>20170613T153819Z</version_modified>
-  <xml_checksum>FB31B85E</xml_checksum>
+  <version_id>f226ffea-147d-4eac-987e-e2cbbd4597c8</version_id>
+  <version_modified>20170622T160850Z</version_modified>
+  <xml_checksum>FFE04372</xml_checksum>
   <class_name>TimeseriesPlot</class_name>
-  <display_name> Timeseries Plot</display_name>
+  <display_name>Timeseries Plot</display_name>
   <description>Creates an interactive timeseries plot of selected variable.</description>
   <modeler_description>NOTE: This will load and respond slowly in the OS app, especially if you select * on a variable with many possible keys or you select timestep data.  Suggest you open it in a web browser like Chrome instead.</modeler_description>
   <arguments>
@@ -78,7 +78,7 @@
   <outputs/>
   <provenances/>
   <tags>
-    <tag>Reporting.Troubleshooting</tag>
+    <tag>Reporting.QAQC</tag>
   </tags>
   <attributes>
     <attribute>
@@ -92,28 +92,8 @@
       <datatype>string</datatype>
     </attribute>
     <attribute>
-      <name>Intended Software Tool</name>
-      <value>OpenStudio Application</value>
-      <datatype>string</datatype>
-    </attribute>
-    <attribute>
-      <name>Intended Software Tool</name>
-      <value>Parametric Analysis Tool</value>
-      <datatype>string</datatype>
-    </attribute>
-    <attribute>
       <name>Measure Type</name>
       <value>ReportingMeasure</value>
-      <datatype>string</datatype>
-    </attribute>
-    <attribute>
-      <name>Intended Software Tool</name>
-      <value>OpenStudio Application</value>
-      <datatype>string</datatype>
-    </attribute>
-    <attribute>
-      <name>Intended Software Tool</name>
-      <value>Parametric Analysis Tool</value>
       <datatype>string</datatype>
     </attribute>
   </attributes>
@@ -133,7 +113,7 @@
       <filename>measure.rb</filename>
       <filetype>rb</filetype>
       <usage_type>script</usage_type>
-      <checksum>B7FF6123</checksum>
+      <checksum>FD57E0EF</checksum>
     </file>
   </files>
 </measure>

@@ -1,18 +1,18 @@
 <measure>
   <schema_version>3.0</schema_version>
-  <name>timeseries_diff</name>
+  <name>timeseries_objective_function</name>
   <uid>6804217d-4737-45f3-82df-b81393c29ce3</uid>
-  <version_id>9a0f81ba-a265-4cfd-9a16-48e2ea8f1334</version_id>
-  <version_modified>20170622T151121Z</version_modified>
-  <xml_checksum>FB31B85E</xml_checksum>
-  <class_name>TimeseriesDiff</class_name>
-  <display_name>timeseries diff</display_name>
-  <description>objective function</description>
-  <modeler_description>objective function</modeler_description>
+  <version_id>3e771936-fad5-403c-8fcb-d3fab0d950a6</version_id>
+  <version_modified>20170622T160758Z</version_modified>
+  <xml_checksum>FFE04372</xml_checksum>
+  <class_name>TimeseriesObjectiveFunction</class_name>
+  <display_name>TimeSeries Objective Function</display_name>
+  <description>Creates Objective Function from Timeseries Data</description>
+  <modeler_description>Creates Objective Function from Timeseries Data.  The measure applies a Norm at each timestep between the difference of CSV metered data and SQL model data. A timeseries plot can also be created.  Possible outputs are 'cvrmse', 'nmbe', 'simdata' = sum of the simulated data, 'csvdata' = sum of metered data, 'diff' = P Norm between the metered and simulated data if Norm is 1 or 2, else its just the Difference.</modeler_description>
   <arguments>
     <argument>
       <name>csv_name</name>
-      <display_name>CSV file name</display_name>
+      <display_name>CSV file name for the metered data</display_name>
       <description>CSV file name.</description>
       <type>String</type>
       <required>true</required>
@@ -22,7 +22,7 @@
     <argument>
       <name>csv_time_header</name>
       <display_name>CSV Time Header</display_name>
-      <description>CSV Time Header Value.</description>
+      <description>CSV Time Header Value. Used to determine the timestamp column in the CSV file</description>
       <type>String</type>
       <required>true</required>
       <model_dependent>false</model_dependent>
@@ -31,7 +31,7 @@
     <argument>
       <name>csv_var</name>
       <display_name>CSV variable name</display_name>
-      <description>CSV variable name</description>
+      <description>CSV variable name. Used to determine the variable column in the CSV file</description>
       <type>String</type>
       <required>true</required>
       <model_dependent>false</model_dependent>
@@ -40,7 +40,7 @@
     <argument>
       <name>csv_var_dn</name>
       <display_name>CSV variable display name</display_name>
-      <description>CSV variable display name</description>
+      <description>CSV variable display name. Not yet Implemented</description>
       <type>String</type>
       <required>true</required>
       <model_dependent>false</model_dependent>
@@ -48,8 +48,8 @@
     </argument>
     <argument>
       <name>year</name>
-      <display_name>Year in csv data</display_name>
-      <description>Year in csv data => mm:dd:yy or mm:dd</description>
+      <display_name>Year in csv data timestamp</display_name>
+      <description>Is the Year in the csv data timestamp => mm:dd:yy or mm:dd (true/false)</description>
       <type>Boolean</type>
       <required>true</required>
       <model_dependent>false</model_dependent>
@@ -67,8 +67,8 @@
     </argument>
     <argument>
       <name>seconds</name>
-      <display_name>Seconds in csv data</display_name>
-      <description>Seconds in csv data => hh:mm:ss or hh:mm</description>
+      <display_name>Seconds in csv data timestamp</display_name>
+      <description>Is the Seconds in the csv data timestamp => hh:mm:ss or hh:mm (true/false)</description>
       <type>Boolean</type>
       <required>true</required>
       <model_dependent>false</model_dependent>
@@ -87,7 +87,7 @@
     <argument>
       <name>sql_key</name>
       <display_name>SQL key</display_name>
-      <description>SQL key</description>
+      <description>SQL key for the SQL query to find the variable in the SQL file</description>
       <type>String</type>
       <required>true</required>
       <model_dependent>false</model_dependent>
@@ -96,7 +96,7 @@
     <argument>
       <name>sql_var</name>
       <display_name>SQL var</display_name>
-      <description>SQL var</description>
+      <description>SQL var for the SQL query to find the variable in the SQL file</description>
       <type>String</type>
       <required>true</required>
       <model_dependent>false</model_dependent>
@@ -114,7 +114,7 @@
     <argument>
       <name>env</name>
       <display_name>availableEnvPeriods</display_name>
-      <description>availableEnvPeriods</description>
+      <description>EnvPeriod for SQL query</description>
       <type>String</type>
       <required>true</required>
       <model_dependent>false</model_dependent>
@@ -123,7 +123,7 @@
     <argument>
       <name>norm</name>
       <display_name>norm of the difference of csv and sql</display_name>
-      <description>norm of the difference of csv and sql</description>
+      <description>norm of the difference of csv and sql. 1 is absolute value. 2 is euclidean distance. 3 is raw difference.</description>
       <type>Double</type>
       <required>true</required>
       <model_dependent>false</model_dependent>
@@ -140,46 +140,8 @@
     </argument>
     <argument>
       <name>find_avail</name>
-      <display_name>find_avail</display_name>
-      <description>find_avail</description>
-      <type>Boolean</type>
-      <required>true</required>
-      <model_dependent>false</model_dependent>
-      <default_value>true</default_value>
-      <choices>
-        <choice>
-          <value>true</value>
-          <display_name>true</display_name>
-        </choice>
-        <choice>
-          <value>false</value>
-          <display_name>false</display_name>
-        </choice>
-      </choices>
-    </argument>
-    <argument>
-      <name>compute_diff</name>
-      <display_name>compute_diff</display_name>
-      <description>compute_diff</description>
-      <type>Boolean</type>
-      <required>true</required>
-      <model_dependent>false</model_dependent>
-      <default_value>true</default_value>
-      <choices>
-        <choice>
-          <value>true</value>
-          <display_name>true</display_name>
-        </choice>
-        <choice>
-          <value>false</value>
-          <display_name>false</display_name>
-        </choice>
-      </choices>
-    </argument>
-    <argument>
-      <name>verbose_messages</name>
-      <display_name>verbose_messages</display_name>
-      <description>verbose_messages</description>
+      <display_name>Find Available data in the SQL file</display_name>
+      <description>Will RegisterInfo all the 'EnvPeriod', 'ReportingFrequencies', 'VariableNames', 'KeyValues' in the SQL file.  Useful for debugging SQL issues.</description>
       <type>Boolean</type>
       <required>true</required>
       <model_dependent>false</model_dependent>
@@ -198,7 +160,7 @@
     <argument>
       <name>algorithm_download</name>
       <display_name>algorithm_download</display_name>
-      <description>algorithm_download</description>
+      <description>Make JSON data available for algorithm_download (true/false)</description>
       <type>Boolean</type>
       <required>true</required>
       <model_dependent>false</model_dependent>
@@ -217,7 +179,7 @@
     <argument>
       <name>plot_flag</name>
       <display_name>plot_flag timeseries data</display_name>
-      <description>plot_flag timeseries data</description>
+      <description>Create plot of timeseries data (true/false)</description>
       <type>Boolean</type>
       <required>true</required>
       <model_dependent>false</model_dependent>
@@ -236,16 +198,16 @@
     <argument>
       <name>plot_name</name>
       <display_name>Plot name</display_name>
-      <description>Plot name</description>
+      <description>Name to include in reporting file name.</description>
       <type>String</type>
       <required>true</required>
       <model_dependent>false</model_dependent>
       <default_value></default_value>
     </argument>
     <argument>
-      <name>warning_messages</name>
-      <display_name>warning_messages</display_name>
-      <description>warning_messages</description>
+      <name>verbose_messages</name>
+      <display_name>verbose_messages</display_name>
+      <description>verbose messages.  Useful for debugging but MAJOR Performance Hit.</description>
       <type>Boolean</type>
       <required>true</required>
       <model_dependent>false</model_dependent>
@@ -261,11 +223,30 @@
         </choice>
       </choices>
     </argument>
+    <argument>
+      <name>warning_messages</name>
+      <display_name>warning_messages</display_name>
+      <description>Warn on missing data.</description>
+      <type>Boolean</type>
+      <required>true</required>
+      <model_dependent>false</model_dependent>
+      <default_value>true</default_value>
+      <choices>
+        <choice>
+          <value>true</value>
+          <display_name>true</display_name>
+        </choice>
+        <choice>
+          <value>false</value>
+          <display_name>false</display_name>
+        </choice>
+      </choices>
+    </argument>
   </arguments>
   <outputs/>
   <provenances/>
   <tags>
-    <tag>Reporting.Troubleshooting</tag>
+    <tag>Reporting.QAQC</tag>
   </tags>
   <attributes>
     <attribute>
@@ -279,28 +260,8 @@
       <datatype>string</datatype>
     </attribute>
     <attribute>
-      <name>Intended Software Tool</name>
-      <value>OpenStudio Application</value>
-      <datatype>string</datatype>
-    </attribute>
-    <attribute>
-      <name>Intended Software Tool</name>
-      <value>Parametric Analysis Tool</value>
-      <datatype>string</datatype>
-    </attribute>
-    <attribute>
       <name>Measure Type</name>
       <value>ReportingMeasure</value>
-      <datatype>string</datatype>
-    </attribute>
-    <attribute>
-      <name>Intended Software Tool</name>
-      <value>OpenStudio Application</value>
-      <datatype>string</datatype>
-    </attribute>
-    <attribute>
-      <name>Intended Software Tool</name>
-      <value>Parametric Analysis Tool</value>
       <datatype>string</datatype>
     </attribute>
   </attributes>
@@ -320,7 +281,7 @@
       <filename>measure.rb</filename>
       <filetype>rb</filetype>
       <usage_type>script</usage_type>
-      <checksum>7855EF8A</checksum>
+      <checksum>58657873</checksum>
     </file>
   </files>
 </measure>
