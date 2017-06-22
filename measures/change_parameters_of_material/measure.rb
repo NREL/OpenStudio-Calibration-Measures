@@ -3,9 +3,19 @@ class ChangeParametersOfMaterial < OpenStudio::Ruleset::ModelUserScript
 
   #define the name that a user will see
   def name
-    return "Change Parameters Of Material"
+    return "Change Parameters Of Material (Layer 0 of Construction)"
   end
 
+    # human readable description
+  def description
+    return "This measure changes properties of Layer 0 for a specific construction."
+  end
+
+  # human readable description of modeling approach
+  def modeler_description
+    return "This measure changes the Layer 0 properties of Thickness, Density, Thermal Absorptance, Solar Absorptance, Visible Absoptance, Thermal Conductivity, Specific Heat."
+  end
+  
   #define the arguments that the user will input
   def arguments(model)
     args = OpenStudio::Ruleset::OSArgumentVector.new
@@ -37,44 +47,58 @@ class ChangeParametersOfMaterial < OpenStudio::Ruleset::ModelUserScript
 
     #make an argument thickness
     thickness = OpenStudio::Ruleset::OSArgument::makeDoubleArgument("thickness",true)
-    thickness.setDisplayName("thickness")
-    thickness.setDefaultValue(0.006)
+    thickness.setDisplayName("Thickness of Layer 0")
+    thickness.setDescription("Set Thickness of Layer 0. 0 value means do not change from default.")
+    thickness.setDefaultValue(0)
+    thickness.setUnits("m")
     args << thickness
     
     #make an argument density
     density = OpenStudio::Ruleset::OSArgument::makeDoubleArgument("density",true)
-    density.setDisplayName("density")
-    density.setDefaultValue(7800)
+    density.setDisplayName("Density of Layer 0")
+    density.setDescription("Set Density of Layer 0. 0 value means do not change from default.")
+    density.setUnits("kg/m^3")
+    density.setDefaultValue(0)
     args << density
  
     #make an argument thermal_absorptance
     thermal_absorptance = OpenStudio::Ruleset::OSArgument::makeDoubleArgument("thermal_absorptance",true)
-    thermal_absorptance.setDisplayName("thermal_absorptance")
-    thermal_absorptance.setDefaultValue(0.69)
+    thermal_absorptance.setDisplayName("Thermal Absorptance of Layer 0")
+    thermal_absorptance.setDescription("Set Thermal Absorptance of Layer 0. 0 value means do not change from default.")   
+    thermal_absorptance.setUnits("fraction")    
+    thermal_absorptance.setDefaultValue(0)
     args << thermal_absorptance
     
     #make an argument solar_absorptance
     solar_absorptance = OpenStudio::Ruleset::OSArgument::makeDoubleArgument("solar_absorptance",true)
-    solar_absorptance.setDisplayName("solar_absorptance.")
-    solar_absorptance.setDefaultValue(0.69)
+    solar_absorptance.setDisplayName("Solar Absorptance of Layer 0")
+    solar_absorptance.setDescription("Set Solar Absorptance of Layer 0. 0 value means do not change from default.")    
+    solar_absorptance.setUnits("fraction")
+    solar_absorptance.setDefaultValue(0)
     args << solar_absorptance
     
     #make an argument visible_absorptance
     visible_absorptance = OpenStudio::Ruleset::OSArgument::makeDoubleArgument("visible_absorptance",true)
-    visible_absorptance.setDisplayName("visible_absorptance")
-    visible_absorptance.setDefaultValue(0.69)
+    visible_absorptance.setDisplayName("Visible Absorptance of Layer 0")
+    visible_absorptance.setDescription("Set Visible Absorptance of Layer 0. 0 value means do not change from default.")    
+    visible_absorptance.setUnits("fraction")
+    visible_absorptance.setDefaultValue(0)
     args << visible_absorptance
     
     #make an argument conductivity
     thermal_conductivity = OpenStudio::Ruleset::OSArgument::makeDoubleArgument("thermal_conductivity",true)
-    thermal_conductivity.setDisplayName("thermal_conductivity")
-    thermal_conductivity.setDefaultValue(45)
+    thermal_conductivity.setDisplayName("Thermal Conductivity of Layer 0")
+    thermal_conductivity.setDescription("Set Thermal Conductivity of Layer 0. 0 value means do not change from default.")    
+    thermal_conductivity.setDefaultValue(0)
+    thermal_conductivity.setUnits("W/(m*K)")
     args << thermal_conductivity
     
     #make an argument specific_heat
     specific_heat = OpenStudio::Ruleset::OSArgument::makeDoubleArgument("specific_heat",true)
-    specific_heat.setDisplayName("specific_heat")
-    specific_heat.setDefaultValue(499)
+    specific_heat.setDisplayName("Specific Heat of Layer 0")
+    specific_heat.setDescription("Set Specific Heat of Layer 0. 0 value means do not change from default.")    
+    specific_heat.setUnits("J/(kg*K)")
+    specific_heat.setDefaultValue(0)
     args << specific_heat
 
     return args
@@ -119,7 +143,7 @@ class ChangeParametersOfMaterial < OpenStudio::Ruleset::ModelUserScript
 
     initial_r_value_ip = OpenStudio::convert(1.0/construction.thermalConductance.to_f,"m^2*K/W", "ft^2*h*R/Btu")
     runner.registerInitialCondition("The Initial R-value of #{construction.name} is #{initial_r_value_ip} (ft^2*h*R/Btu).")
-
+    runner.registerValue("initial_r_value_ip",initial_r_value_ip.to_f,"ft^2*h*R/Btu")
     #get layers
     layers = construction.layers
 
@@ -134,13 +158,13 @@ class ChangeParametersOfMaterial < OpenStudio::Ruleset::ModelUserScript
     runner.registerInfo("Initial density: #{layer.density}")
     
     #set layer properties
-    layer.setThermalAbsorptance(thermal_absorptance)
-    layer.setSolarAbsorptance(solar_absorptance)
-    layer.setVisibleAbsorptance(visible_absorptance)
-    layer.setThermalConductivity(thermal_conductivity)
-    layer.setSpecificHeat(specific_heat)
-    layer.setThickness(thickness)
-    layer.setDensity(density)
+    layer.setThermalAbsorptance(thermal_absorptance) if thermal_absorptance != 0
+    layer.setSolarAbsorptance(solar_absorptance) if solar_absorptance != 0
+    layer.setVisibleAbsorptance(visible_absorptance) if visible_absorptance != 0
+    layer.setThermalConductivity(thermal_conductivity) if thermal_conductivity != 0
+    layer.setSpecificHeat(specific_heat) if specific_heat != 0
+    layer.setThickness(thickness) if thickness != 0
+    layer.setDensity(density) if density != 0
     
     runner.registerInfo("Final thermal_absorptance: #{layer.thermalAbsorptance}")
     runner.registerInfo("Final solar_absorptance: #{layer.solarAbsorptance}")
@@ -153,6 +177,7 @@ class ChangeParametersOfMaterial < OpenStudio::Ruleset::ModelUserScript
     # report initial condition
     final_r_value_ip = OpenStudio::convert(1/construction.thermalConductance.to_f,"m^2*K/W", "ft^2*h*R/Btu")
     runner.registerFinalCondition("The Final R-value of #{construction.name} is #{final_r_value_ip} (ft^2*h*R/Btu).")
+    runner.registerValue("final_r_value_ip",final_r_value_ip.to_f,"ft^2*h*R/Btu")
 
     return true
 
