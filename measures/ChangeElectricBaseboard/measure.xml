@@ -30,7 +30,7 @@
   <outputs/>
   <provenances/>
   <tags>
-    <tag>Envelope.Form</tag>
+    <tag>HVAC.Heating</tag>
   </tags>
   <attributes>
     <attribute>
@@ -48,8 +48,8 @@
     <file>
       <version>
         <software_program>OpenStudio</software_program>
-        <identifier>1.5.3</identifier>
-        <min_compatible>1.5.3</min_compatible>
+        <identifier>2.1.1</identifier>
+        <min_compatible>2.1.1</min_compatible>
       </version>
       <filename>measure.rb</filename>
       <filetype>rb</filetype>
