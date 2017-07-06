@@ -159,8 +159,7 @@ class ChangeExteriorWallThermalProperties < OpenStudio::Ruleset::ModelUserScript
       #create and name new construction
       new_construction = construction.clone
       new_construction = new_construction.to_Construction.get
-      #TODO change name to x change
-      new_construction.setName("Calibrated Exterior #{construction.name.to_s}")
+      new_construction.setName("#{construction.name.to_s} (R #{r_value_mult.round(1)}x Solar #{solar_abs_mult.round(1)}x Therm #{thermal_mass_mult.round(1)}x)")
       #replace layers in new construction
       new_construction.layers.each_with_index do |layer, lay_index|
         new_layer = layer.clone
@@ -169,8 +168,7 @@ class ChangeExteriorWallThermalProperties < OpenStudio::Ruleset::ModelUserScript
         new_layer.to_StandardOpaqueMaterial.get.setSolarAbsorptance(desired_sol_abs[con_index]) if lay_index == 0 && layer.to_StandardOpaqueMaterial.is_initialized #only apply to outer surface
         new_layer.to_OpaqueMaterial.get.setThermalResistance(desired_r_val[con_index][lay_index]) if layer.to_OpaqueMaterial.is_initialized
         new_layer.to_StandardOpaqueMaterial.get.setDensity(desired_thm_mass[con_index][lay_index]) if layer.to_StandardOpaqueMaterial.is_initialized && desired_thm_mass[con_index][lay_index] != 0
-        #TODO change name to x change
-        new_layer.setName("#{new_layer.name.to_s} in #{new_construction.name.to_s}")
+        new_layer.setName("#{layer.name.to_s} (R #{r_value_mult.round(1)}x Solar #{solar_abs_mult.round(1)}x Therm #{thermal_mass_mult.round(1)}x)")
         new_construction.setLayer(lay_index, new_layer)
         #calculate properties of new layer and output nice names
         final_r_val[con_index][lay_index] = new_construction.layers[lay_index].to_OpaqueMaterial.get.thermalResistance if layer.to_OpaqueMaterial.is_initialized
@@ -179,12 +177,11 @@ class ChangeExteriorWallThermalProperties < OpenStudio::Ruleset::ModelUserScript
         final_r_val_d[con_index][lay_index] = neat_numbers(final_r_val[con_index][lay_index])
         final_sol_abs_d[con_index] = neat_numbers(final_sol_abs[con_index]) if lay_index == 0 && layer.to_StandardOpaqueMaterial.is_initialized
         final_thm_mass_d[con_index][lay_index] = neat_numbers(final_thm_mass[con_index][lay_index]) if layer.to_StandardOpaqueMaterial.is_initialized
-        #TODO change the naming and info
-        runner.registerInfo("Updated material '#{layer.name.to_s}' in construction '#{construction.name.to_s}' to '#{new_layer.name.to_s}' as follows:")
-        final_r_val[con_index][lay_index] ? runner.registerInfo(" R-Value updated from #{initial_r_val_d[con_index][lay_index]} to #{final_r_val_d[con_index][lay_index]} (#{final_r_val[con_index][lay_index]/initial_r_val[con_index][lay_index]} mult)") : runner.registerInfo("R-Value was #{initial_r_val_d[con_index][lay_index]} and now is nil_value")
-        final_thm_mass[con_index][lay_index] ? runner.registerInfo("Thermal Mass updated from #{initial_thm_mass_d[con_index][lay_index]} to #{final_thm_mass_d[con_index][lay_index]} (#{final_thm_mass[con_index][lay_index]/initial_thm_mass[con_index][lay_index]} mult)") : runner.registerInfo("Thermal Mass was #{initial_thm_mass[con_index][lay_index]} and now is nil_value")
+        runner.registerInfo("Updated material '#{layer.name.to_s}' in construction '#{new_construction.name.to_s}' to '#{new_layer.name.to_s}' as follows:")
+        final_r_val[con_index][lay_index] ? runner.registerInfo("R-Value updated from #{initial_r_val_d[con_index][lay_index]} to #{final_r_val_d[con_index][lay_index]} (#{(final_r_val[con_index][lay_index]/initial_r_val[con_index][lay_index]).round(2)} mult)") : runner.registerInfo("R-Value was #{initial_r_val_d[con_index][lay_index]} and now is nil_value")
+        final_thm_mass[con_index][lay_index] ? runner.registerInfo("Thermal Mass updated from #{initial_thm_mass_d[con_index][lay_index]} to #{final_thm_mass_d[con_index][lay_index]} (#{(final_thm_mass[con_index][lay_index]/initial_thm_mass[con_index][lay_index]).round(2)} mult)") : runner.registerInfo("Thermal Mass was #{initial_thm_mass[con_index][lay_index]} and now is nil_value")
         if lay_index == 0
-          final_sol_abs[con_index] ? runner.registerInfo("Solar Absorptance updated from #{initial_sol_abs_d[con_index]} to #{final_sol_abs_d[con_index]} (#{final_sol_abs[con_index]/initial_sol_abs[con_index]} mult)") : runner.registerInfo("Solar Absorptance was #{initial_sol_abs[con_index][lay_index]} and now is nil_value")
+          final_sol_abs[con_index] ? runner.registerInfo("Solar Absorptance updated from #{initial_sol_abs_d[con_index]} to #{final_sol_abs_d[con_index]} (#{(final_sol_abs[con_index]/initial_sol_abs[con_index]).round(2)} mult)") : runner.registerInfo("Solar Absorptance was #{initial_sol_abs[con_index][lay_index]} and now is nil_value")
         end
       end
       final_construction[con_index] = new_construction
@@ -192,37 +189,11 @@ class ChangeExteriorWallThermalProperties < OpenStudio::Ruleset::ModelUserScript
       exterior_surfaces.each do |surface|
         surface.setConstruction(new_construction) if surface.construction.get.handle.to_s == construction.handle.to_s
       end
-    end
-#TODO remove this
-    #create an array of exterior surfaces and construction types
-    final_surfaces = model.getSurfaces
-    final_exterior_surfaces = []
-    final_exterior_surface_constructions = []
-    final_surfaces.each do |surface|
-      if surface.outsideBoundaryCondition == "Outdoors" && surface.surfaceType == "Wall"
-        final_exterior_surfaces << surface
-        final_exterior_surface_const = surface.construction.get
-        #only add construction if it hasn't been added yet
-        unless final_exterior_surface_constructions.include?(final_exterior_surface_const)
-          final_exterior_surface_constructions << final_exterior_surface_const.to_Construction.get
-        end
-      end
-    end
-
-    #get final number of surfaces having each construction type
-    final_condition_string = "Final number of surfaces of each construction type: "
-    final_exterior_surface_construction_numbers = []
-    final_exterior_surface_constructions.each_with_index do |construction,index|
-      final_exterior_surface_construction_numbers[index] = 0
-      final_condition_string << "'#{construction.name.to_s}': "
-      final_exterior_surfaces.each do |surface|
-        final_exterior_surface_construction_numbers[index] += 1 if surface.construction.get.handle.to_s == construction.handle.to_s
-      end
-      final_condition_string << "#{exterior_surface_construction_numbers[index]}, "
+      runner.registerInfo("Using New Construction #{new_construction.name.to_s}")
     end
 
     #report desired condition
-    runner.registerFinalCondition(final_condition_string)
+    runner.registerFinalCondition("Applied R #{r_value_mult.round(1)}x Solar #{solar_abs_mult.round(1)}x Therm #{thermal_mass_mult.round(1)}x change")
 
     return true
 
