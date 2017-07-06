@@ -120,7 +120,7 @@ class RValueOfInsulationForConstructionMultiplier < OpenStudio::Ruleset::ModelUs
     # clone insulation material
     new_material = max_thermal_resistance_material.clone(model)
     new_material = new_material.to_OpaqueMaterial.get
-    new_material.setName("#{max_thermal_resistance_material.name.to_s}_R-value #{r_value_multplier.round(2)}x Multiplier") if r_value_multplier != 1
+    new_material.setName("#{max_thermal_resistance_material.name.to_s} (R #{r_value_multplier.round(2)}x Multiplier)") if r_value_multplier != 1
     construction.eraseLayer(max_thermal_resistance_material_index)
     construction.insertLayer(max_thermal_resistance_material_index,new_material)
     runner.registerInfo("For construction'#{construction.name.to_s}', '#{max_thermal_resistance_material.name.to_s}' was altered.")

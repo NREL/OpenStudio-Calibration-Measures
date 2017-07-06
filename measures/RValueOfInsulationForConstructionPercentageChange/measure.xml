@@ -2,8 +2,8 @@
   <schema_version>3.0</schema_version>
   <name>r_value_of_insulation_for_construction_percentage_change</name>
   <uid>7ee248fd-052a-48d6-a8eb-b1fc6a0dc348</uid>
-  <version_id>880e8d73-32e4-442c-83d3-b2639c42d8ae</version_id>
-  <version_modified>20170622T202909Z</version_modified>
+  <version_id>71a2403c-5e5c-4a4c-951d-0683375091c2</version_id>
+  <version_modified>20170706T165730Z</version_modified>
   <xml_checksum>0BF71A3E</xml_checksum>
   <class_name>RValueOfInsulationForConstructionPercentageChange</class_name>
   <display_name>Change R-value of Insulation Layer for Construction By a Specified Percentage</display_name>
@@ -108,7 +108,7 @@
       <filename>measure.rb</filename>
       <filetype>rb</filetype>
       <usage_type>script</usage_type>
-      <checksum>A1DB92C7</checksum>
+      <checksum>502B0109</checksum>
     </file>
   </files>
 </measure>

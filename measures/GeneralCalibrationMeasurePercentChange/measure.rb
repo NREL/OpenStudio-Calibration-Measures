@@ -18,7 +18,7 @@ class GeneralCalibrationMeasurePercentChange < OpenStudio::Ruleset::ModelUserScr
   
   def change_name(object, perc_change)
     if perc_change != 0
-      object.setName("#{object.name.get} + #{perc_change.round(2)} % change")
+      object.setName("#{object.name.get} (#{perc_change.round(2)} percent change)")
     end
   end
   

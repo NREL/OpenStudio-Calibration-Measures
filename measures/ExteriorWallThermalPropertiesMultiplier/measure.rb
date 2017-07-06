@@ -1,11 +1,21 @@
 #start the measure
-class ChangeExteriorWallThermalProperties < OpenStudio::Ruleset::ModelUserScript
+class ExteriorWallThermalPropertiesMultiplier < OpenStudio::Ruleset::ModelUserScript
 
   #define the name that a user will see
   def name
     return "Exterior Wall Thermal Properties Multiplier"
   end
+  
+  # human readable description
+  def description
+    return "Change exterior walls by altering the thermal resistance, density, and solar absorptance of the wall constructions by a Multiplier"
+  end
 
+  # human readable description of modeling approach
+  def modeler_description
+    return "Change exterior walls by altering the thermal resistance, density, and solar absorptance of the wall constructions by a Multiplier"
+  end
+  
   #short def to make numbers pretty (converts 4125001.25641 to 4,125,001.26 or 4,125,001). The definition be called through this measure
   def neat_numbers(number, roundto = 2) #round to 0 or 2)
     if roundto == 2
@@ -202,4 +212,4 @@ class ChangeExteriorWallThermalProperties < OpenStudio::Ruleset::ModelUserScript
 end #end the measure
 
 #this allows the measure to be used by the application
-ChangeExteriorWallThermalProperties.new.registerWithApplication
+ExteriorWallThermalPropertiesMultiplier.new.registerWithApplication

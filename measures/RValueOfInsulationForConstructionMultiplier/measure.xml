@@ -2,8 +2,8 @@
   <schema_version>3.0</schema_version>
   <name>r_value_of_insulation_for_construction_multiplier</name>
   <uid>3c7a6751-bb54-4600-9410-8f042e1a513b</uid>
-  <version_id>8e603973-8910-43f5-a606-0fc287377112</version_id>
-  <version_modified>20170622T202909Z</version_modified>
+  <version_id>0b9d1ef4-32d5-422d-956d-cac62c985bc5</version_id>
+  <version_modified>20170706T165730Z</version_modified>
   <xml_checksum>0BF71A3E</xml_checksum>
   <class_name>RValueOfInsulationForConstructionMultiplier</class_name>
   <display_name>Change R-value of Insulation Layer for Construction By a Multiplier</display_name>
@@ -108,7 +108,7 @@
       <filename>measure.rb</filename>
       <filetype>rb</filetype>
       <usage_type>script</usage_type>
-      <checksum>4036EDF9</checksum>
+      <checksum>197F9140</checksum>
     </file>
   </files>
 </measure>
