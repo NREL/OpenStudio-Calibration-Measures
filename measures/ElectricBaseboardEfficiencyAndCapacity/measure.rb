@@ -2,21 +2,21 @@
 # http://nrel.github.io/OpenStudio-user-documentation/measures/measure_writing_guide/
 
 # start the measure
-class ChangeElectricBaseboard < OpenStudio::Ruleset::ModelUserScript
+class ElectricBaseboardEfficiencyAndCapacity < OpenStudio::Ruleset::ModelUserScript
 
   # human readable name
   def name
-    return "Change Electric Baseboard"
+    return "Electric Baseboard Efficiency And Capacity"
   end
 
   # human readable description
   def description
-    return "Change Electric Baseboard"
+    return "Electric Baseboard Efficiency And Capacity"
   end
 
   # human readable description of modeling approach
   def modeler_description
-    return "Change Electric Baseboard"
+    return "Electric Baseboard Efficiency And Capacity"
   end
 
   # define the arguments that the user will input
@@ -68,4 +68,4 @@ class ChangeElectricBaseboard < OpenStudio::Ruleset::ModelUserScript
 end
 
 # register the measure to be used by the application
-ChangeElectricBaseboard.new.registerWithApplication
+ElectricBaseboardEfficiencyAndCapacity.new.registerWithApplication

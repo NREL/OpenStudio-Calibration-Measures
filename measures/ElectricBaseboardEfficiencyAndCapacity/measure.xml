@@ -1,14 +1,14 @@
 <measure>
   <schema_version>3.0</schema_version>
-  <name>change_electric_baseboard</name>
+  <name>electric_baseboard_efficiency_and_capacity</name>
   <uid>4253e38c-6b48-4e96-8da7-002cec68d376</uid>
-  <version_id>2bed0e3a-1ae4-4809-b8d7-bac4efd7f316</version_id>
-  <version_modified>20170626T161740Z</version_modified>
+  <version_id>834b3275-b0d9-4f4a-8d80-679801fa8671</version_id>
+  <version_modified>20170710T155907Z</version_modified>
   <xml_checksum>0DA5C9E6</xml_checksum>
-  <class_name>ChangeElectricBaseboard</class_name>
-  <display_name>Change Electric Baseboard</display_name>
-  <description>Change Electric Baseboard</description>
-  <modeler_description>Change Electric Baseboard</modeler_description>
+  <class_name>ElectricBaseboardEfficiencyAndCapacity</class_name>
+  <display_name>Electric Baseboard Efficiency And Capacity</display_name>
+  <description>Electric Baseboard Efficiency And Capacity</description>
+  <modeler_description>Electric Baseboard Efficiency And Capacity</modeler_description>
   <arguments>
     <argument>
       <name>base_eff</name>
@@ -54,7 +54,7 @@
       <filename>measure.rb</filename>
       <filetype>rb</filetype>
       <usage_type>script</usage_type>
-      <checksum>AD731017</checksum>
+      <checksum>459797DB</checksum>
     </file>
   </files>
 </measure>
