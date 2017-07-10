@@ -31,7 +31,14 @@ class ExteriorWallThermalPropertiesMultiplier < OpenStudio::Ruleset::ModelUserSc
   def unit_helper(number,from_unit_string,to_unit_string)
     OpenStudio::convert(OpenStudio::Quantity.new(number, OpenStudio::createUnit(from_unit_string).get), OpenStudio::createUnit(to_unit_string).get).get.value
   end
-    
+  
+  def check_multiplier(runner, multiplier)
+    if multiplier < 0
+      runner.registerError("Multiplier #{multiplier} cannot be negative.")
+      return false
+    end
+  end
+  
   #define the arguments that the user will input
   def arguments(model)
     args = OpenStudio::Ruleset::OSArgumentVector.new
@@ -66,8 +73,11 @@ class ExteriorWallThermalPropertiesMultiplier < OpenStudio::Ruleset::ModelUserSc
 
     #assign the user inputs to variables
     r_value_mult = runner.getDoubleArgumentValue("r_value_mult",user_arguments)
+    check_multiplier(runner, r_value_mult)
     solar_abs_mult = runner.getDoubleArgumentValue("solar_abs_mult",user_arguments)
+    check_multiplier(runner, solar_abs_mult)
     thermal_mass_mult = runner.getDoubleArgumentValue("thermal_mass_mult",user_arguments)
+    check_multiplier(runner, thermal_mass_mult)
 
     #create an array of exterior surfaces and construction types
     surfaces = model.getSurfaces

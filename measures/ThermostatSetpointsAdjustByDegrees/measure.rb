@@ -1,11 +1,21 @@
 #start the measure
-class AdjustThermostatSetpointsByDegrees < OpenStudio::Ruleset::ModelUserScript
+class ThermostatSetpointsAdjustByDegrees < OpenStudio::Ruleset::ModelUserScript
 
   #define the name that a user will see
   def name
-    return "Adjust Thermostat Setpoints by Degrees"
+    return "Thermostat Setpoints Adjust by Degrees"
   end
 
+    # human readable description
+  def description
+    return "Thermostat Setpoints Adjust Heating and Cooling by Degrees"
+  end
+
+  # human readable description of modeling approach
+  def modeler_description
+    return "Thermostat Setpoints Adjust Heating and Cooling by Degrees"
+  end
+  
   #define the arguments that the user will input
   def arguments(model)
     args = OpenStudio::Ruleset::OSArgumentVector.new
@@ -289,4 +299,4 @@ class AdjustThermostatSetpointsByDegrees < OpenStudio::Ruleset::ModelUserScript
 end #end the measure
 
 #this allows the measure to be used by the application
-AdjustThermostatSetpointsByDegrees.new.registerWithApplication
+ThermostatSetpointsAdjustByDegrees.new.registerWithApplication

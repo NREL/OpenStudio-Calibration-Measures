@@ -16,6 +16,13 @@ class RValueOfInsulationForConstructionMultiplier < OpenStudio::Ruleset::ModelUs
     return "Change R-value of Insulation Layer for Construction By a Multiplier"
   end
   
+  def check_multiplier(runner, multiplier)
+    if multiplier < 0
+      runner.registerError("Multiplier #{multiplier} cannot be negative.")
+      return false
+    end
+  end
+  
   #define the arguments that the user will input
   def arguments(model)
     args = OpenStudio::Ruleset::OSArgumentVector.new
@@ -66,7 +73,7 @@ class RValueOfInsulationForConstructionMultiplier < OpenStudio::Ruleset::ModelUs
     #assign the user inputs to variables
     construction = runner.getOptionalWorkspaceObjectChoiceValue("construction",user_arguments,model) #model is passed in because of argument type
     r_value_multplier = runner.getDoubleArgumentValue("r_value_multplier",user_arguments)
-
+    check_multiplier(runner, r_value_multplier)
     #check the construction for reasonableness
     if construction.empty?
       handle = runner.getStringArgumentValue("construction",user_arguments)
