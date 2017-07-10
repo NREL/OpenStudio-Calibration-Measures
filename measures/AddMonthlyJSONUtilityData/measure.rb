@@ -16,7 +16,17 @@ class AddMonthlyJSONUtilityData < OpenStudio::Ruleset::ModelUserScript
   #define the name that a user will see, this method may be deprecated as
   #the display name in PAT comes from the name field in measure.xml
   def name
-    return "AddMonthlyJSONUtilityData"
+    return "Add Monthly JSON Utility Data"
+  end
+
+  # human readable description
+  def description
+    return "Add Monthly JSON Utility Data"
+  end
+
+  # human readable description of modeling approach
+  def modeler_description
+    return "Add Monthly JSON Formatted Utility Data to OSM as a UtilityBill Object"
   end
   
   def year_month_day(str)
@@ -45,52 +55,64 @@ class AddMonthlyJSONUtilityData < OpenStudio::Ruleset::ModelUserScript
     
     #set path to json
     json = OpenStudio::Ruleset::OSArgument::makeStringArgument("json",true)
-    json.setDisplayName("Path to JSON")
+    json.setDisplayName("Path to JSON Data in the Server.")
+    json.setDescription("Path to JSON Data in the Server. calibration_data is directory name of uploaded files.")
+    json.setDefaultValue("../../../lib/calibration_data/electric.json")
     args << json
     
     #set variable name
     variable_name = OpenStudio::Ruleset::OSArgument::makeStringArgument("variable_name",true)
     variable_name.setDisplayName("Variable name")
+    variable_name.setDescription("Name of the Utility Bill Object.  For Calibration Report use Electric Bill or Gas Bill")
     variable_name.setDefaultValue("Electric Bill")
     args << variable_name
     
     #set fuel type  
     fuel_type = OpenStudio::Ruleset::OSArgument::makeStringArgument("fuel_type", true)
     fuel_type.setDisplayName("Fuel Type")
+    fuel_type.setDescription("Fuel Type")
     fuel_type.setDefaultValue("Electricity")
     args << fuel_type
     
     #set ConsumptionUnit
     consumption_unit = OpenStudio::Ruleset::OSArgument::makeStringArgument("consumption_unit", true)
     consumption_unit.setDisplayName("Consumption Unit")
+    consumption_unit.setDescription("Consumption Unit (usually kWh or therms)")
     consumption_unit.setDefaultValue("kWh")
     args << consumption_unit
     
     #set data key name in json
     data_key_name = OpenStudio::Ruleset::OSArgument::makeStringArgument("data_key_name",true)
-    data_key_name.setDisplayName("data key name")
+    data_key_name.setDisplayName("data key name in JSON")
+    data_key_name.setDescription("data key name in JSON")
     data_key_name.setDefaultValue("tot_kwh")
     args << data_key_name
     
     #make a start date argument
     start_date = OpenStudio::Ruleset::OSArgument::makeStringArgument("start_date",true)
     start_date.setDisplayName("Start date")
+    start_date.setDescription("Start date format %Y%m%dT%H%M%S with Hour Min Sec optional")
+    start_date.setDefaultValue("2013-01-1")
     args << start_date
     
     #make an end date argument
     end_date = OpenStudio::Ruleset::OSArgument::makeStringArgument("end_date",true)
     end_date.setDisplayName("End date")
+    end_date.setDescription("End date format %Y%m%dT%H%M%S with Hour Min Sec optional")
+    end_date.setDefaultValue("2013-12-31")
     args << end_date
     
     #make an end date argument
     remove_utility_bill_data = OpenStudio::Ruleset::OSArgument::makeBoolArgument("remove_existing_data",true)
-    remove_utility_bill_data.setDisplayName("remove existing Utility Bill data")
+    remove_utility_bill_data.setDisplayName("remove all existing Utility Bill data objects from model")
+    remove_utility_bill_data.setDescription("remove all existing Utility Bill data objects from model")
     remove_utility_bill_data.setDefaultValue(false)
     args << remove_utility_bill_data
     
     #make an end date argument
     set_runperiod = OpenStudio::Ruleset::OSArgument::makeBoolArgument("set_runperiod",true)
-    set_runperiod.setDisplayName("Set RunPeriod in model")
+    set_runperiod.setDisplayName("Set RunPeriod Object in model to use start and end dates")
+    set_runperiod.setDescription("Set RunPeriod Object in model to use start and end dates.  Only needed once if multiple copies of measure being used.")
     set_runperiod.setDefaultValue(false)
     args << set_runperiod
     
@@ -119,9 +141,7 @@ class AddMonthlyJSONUtilityData < OpenStudio::Ruleset::ModelUserScript
     
     # set start date
     if date = year_month_day(start_date)
-
-      start_date = OpenStudio::Date.new(OpenStudio::MonthOfYear.new(date[1]), date[2], date[0])
-      
+      start_date = OpenStudio::Date.new(OpenStudio::MonthOfYear.new(date[1]), date[2], date[0])    
       # actual year of start date
       yearDescription = model.getYearDescription()
       yearDescription.setCalendarYear(date[0])
@@ -138,8 +158,7 @@ class AddMonthlyJSONUtilityData < OpenStudio::Ruleset::ModelUserScript
     end
     
     # set end date
-    if date = year_month_day(end_date)
-      
+    if date = year_month_day(end_date)    
       end_date = OpenStudio::Date.new(OpenStudio::MonthOfYear.new(date[1]), date[2], date[0])
       if set_runperiod
         runPeriod = model.getRunPeriod()
