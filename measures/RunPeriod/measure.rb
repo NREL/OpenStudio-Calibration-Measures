@@ -11,12 +11,22 @@ require 'json'
 require 'time'
 
 #start the measure
-class ChangeRunPeriod < OpenStudio::Ruleset::ModelUserScript
+class RunPeriod < OpenStudio::Ruleset::ModelUserScript
   
   #define the name that a user will see, this method may be deprecated as
   #the display name in PAT comes from the name field in measure.xml
   def name
-    return "ChangeRunPeriod"
+    return "Set Run Period Object"
+  end
+
+  # human readable description
+  def description
+    return "Set Run Period Object"
+  end
+
+  # human readable description of modeling approach
+  def modeler_description
+    return "Set Run Period Object"
   end
   
   def year_month_day(str)
@@ -45,12 +55,16 @@ class ChangeRunPeriod < OpenStudio::Ruleset::ModelUserScript
        
     #make a start date argument
     start_date = OpenStudio::Ruleset::OSArgument::makeStringArgument("start_date",true)
-    start_date.setDisplayName("Start date")
+    start_date.setDisplayName("Start date (yyyy-mm-dd or mm-dd-yyyy)")
+    start_date.setDescription("Start date (yyyy-mm-dd or mm-dd-yyyy)")
+    start_date.setDefaultValue("2013-1-1")
     args << start_date
     
     #make an end date argument
     end_date = OpenStudio::Ruleset::OSArgument::makeStringArgument("end_date",true)
-    end_date.setDisplayName("End date")
+    end_date.setDisplayName("End date (yyyy-mm-dd or mm-dd-yyyy)")
+    end_date.setDescription("End date (yyyy-mm-dd or mm-dd-yyyy)")
+    end_date.setDefaultValue("2013-12-31")
     args << end_date
     
     return args
@@ -116,4 +130,4 @@ class ChangeRunPeriod < OpenStudio::Ruleset::ModelUserScript
 end #end the measure
 
 #this allows the measure to be use by the application
-ChangeRunPeriod.new.registerWithApplication
+RunPeriod.new.registerWithApplication
