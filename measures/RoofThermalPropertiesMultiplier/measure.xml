@@ -1,14 +1,14 @@
 <measure>
   <schema_version>3.0</schema_version>
-  <name>change_roof_thermal_properties</name>
+  <name>roof_thermal_properties_multiplier</name>
   <uid>6c4eb22b-770f-456c-bcd1-084cfad89eeb</uid>
-  <version_id>daf14bbd-429e-42b2-aa4e-5b85d25be8bc</version_id>
-  <version_modified>20170607T193911Z</version_modified>
+  <version_id>1470c713-03ac-4029-b5c9-870097220ad4</version_id>
+  <version_modified>20170710T165916Z</version_modified>
   <xml_checksum>31085437</xml_checksum>
-  <class_name>ChangeRoofThermalProperties</class_name>
-  <display_name>Change Roof Thermal Properties</display_name>
-  <description>Allows calibration of roof by altering the thermal resistance, density, and solar absorptance of the wall constructions independently.</description>
-  <modeler_description>Tunes all roof surfaces by providing separate calibration multipliers to thermal resistance, thermal mass, and solar absorptance.</modeler_description>
+  <class_name>RoofThermalPropertiesMultiplier</class_name>
+  <display_name>Change Roof Thermal Properties by a Multiplier</display_name>
+  <description>Change Roof Thermal Properties by a Multiplier</description>
+  <modeler_description>Change Roof Thermal Properties by a Multiplier</modeler_description>
   <arguments>
     <argument>
       <name>r_value_mult</name>
@@ -73,7 +73,7 @@
       <filename>measure.rb</filename>
       <filetype>rb</filetype>
       <usage_type>script</usage_type>
-      <checksum>2E673C0C</checksum>
+      <checksum>0E62515F</checksum>
     </file>
   </files>
 </measure>

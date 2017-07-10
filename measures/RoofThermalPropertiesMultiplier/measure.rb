@@ -1,11 +1,37 @@
 #start the measure
-class ChangeRoofThermalProperties < OpenStudio::Ruleset::ModelUserScript
+class RoofThermalPropertiesMultiplier < OpenStudio::Ruleset::ModelUserScript
 
   #define the name that a user will see
   def name
-    return "Change Roof Thermal Properties"
+    return "Change Roof Thermal Properties by a Multiplier"
   end
 
+      # human readable description
+  def description
+    return "Change Roof Thermal Properties by a Multiplier"
+  end
+
+  # human readable description of modeling approach
+  def modeler_description
+    return "Change Roof Thermal Properties by a Multiplier"
+  end
+ 
+  #short def to make numbers pretty (converts 4125001.25641 to 4,125,001.26 or 4,125,001). The definition be called through this measure
+  def neat_numbers(number, roundto = 2) #round to 0 or 2)
+    if roundto == 2
+      number = sprintf "%.2f", number
+    else
+      number = number.round
+    end
+    #regex to add commas
+    number.to_s.reverse.gsub(%r{([0-9]{3}(?=([0-9])))}, "\\1,").reverse
+  end #end def neat_numbers
+
+  #helper to make it easier to do unit conversions on the fly
+  def unit_helper(number,from_unit_string,to_unit_string)
+    OpenStudio::convert(OpenStudio::Quantity.new(number, OpenStudio::createUnit(from_unit_string).get), OpenStudio::createUnit(to_unit_string).get).get.value
+  end
+    
   #define the arguments that the user will input
   def arguments(model)
     args = OpenStudio::Ruleset::OSArgumentVector.new
@@ -42,39 +68,6 @@ class ChangeRoofThermalProperties < OpenStudio::Ruleset::ModelUserScript
     r_value_mult = runner.getDoubleArgumentValue("r_value_mult",user_arguments)
     solar_abs_mult = runner.getDoubleArgumentValue("solar_abs_mult",user_arguments)
     thermal_mass_mult = runner.getDoubleArgumentValue("thermal_mass_mult",user_arguments)
-
-    #check the input arguments for percentage input or problomatically small values
-    arg_in = [r_value_mult, solar_abs_mult, thermal_mass_mult]
-    arg_in_d = ["R-value multiplier","Solar absorptance multiplier", "Thermal mass multiplier"]
-    arg_flag = FALSE
-    arg_in.each_with_index do |arg, arg_index|
-      if arg.round(2) == 0
-        runner.registerError("#{arg_in_d[arg_index]} was set equal to #{arg}. Please input a value greater that 1*e-2.")
-        arg_flag = TRUE
-      elsif arg < 0
-        runner.registerError("#{arg_in_d[arg_index]} was set equal to #{arg}. Please input a number greater than zero. Remember a multiplier, not a percentage, is being specified.")
-        arg_flag = TRUE
-      elsif arg >= 3
-        runner.registerWarning("#{arg_in_d[arg_index]} was set equal to #{arg}. Please ensure that the desired value was entered as a multiplier, not a percentage.")
-      end
-    end
-    return false if arg_flag
-
-    #short def to make numbers pretty (converts 4125001.25641 to 4,125,001.26 or 4,125,001). The definition be called through this measure
-    def neat_numbers(number, roundto = 2) #round to 0 or 2)
-      if roundto == 2
-        number = sprintf "%.2f", number
-      else
-        number = number.round
-      end
-      #regex to add commas
-      number.to_s.reverse.gsub(%r{([0-9]{3}(?=([0-9])))}, "\\1,").reverse
-    end #end def neat_numbers
-
-    #helper to make it easier to do unit conversions on the fly
-    def unit_helper(number,from_unit_string,to_unit_string)
-      OpenStudio::convert(OpenStudio::Quantity.new(number, OpenStudio::createUnit(from_unit_string).get), OpenStudio::createUnit(to_unit_string).get).get.value
-    end
 
     #create an array of exterior surfaces and construction types
     surfaces = model.getSurfaces
@@ -245,4 +238,4 @@ class ChangeRoofThermalProperties < OpenStudio::Ruleset::ModelUserScript
 end #end the measure
 
 #this allows the measure to be used by the application
-ChangeRoofThermalProperties.new.registerWithApplication
+RoofThermalPropertiesMultiplier.new.registerWithApplication
