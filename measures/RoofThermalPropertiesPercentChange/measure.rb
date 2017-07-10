@@ -1,19 +1,19 @@
 #start the measure
-class RoofThermalPropertiesMultiplier < OpenStudio::Ruleset::ModelUserScript
+class RoofThermalPropertiesPercentChange < OpenStudio::Ruleset::ModelUserScript
 
   #define the name that a user will see
   def name
-    return "Roof Thermal Properties Multiplier"
+    return "Roof Thermal Properties Percent Change"
   end
 
       # human readable description
   def description
-    return "Change Roof by altering the thermal resistance, density, and solar absorptance of the wall constructions by a Multiplier"
+    return "Change Roof by altering the thermal resistance, density, and solar absorptance of the wall constructions by a Percent Change"
   end
 
   # human readable description of modeling approach
   def modeler_description
-    return "Change Roof by altering the thermal resistance, density, and solar absorptance of the wall constructions by a Multiplier"
+    return "Change Roof by altering the thermal resistance, density, and solar absorptance of the wall constructions by a Percent Change"
   end
  
   #short def to make numbers pretty (converts 4125001.25641 to 4,125,001.26 or 4,125,001). The definition be called through this measure
@@ -37,20 +37,20 @@ class RoofThermalPropertiesMultiplier < OpenStudio::Ruleset::ModelUserScript
     args = OpenStudio::Ruleset::OSArgumentVector.new
 
     #make an argument insulation R-value
-    r_value_mult = OpenStudio::Ruleset::OSArgument::makeDoubleArgument("r_value_mult",true)
-    r_value_mult.setDisplayName("Roof total R-value multiplier")
-    r_value_mult.setDefaultValue(1)
-    args << r_value_mult
+    r_value_perc_change = OpenStudio::Ruleset::OSArgument::makeDoubleArgument("r_value_perc_change",true)
+    r_value_perc_change.setDisplayName("Roof total R-value Percent Change")
+    r_value_perc_change.setDefaultValue(0)
+    args << r_value_perc_change
 
-    solar_abs_mult = OpenStudio::Ruleset::OSArgument::makeDoubleArgument("solar_abs_mult",true)
-    solar_abs_mult.setDisplayName("Roof solar absorptance multiplier")
-    solar_abs_mult.setDefaultValue(1)
-    args << solar_abs_mult
+    solar_abs_perc_change = OpenStudio::Ruleset::OSArgument::makeDoubleArgument("solar_abs_perc_change",true)
+    solar_abs_perc_change.setDisplayName("Roof solar absorptance Percent Change")
+    solar_abs_perc_change.setDefaultValue(0)
+    args << solar_abs_perc_change
 
-    thermal_mass_mult = OpenStudio::Ruleset::OSArgument::makeDoubleArgument("thermal_mass_mult",true)
-    thermal_mass_mult.setDisplayName("Roof thermal mass multiplier")
-    thermal_mass_mult.setDefaultValue(1)
-    args << thermal_mass_mult
+    thermal_mass_perc_change = OpenStudio::Ruleset::OSArgument::makeDoubleArgument("thermal_mass_perc_change",true)
+    thermal_mass_perc_change.setDisplayName("Roof thermal mass Percent Change")
+    thermal_mass_perc_change.setDefaultValue(0)
+    args << thermal_mass_perc_change
 
     return args
   end #end the arguments method
@@ -65,9 +65,9 @@ class RoofThermalPropertiesMultiplier < OpenStudio::Ruleset::ModelUserScript
     end
 
     #assign the user inputs to variables
-    r_value_mult = runner.getDoubleArgumentValue("r_value_mult",user_arguments)
-    solar_abs_mult = runner.getDoubleArgumentValue("solar_abs_mult",user_arguments)
-    thermal_mass_mult = runner.getDoubleArgumentValue("thermal_mass_mult",user_arguments)
+    r_value_perc_change = runner.getDoubleArgumentValue("r_value_perc_change",user_arguments)
+    solar_abs_perc_change = runner.getDoubleArgumentValue("solar_abs_perc_change",user_arguments)
+    thermal_mass_perc_change = runner.getDoubleArgumentValue("thermal_mass_perc_change",user_arguments)
 
     #create an array of exterior surfaces and construction types
     surfaces = model.getSurfaces
@@ -137,25 +137,25 @@ class RoofThermalPropertiesMultiplier < OpenStudio::Ruleset::ModelUserScript
     initial_r_val.each_index do |index1|
       desired_r_val[index1] = Array.new
       initial_r_val[index1].each_index do |index2|
-        desired_r_val[index1][index2] = initial_r_val[index1][index2] * r_value_mult if initial_r_val[index1][index2]
+        desired_r_val[index1][index2] = initial_r_val[index1][index2] + initial_r_val[index1][index2] * r_value_perc_change * 0.01 if initial_r_val[index1][index2]
       end
     end
     initial_sol_abs.each_index do |index1|
       if initial_sol_abs[index1]
-        desired_sol_abs[index1] = initial_sol_abs[index1] * solar_abs_mult
+        desired_sol_abs[index1] = initial_sol_abs[index1] + initial_sol_abs[index1] * solar_abs_perc_change * 0.01
         if desired_sol_abs[index1] > 1
           desired_sol_abs[index1] = 1
-          runner.registerWarning("Initial solar absorptance of '#{initial_layers[index1][0].name.to_s}' was #{initial_sol_abs[index1]}. Multiplying it by #{solar_abs_mult} results in a number greater than 1, which is outside the allowed range. The value is instead being set to #{desired_sol_abs[index1]}")
+          runner.registerWarning("Initial solar absorptance of '#{initial_layers[index1][0].name.to_s}' was #{initial_sol_abs[index1]}. A Percent Change of #{solar_abs_perc_change} results in a number greater than 1, which is outside the allowed range. The value is instead being set to #{desired_sol_abs[index1]}")
         elsif desired_sol_abs[index1] < 0
           desired_sol_abs[index1] = 0
-          runner.registerWarning("Initial solar absorptance of '#{initial_layers[index1][0].name.to_s}' was #{initial_sol_abs[index1]}. Multiplying it by #{solar_abs_mult} results in a number less than 0, which is outside the allowed range. The value is instead being set to #{desired_sol_abs[index1]}")
-        end  
+          runner.registerWarning("Initial solar absorptance of '#{initial_layers[index1][0].name.to_s}' was #{initial_sol_abs[index1]}. A Percent Change of #{solar_abs_perc_change} results in a number less than 0, which is outside the allowed range. The value is instead being set to #{desired_sol_abs[index1]}")
+        end        
       end
     end
     initial_thm_mass.each_index do |index1|
       desired_thm_mass[index1] = Array.new
       initial_thm_mass[index1].each_index do |index2|
-        desired_thm_mass[index1][index2] = initial_thm_mass[index1][index2] * thermal_mass_mult if initial_thm_mass[index1][index2]
+        desired_thm_mass[index1][index2] = initial_thm_mass[index1][index2] + initial_thm_mass[index1][index2] * thermal_mass_perc_change * 0.01 if initial_thm_mass[index1][index2]
       end
     end
 
@@ -177,7 +177,7 @@ class RoofThermalPropertiesMultiplier < OpenStudio::Ruleset::ModelUserScript
       #create and name new construction
       new_construction = construction.clone
       new_construction = new_construction.to_Construction.get
-      new_construction.setName("#{construction.name.to_s} (R #{r_value_mult.round(1)}x Solar #{solar_abs_mult.round(1)}x Therm #{thermal_mass_mult.round(1)}x)")
+      new_construction.setName("#{construction.name.to_s} (R #{r_value_perc_change.round(1)} Solar #{solar_abs_perc_change.round(1)} Therm #{thermal_mass_perc_change.round(1)} Percent Change)")
       #replace layers in new construction
       new_construction.layers.each_with_index do |layer, lay_index|
         new_layer = layer.clone
@@ -186,7 +186,7 @@ class RoofThermalPropertiesMultiplier < OpenStudio::Ruleset::ModelUserScript
         new_layer.to_StandardOpaqueMaterial.get.setSolarAbsorptance(desired_sol_abs[con_index]) if lay_index == 0 && layer.to_StandardOpaqueMaterial.is_initialized #only apply to outer surface
         new_layer.to_OpaqueMaterial.get.setThermalResistance(desired_r_val[con_index][lay_index]) if layer.to_OpaqueMaterial.is_initialized
         new_layer.to_StandardOpaqueMaterial.get.setDensity(desired_thm_mass[con_index][lay_index]) if layer.to_StandardOpaqueMaterial.is_initialized && desired_thm_mass[con_index][lay_index] != 0
-        new_layer.setName("#{layer.name.to_s} (R #{r_value_mult.round(1)}x Solar #{solar_abs_mult.round(1)}x Therm #{thermal_mass_mult.round(1)}x)")
+        new_layer.setName("#{layer.name.to_s} (R #{r_value_perc_change.round(1)} Solar #{solar_abs_perc_change.round(1)} Therm #{thermal_mass_perc_change.round(1)} Percent Change)")
         new_construction.setLayer(lay_index, new_layer)
         #calculate properties of new layer and output nice names
         final_r_val[con_index][lay_index] = new_construction.layers[lay_index].to_OpaqueMaterial.get.thermalResistance if layer.to_OpaqueMaterial.is_initialized
@@ -196,10 +196,10 @@ class RoofThermalPropertiesMultiplier < OpenStudio::Ruleset::ModelUserScript
         final_sol_abs_d[con_index] = neat_numbers(final_sol_abs[con_index]) if lay_index == 0 && layer.to_StandardOpaqueMaterial.is_initialized
         final_thm_mass_d[con_index][lay_index] = neat_numbers(final_thm_mass[con_index][lay_index]) if layer.to_StandardOpaqueMaterial.is_initialized
         runner.registerInfo("Updated material '#{layer.name.to_s}' in construction '#{new_construction.name.to_s}' to '#{new_layer.name.to_s}' as follows:")
-        final_r_val[con_index][lay_index] ? runner.registerInfo("R-Value updated from #{initial_r_val_d[con_index][lay_index]} to #{final_r_val_d[con_index][lay_index]} (#{(final_r_val[con_index][lay_index]/initial_r_val[con_index][lay_index]).round(2)} mult)") : runner.registerInfo("R-Value was #{initial_r_val_d[con_index][lay_index]} and now is nil_value")
-        final_thm_mass[con_index][lay_index] ? runner.registerInfo("Thermal Mass updated from #{initial_thm_mass_d[con_index][lay_index]} to #{final_thm_mass_d[con_index][lay_index]} (#{(final_thm_mass[con_index][lay_index]/initial_thm_mass[con_index][lay_index]).round(2)} mult)") : runner.registerInfo("Thermal Mass was #{initial_thm_mass[con_index][lay_index]} and now is nil_value")
+        final_r_val[con_index][lay_index] ? runner.registerInfo("R-Value updated from #{initial_r_val_d[con_index][lay_index]} to #{final_r_val_d[con_index][lay_index]} (#{((final_r_val[con_index][lay_index] - initial_r_val[con_index][lay_index])/initial_r_val[con_index][lay_index] * 100).round(2)} percent change)") : runner.registerInfo("R-Value was #{initial_r_val_d[con_index][lay_index]} and now is nil_value")
+        final_thm_mass[con_index][lay_index] ? runner.registerInfo("Thermal Mass updated from #{initial_thm_mass_d[con_index][lay_index]} to #{final_thm_mass_d[con_index][lay_index]} (#{((final_thm_mass[con_index][lay_index] - initial_thm_mass[con_index][lay_index])/initial_thm_mass[con_index][lay_index] * 100).round(2)} percent change)") : runner.registerInfo("Thermal Mass was #{initial_thm_mass[con_index][lay_index]} and now is nil_value")
         if lay_index == 0
-          final_sol_abs[con_index] ? runner.registerInfo("Solar Absorptance updated from #{initial_sol_abs_d[con_index]} to #{final_sol_abs_d[con_index]} (#{(final_sol_abs[con_index]/initial_sol_abs[con_index]).round(2)} mult)") : runner.registerInfo("Solar Absorptance was #{initial_sol_abs[con_index][lay_index]} and now is nil_value")
+          final_sol_abs[con_index] ? runner.registerInfo("Solar Absorptance updated from #{initial_sol_abs_d[con_index]} to #{final_sol_abs_d[con_index]} (#{((final_sol_abs[con_index] - initial_sol_abs[con_index])/initial_sol_abs[con_index] * 100).round(2)} percent change)") : runner.registerInfo("Solar Absorptance was #{initial_sol_abs[con_index][lay_index]} and now is nil_value")
         end
       end
       final_construction[con_index] = new_construction
@@ -211,7 +211,7 @@ class RoofThermalPropertiesMultiplier < OpenStudio::Ruleset::ModelUserScript
     end
 
     #report desired condition
-    runner.registerFinalCondition("Applied R #{r_value_mult.round(1)}x Solar #{solar_abs_mult.round(1)}x Therm #{thermal_mass_mult.round(1)}x change")
+    runner.registerFinalCondition("Applied R #{r_value_perc_change.round(1)} Solar #{solar_abs_perc_change.round(1)} Therm #{thermal_mass_perc_change.round(1)} Percent change")
 
     return true
 
@@ -220,4 +220,4 @@ class RoofThermalPropertiesMultiplier < OpenStudio::Ruleset::ModelUserScript
 end #end the measure
 
 #this allows the measure to be used by the application
-RoofThermalPropertiesMultiplier.new.registerWithApplication
+RoofThermalPropertiesPercentChange.new.registerWithApplication

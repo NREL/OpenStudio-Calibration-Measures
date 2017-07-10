@@ -1,38 +1,38 @@
 <measure>
   <schema_version>3.0</schema_version>
-  <name>roof_thermal_properties_multiplier</name>
-  <uid>6c4eb22b-770f-456c-bcd1-084cfad89eeb</uid>
-  <version_id>50f3aafb-a037-4e9f-bf29-e1681e04b43d</version_id>
-  <version_modified>20170710T192125Z</version_modified>
+  <name>roof_thermal_properties_percent_change</name>
+  <uid>07516685-60fd-4da8-9872-1154a995047d</uid>
+  <version_id>5d9f57ba-f3d2-46d1-8c3a-a6a7c2537f23</version_id>
+  <version_modified>20170710T192126Z</version_modified>
   <xml_checksum>31085437</xml_checksum>
-  <class_name>RoofThermalPropertiesMultiplier</class_name>
-  <display_name>Roof Thermal Properties Multiplier</display_name>
-  <description>Change Roof by altering the thermal resistance, density, and solar absorptance of the wall constructions by a Multiplier</description>
-  <modeler_description>Change Roof by altering the thermal resistance, density, and solar absorptance of the wall constructions by a Multiplier</modeler_description>
+  <class_name>RoofThermalPropertiesPercentChange</class_name>
+  <display_name>Roof Thermal Properties Percent Change</display_name>
+  <description>Change Roof by altering the thermal resistance, density, and solar absorptance of the wall constructions by a Percent Change</description>
+  <modeler_description>Change Roof by altering the thermal resistance, density, and solar absorptance of the wall constructions by a Percent Change</modeler_description>
   <arguments>
     <argument>
-      <name>r_value_mult</name>
-      <display_name>Roof total R-value multiplier</display_name>
+      <name>r_value_perc_change</name>
+      <display_name>Roof total R-value Percent Change</display_name>
       <type>Double</type>
       <required>true</required>
       <model_dependent>false</model_dependent>
-      <default_value>1</default_value>
+      <default_value>0</default_value>
     </argument>
     <argument>
-      <name>solar_abs_mult</name>
-      <display_name>Roof solar absorptance multiplier</display_name>
+      <name>solar_abs_perc_change</name>
+      <display_name>Roof solar absorptance Percent Change</display_name>
       <type>Double</type>
       <required>true</required>
       <model_dependent>false</model_dependent>
-      <default_value>1</default_value>
+      <default_value>0</default_value>
     </argument>
     <argument>
-      <name>thermal_mass_mult</name>
-      <display_name>Roof thermal mass multiplier</display_name>
+      <name>thermal_mass_perc_change</name>
+      <display_name>Roof thermal mass Percent Change</display_name>
       <type>Double</type>
       <required>true</required>
       <model_dependent>false</model_dependent>
-      <default_value>1</default_value>
+      <default_value>0</default_value>
     </argument>
   </arguments>
   <outputs/>
@@ -73,7 +73,7 @@
       <filename>measure.rb</filename>
       <filetype>rb</filetype>
       <usage_type>script</usage_type>
-      <checksum>278BE394</checksum>
+      <checksum>A9E1B1BD</checksum>
     </file>
   </files>
 </measure>
