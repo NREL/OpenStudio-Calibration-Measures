@@ -201,35 +201,8 @@ class RoofThermalPropertiesMultiplier < OpenStudio::Ruleset::ModelUserScript
       end
     end
 
-    #create an array of exterior surfaces and construction types
-    final_surfaces = model.getSurfaces
-    final_roof_surfaces = []
-    final_roof_surface_constructions = []
-    final_surfaces.each do |surface|
-      if surface.outsideBoundaryCondition == "Outdoors" && surface.surfaceType == "RoofCeiling"
-        final_roof_surfaces << surface
-        final_roof_surface_const = surface.construction.get
-        #only add construction if it hasn't been added yet
-        unless final_roof_surface_constructions.include?(final_roof_surface_const)
-          final_roof_surface_constructions << final_roof_surface_const.to_Construction.get
-        end
-      end
-    end
-
-    #get final number of surfaces having each construction type
-    final_condition_string = "Final number of surfaces of each construction type: "
-    final_roof_surface_construction_numbers = []
-    final_roof_surface_constructions.each_with_index do |construction,index|
-      final_roof_surface_construction_numbers[index] = 0
-      final_condition_string << "'#{construction.name.to_s}': "
-      final_roof_surfaces.each do |surface|
-        final_roof_surface_construction_numbers[index] += 1 if surface.construction.get.handle.to_s == construction.handle.to_s
-      end
-      final_condition_string << "#{roof_surface_construction_numbers[index]}, "
-    end
-
     #report desired condition
-    runner.registerFinalCondition(final_condition_string)
+    runner.registerFinalCondition("Finished Roof Thermal Properties Multiplier")
 
     return true
 
