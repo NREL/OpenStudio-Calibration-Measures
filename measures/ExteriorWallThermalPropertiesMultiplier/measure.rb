@@ -140,11 +140,16 @@ class ExteriorWallThermalPropertiesMultiplier < OpenStudio::Ruleset::ModelUserSc
         desired_r_val[index1][index2] = initial_r_val[index1][index2] * r_value_mult if initial_r_val[index1][index2]
       end
     end
-    #TODO handle < 0
     initial_sol_abs.each_index do |index1|
       if initial_sol_abs[index1]
-        desired_sol_abs[index1] = [initial_sol_abs[index1] * solar_abs_mult, 1].min
-        runner.registerWarning("Initial solar absorptance of '#{initial_layers[index1][0].name.to_s}' was #{initial_sol_abs[index1]}. Multiplying it by #{solar_abs_mult} results in a number greater than 1, which is outside the allowed range. The value is instead being set to #{desired_sol_abs[index1]}") if desired_sol_abs[index1] == 1
+        desired_sol_abs[index1] = initial_sol_abs[index1] * solar_abs_mult
+        if desired_sol_abs[index1] > 1
+          desired_sol_abs[index1] = 1
+          runner.registerWarning("Initial solar absorptance of '#{initial_layers[index1][0].name.to_s}' was #{initial_sol_abs[index1]}. Multiplying it by #{solar_abs_mult} results in a number greater than 1, which is outside the allowed range. The value is instead being set to #{desired_sol_abs[index1]}")
+        elsif desired_sol_abs[index1] < 0
+          desired_sol_abs[index1] = 0
+          runner.registerWarning("Initial solar absorptance of '#{initial_layers[index1][0].name.to_s}' was #{initial_sol_abs[index1]}. Multiplying it by #{solar_abs_mult} results in a number less than 0, which is outside the allowed range. The value is instead being set to #{desired_sol_abs[index1]}")
+        end  
       end
     end
     initial_thm_mass.each_index do |index1|

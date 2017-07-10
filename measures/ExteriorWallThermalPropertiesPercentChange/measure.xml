@@ -2,8 +2,8 @@
   <schema_version>3.0</schema_version>
   <name>exterior_wall_thermal_properties_percent_change</name>
   <uid>6ab39cf2-1f9e-4570-a797-360a814aaa64</uid>
-  <version_id>4df7d194-0b15-4843-b155-e37ee5353902</version_id>
-  <version_modified>20170706T171322Z</version_modified>
+  <version_id>10f1357d-04fb-474c-9af7-8a6580a100db</version_id>
+  <version_modified>20170710T142100Z</version_modified>
   <xml_checksum>31085437</xml_checksum>
   <class_name>ExteriorWallThermalPropertiesPercentChange</class_name>
   <display_name>Exterior Wall Thermal Percent Change</display_name>
@@ -73,7 +73,7 @@
       <filename>measure.rb</filename>
       <filetype>rb</filetype>
       <usage_type>script</usage_type>
-      <checksum>C7B9208D</checksum>
+      <checksum>C3192568</checksum>
     </file>
   </files>
 </measure>
