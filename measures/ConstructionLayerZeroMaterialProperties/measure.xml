@@ -1,11 +1,11 @@
 <measure>
   <schema_version>3.0</schema_version>
-  <name>change_parameters_of_material</name>
+  <name>construction_layer_zero_material_properties</name>
   <uid>3c7a6751-bb54-4600-9410-8f042e1a413b</uid>
-  <version_id>5ef7f681-8ef1-4d73-8b57-92f1da4e0df4</version_id>
-  <version_modified>20170622T192547Z</version_modified>
+  <version_id>af55071e-8978-4b9b-a9db-22817955fb63</version_id>
+  <version_modified>20170710T164335Z</version_modified>
   <xml_checksum>0BF71A3E</xml_checksum>
-  <class_name>ChangeParametersOfMaterial</class_name>
+  <class_name>ConstructionLayerZeroMaterialProperties</class_name>
   <display_name>Change Parameters Of Material (Layer 0 of Construction)</display_name>
   <description>This measure changes properties of Layer 0 for a specific construction.</description>
   <modeler_description>This measure changes the Layer 0 properties of Thickness, Density, Thermal Absorptance, Solar Absorptance, Visible Absoptance, Thermal Conductivity, Specific Heat.</modeler_description>
@@ -170,7 +170,7 @@
       <filename>measure.rb</filename>
       <filetype>rb</filetype>
       <usage_type>script</usage_type>
-      <checksum>44B1190E</checksum>
+      <checksum>1316EAD6</checksum>
     </file>
   </files>
 </measure>

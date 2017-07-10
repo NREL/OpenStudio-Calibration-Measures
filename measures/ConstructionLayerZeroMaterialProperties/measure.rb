@@ -1,5 +1,5 @@
 #start the measure
-class ChangeParametersOfMaterial < OpenStudio::Ruleset::ModelUserScript
+class ConstructionLayerZeroMaterialProperties < OpenStudio::Ruleset::ModelUserScript
 
   #define the name that a user will see
   def name
@@ -186,4 +186,4 @@ class ChangeParametersOfMaterial < OpenStudio::Ruleset::ModelUserScript
 end #end the measure
 
 #this allows the measure to be used by the application
-ChangeParametersOfMaterial.new.registerWithApplication
+ConstructionLayerZeroMaterialProperties.new.registerWithApplication
