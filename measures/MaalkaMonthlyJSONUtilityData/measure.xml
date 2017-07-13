@@ -1,14 +1,14 @@
 <measure>
   <schema_version>3.0</schema_version>
-  <name>add_monthly_json_utility_data</name>
-  <uid>6da969e0-4256-49bf-9607-26504cc3d423</uid>
-  <version_id>85d68e03-31c4-4b32-875f-01b8cc0b367e</version_id>
-  <version_modified>20170711T195330Z</version_modified>
+  <name>maalka_monthly_json_utility_data</name>
+  <uid>afe82cf5-3e3a-43ea-b31e-8289ff268bed</uid>
+  <version_id>e99add95-835a-4e40-94cf-386684f8a094</version_id>
+  <version_modified>20170713T162702Z</version_modified>
   <xml_checksum>057E8D9D</xml_checksum>
-  <class_name>AddMonthlyJSONUtilityData</class_name>
-  <display_name>Add Monthly JSON Utility Data</display_name>
-  <description>Add Monthly JSON Utility Data</description>
-  <modeler_description>Add Monthly JSON Formatted Utility Data to OSM as a UtilityBill Object</modeler_description>
+  <class_name>MaalkaMonthlyJSONUtilityData</class_name>
+  <display_name>Maalka Formatted Monthly JSON Utility Data</display_name>
+  <description>Maalka Formatted Monthly JSON Utility Data</description>
+  <modeler_description>Add Maalka Formatted Monthly JSON Utility Data to OSM as a UtilityBill Object</modeler_description>
   <arguments>
     <argument>
       <name>json</name>
@@ -17,7 +17,7 @@
       <type>String</type>
       <required>true</required>
       <model_dependent>false</model_dependent>
-      <default_value>../../../lib/calibration_data/electric.json</default_value>
+      <default_value>../../../lib/sample_json.json</default_value>
     </argument>
     <argument>
       <name>variable_name</name>
@@ -27,6 +27,15 @@
       <required>true</required>
       <model_dependent>false</model_dependent>
       <default_value>Electric Bill</default_value>
+    </argument>
+    <argument>
+      <name>maalka_fuel_type</name>
+      <display_name>Maalka Fuel Type</display_name>
+      <description>Maalka Fuel Type</description>
+      <type>String</type>
+      <required>true</required>
+      <model_dependent>false</model_dependent>
+      <default_value>electric</default_value>
     </argument>
     <argument>
       <name>fuel_type</name>
@@ -139,7 +148,7 @@
       <filename>measure.rb</filename>
       <filetype>rb</filetype>
       <usage_type>script</usage_type>
-      <checksum>52FA488E</checksum>
+      <checksum>C464EDAA</checksum>
     </file>
   </files>
 </measure>

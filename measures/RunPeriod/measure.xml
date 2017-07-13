@@ -2,9 +2,9 @@
   <schema_version>3.0</schema_version>
   <name>run_period</name>
   <uid>6da969e0-4256-49bf-9607-26504cc3d321</uid>
-  <version_id>b27f5003-0baf-4dcc-a734-b779b273b7fc</version_id>
-  <version_modified>20170710T164944Z</version_modified>
-  <xml_checksum>9064277D</xml_checksum>
+  <version_id>56138a74-0226-4a32-ba64-25a584cf2c66</version_id>
+  <version_modified>20170711T195331Z</version_modified>
+  <xml_checksum>057E8D9D</xml_checksum>
   <class_name>RunPeriod</class_name>
   <display_name>Set Run Period Object</display_name>
   <description>Set Run Period Object</description>
