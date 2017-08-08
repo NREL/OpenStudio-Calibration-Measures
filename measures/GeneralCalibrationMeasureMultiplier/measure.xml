@@ -1,9 +1,9 @@
 <measure>
   <schema_version>3.0</schema_version>
   <name>general_calibration_measure_multiplier</name>
-  <uid>af156383-cfe2-4798-b581-08a4cccb8884</uid>
-  <version_id>828ea689-43e7-4201-bf6e-12ac8dec8223</version_id>
-  <version_modified>20170620T172225Z</version_modified>
+  <uid>d622534e-a3c9-4ba5-b616-53dce2a18ac8</uid>
+  <version_id>5ea7209d-ca73-4e45-87c5-4c526e6493e4</version_id>
+  <version_modified>20170801T152202Z</version_modified>
   <xml_checksum>DEC0D835</xml_checksum>
   <class_name>GeneralCalibrationMeasureMultiplier</class_name>
   <display_name>General Calibration Measure Multiplier</display_name>
