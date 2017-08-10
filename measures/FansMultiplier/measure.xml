@@ -2,8 +2,8 @@
   <schema_version>3.0</schema_version>
   <name>fans_multiplier</name>
   <uid>af156383-cfe2-4798-b581-08a4cccb8877</uid>
-  <version_id>55961863-ce7b-4d66-aa43-d49eac780466</version_id>
-  <version_modified>20170808T155818Z</version_modified>
+  <version_id>5c42382f-aae5-4be6-bf79-e93ec7bfbcb1</version_id>
+  <version_modified>20170810T162731Z</version_modified>
   <xml_checksum>3C1DA54F</xml_checksum>
   <class_name>FansMultiplier</class_name>
   <display_name>Fans Multiplier</display_name>
@@ -19,7 +19,7 @@
       <default_value>*All Fans*</default_value>
       <choices>
         <choice>
-          <value>{595ee50a-73f7-4e98-9039-ce5f2ec97eae}</value>
+          <value>{3266d916-b21d-4f47-b6e4-c8fc331fc795}</value>
           <display_name>*All Fans*</display_name>
         </choice>
         <choice>
@@ -48,8 +48,8 @@
     </argument>
     <argument>
       <name>pressure_rise_multiplier</name>
-      <display_name>Multiplier for Electric Equipment.</display_name>
-      <description>Multiplier for Electric Equipment.</description>
+      <display_name>Multiplier for Pressure Rise.</display_name>
+      <description>Multiplier for Pressure Rise.</description>
       <type>Double</type>
       <required>true</required>
       <model_dependent>false</model_dependent>
@@ -57,8 +57,8 @@
     </argument>
     <argument>
       <name>motor_efficiency_multiplier</name>
-      <display_name>Multiplier for Gas Equipment.</display_name>
-      <description>Multiplier for Gas Equipment.</description>
+      <display_name>Multiplier for Motor Efficiency.</display_name>
+      <description>Multiplier for Motor Efficiency.</description>
       <type>Double</type>
       <required>true</required>
       <model_dependent>false</model_dependent>
@@ -142,7 +142,7 @@
       <filename>measure.rb</filename>
       <filetype>rb</filetype>
       <usage_type>script</usage_type>
-      <checksum>28A83A40</checksum>
+      <checksum>03F0CF1D</checksum>
     </file>
   </files>
 </measure>

@@ -16,10 +16,21 @@ class FansMultiplier < OpenStudio::Ruleset::ModelUserScript
     return "It will be used for calibration maximum flow rate, efficiency, pressure rise and motor efficiency. User can choose between a SINGLE Fan or ALL the Fans."
   end
   
-  def change_name(object, multiplier)
-    if multiplier != 1
-      object.setName("#{object.name.get} #{multiplier.round(2)}x Multiplier")
+  def change_name(object,max_flowrate_multiplier,fan_efficiency_multiplier,pressure_rise_multiplier,motor_efficiency_multiplier)
+    nameString = "#{object.name.get}"
+    if max_flowrate_multiplier != 1.0
+      nameString = nameString + " #{max_flowrate_multiplier.round(2)}x flow"
     end
+    if pressure_rise_multiplier != 1.0
+      nameString = nameString + " #{pressure_rise_multiplier.round(2)}x press"
+    end
+    if fan_efficiency_multiplier != 1.0
+      nameString = nameString + " #{fan_efficiency_multiplier.round(2)}x fanEff"
+    end
+    if motor_efficiency_multiplier != 1.0
+      nameString = nameString + " #{motor_efficiency_multiplier.round(2)}x motorEff"
+    end
+    object.setName(nameString)
   end
   
   def check_multiplier(runner, multiplier)
@@ -97,15 +108,15 @@ class FansMultiplier < OpenStudio::Ruleset::ModelUserScript
     
     # pressure_rise_multiplier
     pressure_rise_multiplier = OpenStudio::Ruleset::OSArgument.makeDoubleArgument("pressure_rise_multiplier", true)
-    pressure_rise_multiplier.setDisplayName("Multiplier for Electric Equipment.")
-    pressure_rise_multiplier.setDescription("Multiplier for Electric Equipment.")
+    pressure_rise_multiplier.setDisplayName("Multiplier for Pressure Rise.")
+    pressure_rise_multiplier.setDescription("Multiplier for Pressure Rise.")
     pressure_rise_multiplier.setDefaultValue(1.0)
     args << pressure_rise_multiplier
     
     # motor_efficiency_multiplier
     motor_efficiency_multiplier = OpenStudio::Ruleset::OSArgument.makeDoubleArgument("motor_efficiency_multiplier", true)
-    motor_efficiency_multiplier.setDisplayName("Multiplier for Gas Equipment.")
-    motor_efficiency_multiplier.setDescription("Multiplier for Gas Equipment.")
+    motor_efficiency_multiplier.setDisplayName("Multiplier for Motor Efficiency.")
+    motor_efficiency_multiplier.setDescription("Multiplier for Motor Efficiency.")
     motor_efficiency_multiplier.setDefaultValue(1.0)
     args << motor_efficiency_multiplier
     
@@ -180,49 +191,65 @@ class FansMultiplier < OpenStudio::Ruleset::ModelUserScript
     end
        
     # report initial condition of model
-    runner.registerInitialCondition("Applying Multiplier to #{fans.size} fans.")
-    runner.registerInfo("Applying Multiplier to #{fans.size} fans.")
-
+    runner.registerInitialCondition("Fans to change: #{fans.size}")
+    runner.registerInfo("Fans to change: #{fans.size}")
+    altered_fans = []
+    altered_maxflow = []
+    altered_pressurerise = []
+    altered_fanefficiency = []
+    altered_motorefficiency = []
     # loop through fans
     fans.each do |fan|
-
+      altered_fan = false
       # modify max flowrate
-      runner.registerInfo("Applying #{max_flowrate_multiplier}x multiplier to #{fan.name.get}.")
-      fan.setMaximumFlowRate(max_flowrate_multiplier)          
-      # change name
-      change_name(fan, max_flowrate_multiplier)
-
+      if max_flowrate_multiplier != 1.0
+        if fan.maximumFlowRate.is_initialized
+          runner.registerInfo("Applying #{max_flowrate_multiplier}x multiplier to #{fan.name.get}.")
+          fan.setMaximumFlowRate(fan.maximumFlowRate * max_flowrate_multiplier)          
+          altered_maxflow << fan.handle.to_s
+          altered_fan = true
+        end
+      end
       
       # modify fan_efficiency_multiplier
-      runner.registerInfo("Applying #{fan_efficiency_multiplier}x multiplier to #{fan.name.get}.")
-      fan.setFanEfficiency(fan_efficiency_multiplier)          
-      # change name
-      change_name(fan, fan_efficiency_multiplier)
-
+      if fan_efficiency_multiplier != 1.0
+        runner.registerInfo("Applying #{fan_efficiency_multiplier}x multiplier to #{fan.name.get}.")
+        fan.setFanEfficiency(fan.fanEfficiency * fan_efficiency_multiplier)          
+        altered_fanefficiency << fan.handle.to_s
+        altered_fan = true
+      end
       
       # pressure_rise_multiplier
-      runner.registerInfo("Applying #{pressure_rise_multiplier}x multiplier to #{fan.name.get}.")
-      fan.setPressureRise(pressure_rise_multiplier)          
-      #change name
-      change_name(fan, pressure_rise_multiplier)
-
+      if pressure_rise_multiplier != 1.0
+        runner.registerInfo("Applying #{pressure_rise_multiplier}x multiplier to #{fan.name.get}.")
+        fan.setPressureRise(fan.pressureRise * pressure_rise_multiplier)          
+        altered_pressurerise << fan.handle.to_s
+        altered_fan = true
+      end
       
       # motor_efficiency_multiplier
-      runner.registerInfo("Applying #{motor_efficiency_multiplier}x multiplier to #{fan.name.get}.")
-      fan.setMotorEfficiency(motor_efficiency_multiplier)          
-      #change name
-      change_name(fan, motor_efficiency_multiplier)
-
+      if motor_efficiency_multiplier != 1.0
+        runner.registerInfo("Applying #{motor_efficiency_multiplier}x multiplier to #{fan.name.get}.")
+        fan.setMotorEfficiency(fan.motorEfficiency * motor_efficiency_multiplier)          
+        altered_motorefficiency << fan.handle.to_s
+        altered_fan = true
+      end
+      
+      if altered_fan
+        altered_fans << fan.handle.to_s
+        change_name(fan,max_flowrate_multiplier,fan_efficiency_multiplier,pressure_rise_multiplier,motor_efficiency_multiplier)
+        runner.registerInfo("Fan name changed to: #{fan.name.get}")
+      end
     end #end fan loop
     
     # na if nothing in model to look at
-    if fans.size == 0
-      runner.registerAsNotApplicable("No objects to alter were found in the model")
+    if altered_fans.size == 0
+      runner.registerAsNotApplicable("No Fans were altered in the model")
       return true
     end
 
     # report final condition of model
-    runner.registerFinalCondition("#{fans.size} fans objects were altered.")
+    runner.registerFinalCondition("#{altered_fans.size} fans objects were altered.")
 
     return true
 
