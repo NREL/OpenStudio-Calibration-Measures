@@ -1,13 +1,13 @@
 <measure>
   <schema_version>3.0</schema_version>
-  <name>water_heater_mixed_multiplier</name>
-  <uid>1e4d5053-d2c1-400d-9192-7a470e5a7b5c</uid>
-  <version_id>8e27e396-7bbe-4d98-b2d5-20b07eaa0887</version_id>
-  <version_modified>20170810T201421Z</version_modified>
-  <xml_checksum>DEC0D835</xml_checksum>
-  <class_name>WaterHeaterMixedMultiplier</class_name>
-  <display_name>Water Heater Mixed Multiplier</display_name>
-  <description>This is a general purpose measure to calibrate WaterHeaterMixed with a Multiplier.</description>
+  <name>water_heater_mixed_percent_change</name>
+  <uid>c42bf4e7-2bbb-44c6-ab91-e6ddb53e050d</uid>
+  <version_id>947f0c02-732c-4eda-a815-d2cb9c96dcd8</version_id>
+  <version_modified>20170810T201641Z</version_modified>
+  <xml_checksum>D28BCE9C</xml_checksum>
+  <class_name>WaterHeaterMixedPercentChange</class_name>
+  <display_name>Water Heater Mixed Percent Change</display_name>
+  <description>This is a general purpose measure to calibrate WaterHeaterMixed with a Percent Change.</description>
   <modeler_description>It will be used for calibration of WaterHeaterMixed. User can choose between a SINGLE WaterHeaterMixed or ALL the WaterHeaterMixed objects.</modeler_description>
   <arguments>
     <argument>
@@ -19,7 +19,7 @@
       <default_value>*All WaterHeaterMixeds*</default_value>
       <choices>
         <choice>
-          <value>{23994208-c5bd-4be4-a8d0-adc5cab0c296}</value>
+          <value>{454a2d6e-224b-4023-99f2-1b6a176902e1}</value>
           <display_name>*All WaterHeaterMixeds*</display_name>
         </choice>
         <choice>
@@ -30,30 +30,30 @@
     </argument>
     <argument>
       <name>maximum_capacity_multiplier</name>
-      <display_name>Multiplier for Heater Maximum Capacity.</display_name>
-      <description>Multiplier for Heater Maximum Capacity.</description>
+      <display_name>Percent Change for Heater Maximum Capacity.</display_name>
+      <description>Percent Change for Heater Maximum Capacity.</description>
       <type>Double</type>
       <required>true</required>
       <model_dependent>false</model_dependent>
-      <default_value>1</default_value>
+      <default_value>0</default_value>
     </argument>
     <argument>
       <name>minimum_capacity_multiplier</name>
-      <display_name>Multiplier for Heater Minimum Capacity.</display_name>
-      <description>Multiplier for Heater Minimum Capacity.</description>
+      <display_name>Percent Change for Heater Minimum Capacity.</display_name>
+      <description>Percent Change for Heater Minimum Capacity.</description>
       <type>Double</type>
       <required>true</required>
       <model_dependent>false</model_dependent>
-      <default_value>1</default_value>
+      <default_value>0</default_value>
     </argument>
     <argument>
       <name>thermal_efficiency_multiplier</name>
-      <display_name>Multiplier for Thermal Efficiency.</display_name>
-      <description>Multiplier for Thermal Efficiency.</description>
+      <display_name>Percent Change for Thermal Efficiency.</display_name>
+      <description>Percent Change for Thermal Efficiency.</description>
       <type>Double</type>
       <required>true</required>
       <model_dependent>false</model_dependent>
-      <default_value>1</default_value>
+      <default_value>0</default_value>
     </argument>
     <argument>
       <name>fuel_type</name>
@@ -156,7 +156,7 @@
       <filename>measure.rb</filename>
       <filetype>rb</filetype>
       <usage_type>script</usage_type>
-      <checksum>00E45A92</checksum>
+      <checksum>C6D9039D</checksum>
     </file>
   </files>
 </measure>
