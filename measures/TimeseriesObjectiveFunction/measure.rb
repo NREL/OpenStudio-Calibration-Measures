@@ -191,7 +191,7 @@ class TimeseriesObjectiveFunction < OpenStudio::Ruleset::ReportingUserScript
     csv_var_dn = runner.getStringArgumentValue("csv_var_dn", user_arguments)
     years = runner.getBoolArgumentValue("year", user_arguments)
     seconds = runner.getBoolArgumentValue("seconds", user_arguments)
-    sql_key = runner.getStringArgumentValue("sql_key", user_arguments)
+    sql_key = runner.getStringArgumentValue("key_value", user_arguments)
     sql_var = runner.getStringArgumentValue("sql_var", user_arguments)
     norm = runner.getDoubleArgumentValue("norm", user_arguments)
     scale = runner.getDoubleArgumentValue("scale", user_arguments)
