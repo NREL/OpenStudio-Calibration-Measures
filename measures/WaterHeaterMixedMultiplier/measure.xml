@@ -2,9 +2,9 @@
   <schema_version>3.0</schema_version>
   <name>water_heater_mixed_multiplier</name>
   <uid>1e4d5053-d2c1-400d-9192-7a470e5a7b5c</uid>
-  <version_id>8e27e396-7bbe-4d98-b2d5-20b07eaa0887</version_id>
-  <version_modified>20170810T201421Z</version_modified>
-  <xml_checksum>DEC0D835</xml_checksum>
+  <version_id>1f2bd409-1f0a-4407-bd35-3c74c43c452a</version_id>
+  <version_modified>20170816T185343Z</version_modified>
+  <xml_checksum>D28BCE9C</xml_checksum>
   <class_name>WaterHeaterMixedMultiplier</class_name>
   <display_name>Water Heater Mixed Multiplier</display_name>
   <description>This is a general purpose measure to calibrate WaterHeaterMixed with a Multiplier.</description>
@@ -19,7 +19,7 @@
       <default_value>*All WaterHeaterMixeds*</default_value>
       <choices>
         <choice>
-          <value>{23994208-c5bd-4be4-a8d0-adc5cab0c296}</value>
+          <value>{31752e3d-115c-43a9-aa21-377506ea210e}</value>
           <display_name>*All WaterHeaterMixeds*</display_name>
         </choice>
         <choice>

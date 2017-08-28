@@ -2,8 +2,8 @@
   <schema_version>3.0</schema_version>
   <name>timeseries_objective_function</name>
   <uid>6804217d-4737-45f3-82df-b81393c29ce3</uid>
-  <version_id>9a52ac7b-849c-4ebb-a5de-96204a94819e</version_id>
-  <version_modified>20170622T165922Z</version_modified>
+  <version_id>8bf7bb0e-2425-4369-b4c8-f3fe537213b1</version_id>
+  <version_modified>20170828T154452Z</version_modified>
   <xml_checksum>FFE04372</xml_checksum>
   <class_name>TimeseriesObjectiveFunction</class_name>
   <display_name>TimeSeries Objective Function</display_name>
@@ -12,12 +12,12 @@
   <arguments>
     <argument>
       <name>csv_name</name>
-      <display_name>CSV file name for the metered data</display_name>
-      <description>CSV file name.</description>
+      <display_name>Path to CSV file for the metered data</display_name>
+      <description>Path to CSV file including file name.</description>
       <type>String</type>
       <required>true</required>
       <model_dependent>false</model_dependent>
-      <default_value>mtr.csv</default_value>
+      <default_value>../../../lib/resources/mtr.csv</default_value>
     </argument>
     <argument>
       <name>csv_time_header</name>
@@ -269,7 +269,43 @@
       </choices>
     </argument>
   </arguments>
-  <outputs/>
+  <outputs>
+    <output>
+      <name>diff</name>
+      <display_name>diff</display_name>
+      <short_name>diff</short_name>
+      <type>Double</type>
+      <model_dependent>false</model_dependent>
+    </output>
+    <output>
+      <name>simdata</name>
+      <display_name>simdata</display_name>
+      <short_name>simdata</short_name>
+      <type>Double</type>
+      <model_dependent>false</model_dependent>
+    </output>
+    <output>
+      <name>csvdata</name>
+      <display_name>csvdata</display_name>
+      <short_name>csvdata</short_name>
+      <type>Double</type>
+      <model_dependent>false</model_dependent>
+    </output>
+    <output>
+      <name>cvrmse</name>
+      <display_name>cvrmse</display_name>
+      <short_name>cvrmse</short_name>
+      <type>Double</type>
+      <model_dependent>false</model_dependent>
+    </output>
+    <output>
+      <name>nmbe</name>
+      <display_name>nmbe</display_name>
+      <short_name>nmbe</short_name>
+      <type>Double</type>
+      <model_dependent>false</model_dependent>
+    </output>
+  </outputs>
   <provenances/>
   <tags>
     <tag>Reporting.QAQC</tag>
@@ -307,7 +343,7 @@
       <filename>measure.rb</filename>
       <filetype>rb</filetype>
       <usage_type>script</usage_type>
-      <checksum>C110D1BE</checksum>
+      <checksum>70718D00</checksum>
     </file>
   </files>
 </measure>

@@ -29,9 +29,9 @@ class TimeseriesObjectiveFunction < OpenStudio::Ruleset::ReportingUserScript
 
     # the name of the sql file
     csv_name = OpenStudio::Ruleset::OSArgument.makeStringArgument("csv_name", true)
-    csv_name.setDisplayName("CSV file name for the metered data")
-    csv_name.setDescription("CSV file name.")
-    csv_name.setDefaultValue("mtr.csv")
+    csv_name.setDisplayName("Path to CSV file for the metered data")
+    csv_name.setDescription("Path to CSV file including file name.")
+    csv_name.setDefaultValue("../../../lib/resources/mtr.csv")
     args << csv_name
     
     csv_time_header = OpenStudio::Ruleset::OSArgument.makeStringArgument("csv_time_header", true)
@@ -146,6 +146,19 @@ class TimeseriesObjectiveFunction < OpenStudio::Ruleset::ReportingUserScript
     return args
   end
 
+    def outputs
+    result = OpenStudio::Measure::OSOutputVector.new
+
+    # electric consumption values
+    result << OpenStudio::Measure::OSOutput.makeDoubleOutput('diff') # kWh
+    result << OpenStudio::Measure::OSOutput.makeDoubleOutput('simdata') # kWh
+    result << OpenStudio::Measure::OSOutput.makeDoubleOutput('csvdata') # %
+    result << OpenStudio::Measure::OSOutput.makeDoubleOutput('cvrmse') # %
+    result << OpenStudio::Measure::OSOutput.makeDoubleOutput('nmbe') # kWh
+
+    return result
+  end
+  
   # define what happens when the measure is run
   def run(runner, user_arguments)
     super(runner, user_arguments)
