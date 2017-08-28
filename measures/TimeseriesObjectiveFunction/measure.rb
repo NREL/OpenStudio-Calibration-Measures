@@ -192,7 +192,7 @@ class TimeseriesObjectiveFunction < OpenStudio::Ruleset::ReportingUserScript
     years = runner.getBoolArgumentValue("year", user_arguments)
     seconds = runner.getBoolArgumentValue("seconds", user_arguments)
     sql_key = runner.getStringArgumentValue("key_value", user_arguments)
-    sql_var = runner.getStringArgumentValue("sql_var", user_arguments)
+    sql_var = runner.getStringArgumentValue("timeseries_name", user_arguments)
     norm = runner.getDoubleArgumentValue("norm", user_arguments)
     scale = runner.getDoubleArgumentValue("scale", user_arguments)
     find_avail = runner.getBoolArgumentValue("find_avail", user_arguments) 
