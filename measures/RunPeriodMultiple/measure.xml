@@ -1,0 +1,96 @@
+<measure>
+  <schema_version>3.0</schema_version>
+  <name>run_period_multiple</name>
+  <uid>14a9aa83-b4de-48b4-ba65-dad6f103ffcb</uid>
+  <version_id>5301f37b-5d32-4dbb-ae7c-5636cb7a5544</version_id>
+  <version_modified>20170831T150104Z</version_modified>
+  <xml_checksum>87C4F8A7</xml_checksum>
+  <class_name>RunPeriodMultiple</class_name>
+  <display_name>Set Multiple Run Period Object</display_name>
+  <description>Set Multiple Run Period Object</description>
+  <modeler_description>Set Multiple Run Period Object</modeler_description>
+  <arguments>
+    <argument>
+      <name>runPeriodName</name>
+      <display_name>Run Period Name</display_name>
+      <type>String</type>
+      <required>false</required>
+      <model_dependent>false</model_dependent>
+      <default_value>August</default_value>
+    </argument>
+    <argument>
+      <name>beginMonth</name>
+      <display_name>Begin Month (integer)</display_name>
+      <type>Integer</type>
+      <required>false</required>
+      <model_dependent>false</model_dependent>
+      <default_value>8</default_value>
+    </argument>
+    <argument>
+      <name>beginDay</name>
+      <display_name>Begin Day (integer)</display_name>
+      <type>Integer</type>
+      <required>false</required>
+      <model_dependent>false</model_dependent>
+      <default_value>7</default_value>
+    </argument>
+    <argument>
+      <name>endMonth</name>
+      <display_name>End Month (integer)</display_name>
+      <type>Integer</type>
+      <required>false</required>
+      <model_dependent>false</model_dependent>
+      <default_value>8</default_value>
+    </argument>
+    <argument>
+      <name>endDay</name>
+      <display_name>End Day (integer)</display_name>
+      <type>Integer</type>
+      <required>false</required>
+      <model_dependent>false</model_dependent>
+      <default_value>8</default_value>
+    </argument>
+  </arguments>
+  <outputs/>
+  <provenances/>
+  <tags>
+    <tag>Whole Building.Space Types</tag>
+  </tags>
+  <attributes>
+    <attribute>
+      <name>Measure Type</name>
+      <value>EnergyPlusMeasure</value>
+      <datatype>string</datatype>
+    </attribute>
+    <attribute>
+      <name>Uses SketchUp API</name>
+      <value>false</value>
+      <datatype>boolean</datatype>
+    </attribute>
+  </attributes>
+  <files>
+    <file>
+      <filename>ModifyEnergyPlusFanVariableVolumeObjects_Test.rb</filename>
+      <filetype>rb</filetype>
+      <usage_type>test</usage_type>
+      <checksum>F937148D</checksum>
+    </file>
+    <file>
+      <filename>Test.osm</filename>
+      <filetype>osm</filetype>
+      <usage_type>test</usage_type>
+      <checksum>BCF2DBB8</checksum>
+    </file>
+    <file>
+      <version>
+        <software_program>OpenStudio</software_program>
+        <identifier>2.1.0</identifier>
+        <min_compatible>2.1.0</min_compatible>
+      </version>
+      <filename>measure.rb</filename>
+      <filetype>rb</filetype>
+      <usage_type>script</usage_type>
+      <checksum>5BA235B5</checksum>
+    </file>
+  </files>
+</measure>
