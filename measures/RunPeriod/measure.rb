@@ -52,20 +52,38 @@ class RunPeriod < OpenStudio::Ruleset::ModelUserScript
   #define the arguments that the user will input
   def arguments(model)
     args = OpenStudio::Ruleset::OSArgumentVector.new
-       
+    
+    #RunPeriodName
+    runPeriodName = OpenStudio::Ruleset::OSArgument::makeStringArgument("runPeriodName",false)
+    runPeriodName.setDisplayName("Run Period Name")
+    runPeriodName.setDefaultValue("July")
+    args << runPeriodName
+    
     #make a start date argument
     start_date = OpenStudio::Ruleset::OSArgument::makeStringArgument("start_date",true)
     start_date.setDisplayName("Start date (yyyy-mm-dd or mm-dd-yyyy)")
     start_date.setDescription("Start date (yyyy-mm-dd or mm-dd-yyyy)")
-    start_date.setDefaultValue("2013-1-1")
+    start_date.setDefaultValue("2015-7-25")
     args << start_date
     
     #make an end date argument
     end_date = OpenStudio::Ruleset::OSArgument::makeStringArgument("end_date",true)
     end_date.setDisplayName("End date (yyyy-mm-dd or mm-dd-yyyy)")
     end_date.setDescription("End date (yyyy-mm-dd or mm-dd-yyyy)")
-    end_date.setDefaultValue("2013-12-31")
+    end_date.setDefaultValue("2015-7-26")
     args << end_date
+    
+    #daylightsavings
+    daylightsavings = OpenStudio::Ruleset::OSArgument::makeBoolArgument("daylightsavings",false)
+    daylightsavings.setDisplayName("Use Daylightsavings")
+    daylightsavings.setDefaultValue(false)
+    args << daylightsavings
+    
+    #holiday
+    holiday = OpenStudio::Ruleset::OSArgument::makeBoolArgument("holiday",false)
+    holiday.setDisplayName("Use Holiday and Special Days")
+    holiday.setDefaultValue(false)
+    args << holiday
     
     return args
   end #end the arguments method
@@ -78,10 +96,18 @@ class RunPeriod < OpenStudio::Ruleset::ModelUserScript
     if not runner.validateUserArguments(arguments(model), user_arguments)
       return false
     end
-    #model.getSimulationControl.setSolarDistribution("FullExterior")
+
     #assign the user inputs to variables
+    runPeriodName = runner.getStringArgumentValue("runPeriodName",user_arguments)
     start_date = runner.getStringArgumentValue("start_date",user_arguments)
     end_date = runner.getStringArgumentValue("end_date",user_arguments)
+    daylightsavings = runner.getBoolArgumentValue("daylightsavings",user_arguments)
+    holiday = runner.getBoolArgumentValue("holiday",user_arguments)
+    
+    runPeriod = model.getRunPeriod()
+    runPeriod.setName(runPeriodName)
+    runPeriod.setUseWeatherFileDaylightSavings(daylightsavings)
+    runPeriod.setUseWeatherFileHolidays(holiday)
     
     # set start date
     if date = year_month_day(start_date)
@@ -91,8 +117,7 @@ class RunPeriod < OpenStudio::Ruleset::ModelUserScript
       # actual year of start date
       yearDescription = model.getYearDescription()
       yearDescription.setCalendarYear(date[0])
-      
-      runPeriod = model.getRunPeriod()
+           
       runPeriod.setBeginMonth(date[1])
       runPeriod.setBeginDayOfMonth(date[2])
     else
@@ -106,7 +131,6 @@ class RunPeriod < OpenStudio::Ruleset::ModelUserScript
       
       end_date = OpenStudio::Date.new(OpenStudio::MonthOfYear.new(date[1]), date[2], date[0])
       
-      runPeriod = model.getRunPeriod()
       runPeriod.setEndMonth(date[1])
       runPeriod.setEndDayOfMonth(date[2])
     else
@@ -115,13 +139,12 @@ class RunPeriod < OpenStudio::Ruleset::ModelUserScript
       return false
     end
     
-    runPeriod = model.getRunPeriod()
     runner.registerInfo("runperiod: #{runPeriod.to_s}")
     #reporting final condition of model
     runner.registerFinalCondition("Changed run period.")
     
     #set minimum warmup days
-    model.getSimulationControl.setMinimumNumberofWarmupDays(20)
+    #model.getSimulationControl.setMinimumNumberofWarmupDays(20)
     
     return true
  
