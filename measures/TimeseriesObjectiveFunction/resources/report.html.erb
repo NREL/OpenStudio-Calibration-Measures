@@ -41,7 +41,8 @@ svg {
 var allSeries = <%= all_series %>;
 
 // Set the overall plot heading
-$("#plottitle").text(allSeries[0].type);
+if (allSeries[0].displayname != "") $("#plottitle").text(allSeries[0].displayname);
+else $("#plottitle").text(allSeries[0].type);
 
 // Define size and margins of chart
 var margin = {top: 10, right: 350, bottom: 100, left: 100},

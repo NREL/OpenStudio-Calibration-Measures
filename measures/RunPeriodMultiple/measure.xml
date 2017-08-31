@@ -2,8 +2,8 @@
   <schema_version>3.0</schema_version>
   <name>run_period_multiple</name>
   <uid>14a9aa83-b4de-48b4-ba65-dad6f103ffcb</uid>
-  <version_id>5301f37b-5d32-4dbb-ae7c-5636cb7a5544</version_id>
-  <version_modified>20170831T150104Z</version_modified>
+  <version_id>2f53017a-1bba-4371-8193-1e691927daea</version_id>
+  <version_modified>20170831T173638Z</version_modified>
   <xml_checksum>87C4F8A7</xml_checksum>
   <class_name>RunPeriodMultiple</class_name>
   <display_name>Set Multiple Run Period Object</display_name>
@@ -69,18 +69,6 @@
     </attribute>
   </attributes>
   <files>
-    <file>
-      <filename>ModifyEnergyPlusFanVariableVolumeObjects_Test.rb</filename>
-      <filetype>rb</filetype>
-      <usage_type>test</usage_type>
-      <checksum>F937148D</checksum>
-    </file>
-    <file>
-      <filename>Test.osm</filename>
-      <filetype>osm</filetype>
-      <usage_type>test</usage_type>
-      <checksum>BCF2DBB8</checksum>
-    </file>
     <file>
       <version>
         <software_program>OpenStudio</software_program>

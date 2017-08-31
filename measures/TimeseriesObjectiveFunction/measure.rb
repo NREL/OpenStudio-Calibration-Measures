@@ -504,6 +504,8 @@ class TimeseriesObjectiveFunction < OpenStudio::Ruleset::ReportingUserScript
             end
           end
         end
+        series["displayname"] = plot_name
+        series2["displayname"] = plot_name
         series["data"] = data
         series2["data"] = data2
         all_series << series
