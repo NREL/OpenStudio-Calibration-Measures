@@ -46,6 +46,16 @@ class TimeseriesObjectiveFunction < OpenStudio::Ruleset::ReportingUserScript
     csv_var.setDefaultValue("Whole Building:Facility Total Electric Demand Power [W](TimeStep)")
     args << csv_var
     
+    convert_data_chs = OpenStudio::StringVector.new
+    convert_data_chs << 'F to C'
+    convert_data_chs << 'WH to J'
+    convert_data_chs << 'None'
+    convert_data = OpenStudio::Ruleset::OSArgument::makeChoiceArgument('convert_data', convert_data_chs, true)
+    convert_data.setDisplayName("Convert Units")
+    convert_data.setDescription("Convert Units in Metered Data")
+    convert_data.setDefaultValue("None")
+    args << convert_data
+    
     csv_var_dn = OpenStudio::Ruleset::OSArgument.makeStringArgument("csv_var_dn", true)
     csv_var_dn.setDisplayName("CSV variable display name")
     csv_var_dn.setDescription("CSV variable display name. Not yet Implemented")
@@ -203,6 +213,7 @@ class TimeseriesObjectiveFunction < OpenStudio::Ruleset::ReportingUserScript
     plot_name = runner.getStringArgumentValue("plot_name", user_arguments)
     environment_period = runner.getStringArgumentValue("environment_period", user_arguments)
     reporting_frequency = runner.getStringArgumentValue("reporting_frequency", user_arguments)
+    convert_data = runner.getStringArgumentValue("convert_data", user_arguments)
     
     # Method to translate from OpenStudio's time formatting
     # to Javascript time formatting
@@ -231,6 +242,15 @@ class TimeseriesObjectiveFunction < OpenStudio::Ruleset::ReportingUserScript
       return js_time
 
     end 
+
+    #setup convert
+    if convert_data == 'F to C'
+      convert = 0.5556
+    elsif convert_data == 'WH to J' 
+      convert = 3600
+    else convert_data_chs == 'None'
+      convert = 1
+    end
     
     diff = 0.0
     simdata = 0.0
@@ -463,6 +483,20 @@ class TimeseriesObjectiveFunction < OpenStudio::Ruleset::ReportingUserScript
             csv[row].each_index do |col|
               if col > 0
                 mtr = csv[row][col].to_s
+                #try converting
+                if convert == 0.5556
+                  if mtr != 'NAN'
+                    mtr = (mtr.to_f - 32) * convert
+                  else
+                    mtr = 0
+                  end                  
+                else
+                  if mtr != 'NAN'
+                    mtr = mtr.to_f * convert
+                  else
+                    mtr = 0
+                  end
+                end
                 if csv[0][col] == hdr
                   sim = ser.value(dtm)
                   #store timeseries for plotting
