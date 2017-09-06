@@ -1,26 +1,26 @@
 <measure>
   <schema_version>3.0</schema_version>
-  <name>heating_coils_gas_multiplier</name>
-  <uid>a4843fc4-4cc7-4112-b5a9-aef81cbeac63</uid>
-  <version_id>91e5ff51-1fcb-4104-a641-f40d8c36feba</version_id>
-  <version_modified>20170906T174105Z</version_modified>
+  <name>heating_coils_electric_multiplier</name>
+  <uid>97d0dbdf-6245-4cfd-8dfc-a6a5eb853b16</uid>
+  <version_id>978da991-5428-409d-9ad5-ea5add0f8723</version_id>
+  <version_modified>20170906T174104Z</version_modified>
   <xml_checksum>1F3D2430</xml_checksum>
-  <class_name>HeatingCoilsGasMultiplier</class_name>
-  <display_name>Heating Coils Gas Multiplier</display_name>
-  <description>This is a general purpose measure to calibrate Gas Heating Coils with a Multiplier.</description>
+  <class_name>HeatingCoilsElectricMultiplier</class_name>
+  <display_name>Heating Coils Electric Multiplier</display_name>
+  <description>This is a general purpose measure to calibrate Electric Heating Coils with a Multiplier.</description>
   <modeler_description>It will be used for calibration of rated capacity and efficiency and parasitic loads. User can choose between a SINGLE coil or ALL the Coils.</modeler_description>
   <arguments>
     <argument>
       <name>coil</name>
-      <display_name>Apply the Measure to a SINGLE Gas Heating Coil, ALL the Gas Heating Coils or NONE.</display_name>
+      <display_name>Apply the Measure to a SINGLE Electric Heating Coil, ALL the Electric Heating Coils or NONE.</display_name>
       <type>Choice</type>
       <required>true</required>
       <model_dependent>false</model_dependent>
-      <default_value>*All Gas Heating Coils*</default_value>
+      <default_value>*All Electric Heating Coils*</default_value>
       <choices>
         <choice>
-          <value>{4c08c4d0-3cd5-4116-9b5d-8f5fe4450c39}</value>
-          <display_name>*All Gas Heating Coils*</display_name>
+          <value>{6aa9fec1-0223-4a97-9d20-832f9b2e4d9f}</value>
+          <display_name>*All Electric Heating Coils*</display_name>
         </choice>
         <choice>
           <value>0</value>
@@ -41,24 +41,6 @@
       <name>coil_capacity_multiplier</name>
       <display_name>Multiplier for coil Capacity.</display_name>
       <description>Multiplier for coil Capacity.</description>
-      <type>Double</type>
-      <required>true</required>
-      <model_dependent>false</model_dependent>
-      <default_value>1</default_value>
-    </argument>
-    <argument>
-      <name>coil_parasitic_electric_multiplier</name>
-      <display_name>Multiplier for coil parasitic electric load.</display_name>
-      <description>Multiplier for coil parasitic electric load.</description>
-      <type>Double</type>
-      <required>true</required>
-      <model_dependent>false</model_dependent>
-      <default_value>1</default_value>
-    </argument>
-    <argument>
-      <name>coil_parasitic_gas_multiplier</name>
-      <display_name>Multiplier for coil parasitic gas load.</display_name>
-      <description>Multiplier for coil parasitic gas load.</description>
       <type>Double</type>
       <required>true</required>
       <model_dependent>false</model_dependent>
@@ -87,7 +69,7 @@
       <filename>measure.rb</filename>
       <filetype>rb</filetype>
       <usage_type>script</usage_type>
-      <checksum>62CE7843</checksum>
+      <checksum>E00FAE1E</checksum>
     </file>
   </files>
 </measure>
