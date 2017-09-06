@@ -1,28 +1,28 @@
 # start the measure
-class HeatingCoilsWaterMultiplier < OpenStudio::Ruleset::ModelUserScript
+class CoolingCoilsDXSingleSpeedMultiplier < OpenStudio::Ruleset::ModelUserScript
 
   # human readable name
   def name
-    return "Heating Coils Water Multiplier"
+    return "Cooling Coils DX Single Speed Multiplier"
   end
 
   # human readable description
   def description
-    return "This is a general purpose measure to calibrate Water Heating Coils with a Multiplier."
+    return "This is a general purpose measure to calibrate DX Cooling Coils with a Multiplier."
   end
 
   # human readable description of modeling approach
   def modeler_description
-    return "It will be used for calibration of rated capacity and efficiency and parasitic loads. User can choose between a SINGLE coil or ALL the Coils."
+    return "It will be used for calibration of rated capacity and COP. User can choose between a SINGLE coil or ALL the Coils."
   end
   
-  def change_name(object,ua_factor,coil_capacity_multiplier)
+  def change_name(object,rated_cop_multiplier,rated_cooling_capacity_multiplier)
     nameString = "#{object.name.get}"
-    if ua_factor != 1.0
-      nameString = nameString + " #{ua_factor.round(2)}x coilEff"
+    if rated_cop_multiplier != 1.0
+      nameString = nameString + " #{rated_cop_multiplier.round(2)}x coilEff"
     end
-    if coil_capacity_multiplier != 1.0
-      nameString = nameString + " #{coil_capacity_multiplier.round(2)}x coilCap"
+    if rated_cooling_capacity_multiplier != 1.0
+      nameString = nameString + " #{rated_cooling_capacity_multiplier.round(2)}x coilCap"
     end
     object.setName(nameString)
   end
@@ -54,7 +54,7 @@ class HeatingCoilsWaterMultiplier < OpenStudio::Ruleset::ModelUserScript
       show_loop = false
       components = value.supplyComponents
       components.each do |component|
-        if not component.to_CoilHeatingWater.empty?
+        if not component.to_CoilCoolingDXSingleSpeed.empty?
           show_loop = true
         end
       end
@@ -69,29 +69,29 @@ class HeatingCoilsWaterMultiplier < OpenStudio::Ruleset::ModelUserScript
     #add building to string vector with space type
     building = model.getBuilding
     loop_handles << building.handle.to_s
-    loop_display_names << "*All Water Heating Coils*"
+    loop_display_names << "*All DX Cooling Coils*"
     loop_handles << "0"
     loop_display_names << "*None*"
 
     #make a choice argument for space type
     coil_arg = OpenStudio::Ruleset::OSArgument::makeChoiceArgument("coil", loop_handles, loop_display_names)
-    coil_arg.setDisplayName("Apply the Measure to a SINGLE Water Heating Coil, ALL the Water Heating Coils or NONE.")
-    coil_arg.setDefaultValue("*All Water Heating Coils*") #if no space type is chosen this will run on the entire building
+    coil_arg.setDisplayName("Apply the Measure to a SINGLE DX Cooling Coil, ALL the DX Cooling Coils or NONE.")
+    coil_arg.setDefaultValue("*All DX Cooling Coils*") #if no space type is chosen this will run on the entire building
     args << coil_arg
     
-    # ua_factor
-    ua_factor = OpenStudio::Ruleset::OSArgument.makeDoubleArgument("ua_factor", true)
-    ua_factor.setDisplayName("Multiplier for UA coefficient.")
-    ua_factor.setDescription("Multiplier for UA coefficient.")
-    ua_factor.setDefaultValue(1.0)
-    args << ua_factor
+    # rated_cop_multiplier
+    rated_cop_multiplier = OpenStudio::Ruleset::OSArgument.makeDoubleArgument("rated_cop_multiplier", true)
+    rated_cop_multiplier.setDisplayName("Multiplier for COP.")
+    rated_cop_multiplier.setDescription("Multiplier for COP.")
+    rated_cop_multiplier.setDefaultValue(1.0)
+    args << rated_cop_multiplier
     
-    # coil_capacity_multiplier
-    coil_capacity_multiplier = OpenStudio::Ruleset::OSArgument.makeDoubleArgument("coil_capacity_multiplier", true)
-    coil_capacity_multiplier.setDisplayName("Multiplier for coil Capacity.")
-    coil_capacity_multiplier.setDescription("Multiplier for coil Capacity.")
-    coil_capacity_multiplier.setDefaultValue(1.0)
-    args << coil_capacity_multiplier    
+    # rated_cooling_capacity_multiplier
+    rated_cooling_capacity_multiplier = OpenStudio::Ruleset::OSArgument.makeDoubleArgument("rated_cooling_capacity_multiplier", true)
+    rated_cooling_capacity_multiplier.setDisplayName("Multiplier for rated cooling Capacity.")
+    rated_cooling_capacity_multiplier.setDescription("Multiplier for rated cooling Capacity.")
+    rated_cooling_capacity_multiplier.setDefaultValue(1.0)
+    args << rated_cooling_capacity_multiplier    
     
     return args
   end
@@ -109,10 +109,10 @@ class HeatingCoilsWaterMultiplier < OpenStudio::Ruleset::ModelUserScript
     coil_object = runner.getOptionalWorkspaceObjectChoiceValue("coil",user_arguments,model)
     coil_handle = runner.getStringArgumentValue("coil",user_arguments)
 
-    coil_capacity_multiplier = runner.getDoubleArgumentValue("coil_capacity_multiplier",user_arguments)
-    check_multiplier(runner, coil_capacity_multiplier)
-    ua_factor = runner.getDoubleArgumentValue("ua_factor",user_arguments)
-    check_multiplier(runner, ua_factor)
+    rated_cooling_capacity_multiplier = runner.getDoubleArgumentValue("rated_cooling_capacity_multiplier",user_arguments)
+    check_multiplier(runner, rated_cooling_capacity_multiplier)
+    rated_cop_multiplier = runner.getDoubleArgumentValue("rated_cop_multiplier",user_arguments)
+    check_multiplier(runner, rated_cop_multiplier)
     
     #find objects to change
     coils = []
@@ -129,8 +129,8 @@ class HeatingCoilsWaterMultiplier < OpenStudio::Ruleset::ModelUserScript
         supply_components = loop.supplyComponents
         #find coils on loops
         supply_components.each do |supply_component|
-          if not supply_component.to_CoilHeatingWater.empty?
-            coils << supply_component.to_CoilHeatingWater.get
+          if not supply_component.to_CoilCoolingDXSingleSpeed.empty?
+            coils << supply_component.to_CoilCoolingDXSingleSpeed.get
           end
         end   
       end      
@@ -139,9 +139,9 @@ class HeatingCoilsWaterMultiplier < OpenStudio::Ruleset::ModelUserScript
       runner.registerInfo("Applying change to NONE Coils")
     elsif not coil_handle.empty?
       #Single coil handle found, check if object is good    
-      if not coil_object.get.to_CoilHeatingWater.empty?
+      if not coil_object.get.to_CoilCoolingDXSingleSpeed.empty?
         runner.registerInfo("Applying change to #{coil_object.get.name.to_s} coil")
-        coils << coil_object.get.to_CoilHeatingWater.get
+        coils << coil_object.get.to_CoilCoolingDXSingleSpeed.get
       else
         runner.registerError("coil with handle #{coil_handle} could not be found.")
       end
@@ -159,29 +159,29 @@ class HeatingCoilsWaterMultiplier < OpenStudio::Ruleset::ModelUserScript
     # loop through coils
     coils.each do |coil|
       altered_coil = false
-      # coil_capacity_multiplier
-      if coil_capacity_multiplier != 1.0
-        if coil.ratedCapacity.is_initialized
-          runner.registerInfo("Applying #{coil_capacity_multiplier}x multiplier to #{coil.name.get}.")
-          coil.setRatedCapacity(coil.ratedCapacity.get * coil_capacity_multiplier)          
+      # rated_cooling_capacity_multiplier
+      if rated_cooling_capacity_multiplier != 1.0
+        if coil.ratedTotalCoolingCapacity.is_initialized
+          runner.registerInfo("Applying #{rated_cooling_capacity_multiplier}x multiplier to #{coil.name.get}.")
+          coil.setRatedTotalCoolingCapacity(coil.ratedTotalCoolingCapacity.get * rated_cooling_capacity_multiplier)          
           altered_capacity << coil.handle.to_s
           altered_coil = true
         end
       end
       
-      # modify ua_factor
-      if ua_factor != 1.0
-        if coil.uFactorTimesAreaValue.is_initialized
-          runner.registerInfo("Applying #{ua_factor}x multiplier to #{coil.name.get}.")
-          coil.setUFactorTimesAreaValue(coil.uFactorTimesAreaValue.get * ua_factor)   
+      # modify rated_cop_multiplier
+      if rated_cop_multiplier != 1.0
+        if coil.ratedCOP.is_initialized
+          runner.registerInfo("Applying #{rated_cop_multiplier}x multiplier to #{coil.name.get}.")
+          coil.setRatedCOP(coil.ratedCOP.get * rated_cop_multiplier)         
           altered_coilefficiency << coil.handle.to_s
           altered_coil = true
-         end 
+        end
       end
       
       if altered_coil
         altered_coils << coil.handle.to_s
-        change_name(coil,ua_factor,coil_capacity_multiplier)
+        change_name(coil,rated_cop_multiplier,rated_cooling_capacity_multiplier)
         runner.registerInfo("coil name changed to: #{coil.name.get}")
       end
     end #end coil loop
@@ -202,4 +202,4 @@ class HeatingCoilsWaterMultiplier < OpenStudio::Ruleset::ModelUserScript
 end
 
 # register the measure to be used by the application
-HeatingCoilsWaterMultiplier.new.registerWithApplication
+CoolingCoilsDXSingleSpeedMultiplier.new.registerWithApplication

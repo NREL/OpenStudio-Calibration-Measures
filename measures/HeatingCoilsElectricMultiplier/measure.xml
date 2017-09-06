@@ -1,9 +1,9 @@
 <measure>
   <schema_version>3.0</schema_version>
   <name>heating_coils_electric_multiplier</name>
-  <uid>97d0dbdf-6245-4cfd-8dfc-a6a5eb853b16</uid>
-  <version_id>978da991-5428-409d-9ad5-ea5add0f8723</version_id>
-  <version_modified>20170906T174104Z</version_modified>
+  <uid>122e854c-d939-4bea-822a-89f2a5584a01</uid>
+  <version_id>06d41cda-61e1-4846-bf0c-2fb2f510326c</version_id>
+  <version_modified>20170906T215921Z</version_modified>
   <xml_checksum>1F3D2430</xml_checksum>
   <class_name>HeatingCoilsElectricMultiplier</class_name>
   <display_name>Heating Coils Electric Multiplier</display_name>

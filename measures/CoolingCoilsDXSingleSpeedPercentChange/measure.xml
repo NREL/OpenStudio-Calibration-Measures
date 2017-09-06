@@ -1,26 +1,26 @@
 <measure>
   <schema_version>3.0</schema_version>
-  <name>heating_coils_electric_percent_change</name>
-  <uid>7c681481-16d2-4a8e-b0a3-71a86639f53a</uid>
-  <version_id>07462684-af48-416a-9e23-e0f96bb7f7c0</version_id>
+  <name>cooling_coils_dx_single_speed_percent_change</name>
+  <uid>97d0dbdf-6245-4cfd-8dfc-a6a5eb853b37</uid>
+  <version_id>e19b8431-6780-4650-826e-075f568bcced</version_id>
   <version_modified>20170906T215921Z</version_modified>
-  <xml_checksum>1F3D2430</xml_checksum>
-  <class_name>HeatingCoilsElectricPercentChange</class_name>
-  <display_name>Heating Coils Electric Percent Change</display_name>
-  <description>This is a general purpose measure to calibrate Electric Heating Coils with a Percent Change.</description>
+  <xml_checksum>8CBDDA1B</xml_checksum>
+  <class_name>CoolingCoilsDXSingleSpeedPercentChange</class_name>
+  <display_name>Cooling Coils DX Single Speed Percent Change</display_name>
+  <description>This is a general purpose measure to calibrate DX Cooling Coils with a Percent Change.</description>
   <modeler_description>It will be used for calibration of rated capacity and efficiency and parasitic loads. User can choose between a SINGLE coil or ALL the Coils.</modeler_description>
   <arguments>
     <argument>
       <name>coil</name>
-      <display_name>Apply the Measure to a SINGLE Electric Heating Coil, ALL the Electric Heating Coils or NONE.</display_name>
+      <display_name>Apply the Measure to a SINGLE DX Cooling Coil, ALL the DX Cooling Coils or NONE.</display_name>
       <type>Choice</type>
       <required>true</required>
       <model_dependent>false</model_dependent>
-      <default_value>*All Electric Heating Coils*</default_value>
+      <default_value>*All DX Cooling Coils*</default_value>
       <choices>
         <choice>
-          <value>{63b23789-e6a5-4447-9f56-9addca8ff24c}</value>
-          <display_name>*All Electric Heating Coils*</display_name>
+          <value>{877221e8-e29c-435a-a8b8-55b1f5a76d8c}</value>
+          <display_name>*All DX Cooling Coils*</display_name>
         </choice>
         <choice>
           <value>0</value>
@@ -29,18 +29,18 @@
       </choices>
     </argument>
     <argument>
-      <name>coil_efficiency_perc_change</name>
-      <display_name>Percent Change for coil Efficiency.</display_name>
-      <description>Percent Change for coil Efficiency.</description>
+      <name>rated_cop_perc_change</name>
+      <display_name>Percent Change for COP.</display_name>
+      <description>Percent Change for COP.</description>
       <type>Double</type>
       <required>true</required>
       <model_dependent>false</model_dependent>
       <default_value>0</default_value>
     </argument>
     <argument>
-      <name>coil_capacity_perc_change</name>
-      <display_name>Percent Change for coil Capacity.</display_name>
-      <description>Percent Change for coil Capacity.</description>
+      <name>rated_cooling_capacity_perc_change</name>
+      <display_name>Percent Change for coil cooling Capacity.</display_name>
+      <description>Percent Change for coil cooling Capacity.</description>
       <type>Double</type>
       <required>true</required>
       <model_dependent>false</model_dependent>
@@ -50,7 +50,7 @@
   <outputs/>
   <provenances/>
   <tags>
-    <tag>HVAC.Heating</tag>
+    <tag>HVAC.Cooling</tag>
   </tags>
   <attributes>
     <attribute>
@@ -69,7 +69,7 @@
       <filename>measure.rb</filename>
       <filetype>rb</filetype>
       <usage_type>script</usage_type>
-      <checksum>B2C132E9</checksum>
+      <checksum>A37F08D0</checksum>
     </file>
   </files>
 </measure>

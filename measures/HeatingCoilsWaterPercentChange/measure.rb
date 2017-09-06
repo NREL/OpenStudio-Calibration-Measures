@@ -162,12 +162,12 @@ class HeatingCoilsWaterPercentChange < OpenStudio::Ruleset::ModelUserScript
       
       # modify ua_factor
       if ua_factor != 0.0
-        runner.registerInfo("Applying #{ua_factor} Percent Change to #{coil.name.get}.")
         if coil.uFactorTimesAreaValue.is_initialized
-          coil.setUFactorTimesAreaValue(coil.uFactorTimesAreaValue.get + coil.uFactorTimesAreaValue.get * ua_factor * 0.01)   
-        end        
-        altered_coilefficiency << coil.handle.to_s
-        altered_coil = true
+          runner.registerInfo("Applying #{ua_factor} Percent Change to #{coil.name.get}.")
+          coil.setUFactorTimesAreaValue(coil.uFactorTimesAreaValue.get + coil.uFactorTimesAreaValue.get * ua_factor * 0.01)       
+          altered_coilefficiency << coil.handle.to_s
+          altered_coil = true
+        end
       end
       
       if altered_coil
