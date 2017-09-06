@@ -1,13 +1,13 @@
 <measure>
   <schema_version>3.0</schema_version>
-  <name>heating_coils_gas_multiplier</name>
-  <uid>97d0dbdf-6245-4cfd-8dfc-a6a5eb853b16</uid>
-  <version_id>644d0381-e50e-4749-ad08-7968b1853f9d</version_id>
-  <version_modified>20170906T172828Z</version_modified>
+  <name>heating_coils_gas_percent_change</name>
+  <uid>97d0dbdf-6245-4cfd-8dfc-a6a5eb853b37</uid>
+  <version_id>6878538f-36ac-474f-88f1-520eaf28e5be</version_id>
+  <version_modified>20170906T172818Z</version_modified>
   <xml_checksum>1F3D2430</xml_checksum>
-  <class_name>HeatingCoilsGasMultiplier</class_name>
-  <display_name>Heating Coils Gas Multiplier</display_name>
-  <description>This is a general purpose measure to calibrate Gas Heating Coils with a Multiplier.</description>
+  <class_name>HeatingCoilsGasPercentChange</class_name>
+  <display_name>Heating Coils Gas Percent Change</display_name>
+  <description>This is a general purpose measure to calibrate Gas Heating Coils with a Percent Change.</description>
   <modeler_description>It will be used for calibration of rated capacity and efficiency and parasitic loads. User can choose between a SINGLE coil or ALL the Coils.</modeler_description>
   <arguments>
     <argument>
@@ -19,7 +19,7 @@
       <default_value>*All Gas Heating Coils*</default_value>
       <choices>
         <choice>
-          <value>{4c08c4d0-3cd5-4116-9b5d-8f5fe4450c39}</value>
+          <value>{13c99bbc-441e-454e-8171-e576560cccd9}</value>
           <display_name>*All Gas Heating Coils*</display_name>
         </choice>
         <choice>
@@ -29,40 +29,40 @@
       </choices>
     </argument>
     <argument>
-      <name>coil_efficiency_multiplier</name>
-      <display_name>Multiplier for coil Efficiency.</display_name>
-      <description>Multiplier for coil Efficiency.</description>
+      <name>coil_efficiency_perc_change</name>
+      <display_name>Percent Change for coil Efficiency.</display_name>
+      <description>Percent Change for coil Efficiency.</description>
       <type>Double</type>
       <required>true</required>
       <model_dependent>false</model_dependent>
-      <default_value>1</default_value>
+      <default_value>0</default_value>
     </argument>
     <argument>
-      <name>coil_capacity_multiplier</name>
-      <display_name>Multiplier for coil Capacity.</display_name>
-      <description>Multiplier for coil Capacity.</description>
+      <name>coil_capacity_perc_change</name>
+      <display_name>Percent Change for coil Capacity.</display_name>
+      <description>Percent Change for coil Capacity.</description>
       <type>Double</type>
       <required>true</required>
       <model_dependent>false</model_dependent>
-      <default_value>1</default_value>
+      <default_value>0</default_value>
     </argument>
     <argument>
-      <name>coil_parasitic_electric_multiplier</name>
-      <display_name>Multiplier for coil parasitic electric load.</display_name>
-      <description>Multiplier for coil parasitic electric load.</description>
+      <name>coil_parasitic_electric_perc_change</name>
+      <display_name>Percent Change for coil parasitic electric load.</display_name>
+      <description>Percent Change for coil parasitic electric load.</description>
       <type>Double</type>
       <required>true</required>
       <model_dependent>false</model_dependent>
-      <default_value>1</default_value>
+      <default_value>0</default_value>
     </argument>
     <argument>
-      <name>coil_parasitic_gas_multiplier</name>
-      <display_name>Multiplier for coil parasitic gas load.</display_name>
-      <description>Multiplier for coil parasitic gas load.</description>
+      <name>coil_parasitic_gas_perc_change</name>
+      <display_name>Percent Change for coil parasitic gas load.</display_name>
+      <description>Percent Change for coil parasitic gas load.</description>
       <type>Double</type>
       <required>true</required>
       <model_dependent>false</model_dependent>
-      <default_value>1</default_value>
+      <default_value>0</default_value>
     </argument>
   </arguments>
   <outputs/>
@@ -87,7 +87,7 @@
       <filename>measure.rb</filename>
       <filetype>rb</filetype>
       <usage_type>script</usage_type>
-      <checksum>62CE7843</checksum>
+      <checksum>0A47AB24</checksum>
     </file>
   </files>
 </measure>
