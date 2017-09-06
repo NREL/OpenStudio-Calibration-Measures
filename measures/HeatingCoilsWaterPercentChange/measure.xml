@@ -1,26 +1,26 @@
 <measure>
   <schema_version>3.0</schema_version>
-  <name>heating_coils_electric_percent_change</name>
-  <uid>97d0dbdf-6245-4cfd-8dfc-a6a5eb853b37</uid>
-  <version_id>15deec27-106b-4f3e-82dc-e53279942f1a</version_id>
-  <version_modified>20170906T205537Z</version_modified>
+  <name>heating_coils_water_percent_change</name>
+  <uid>85674ff6-4fdc-463f-9695-36bf6c6a2608</uid>
+  <version_id>b9fbcf23-52a8-4f0a-bdad-686d7753164c</version_id>
+  <version_modified>20170906T210254Z</version_modified>
   <xml_checksum>1F3D2430</xml_checksum>
-  <class_name>HeatingCoilsElectricPercentChange</class_name>
-  <display_name>Heating Coils Electric Percent Change</display_name>
-  <description>This is a general purpose measure to calibrate Electric Heating Coils with a Percent Change.</description>
+  <class_name>HeatingCoilsWaterPercentChange</class_name>
+  <display_name>Heating Coils Water Percent Change</display_name>
+  <description>This is a general purpose measure to calibrate Water Heating Coils with a Percent Change.</description>
   <modeler_description>It will be used for calibration of rated capacity and efficiency and parasitic loads. User can choose between a SINGLE coil or ALL the Coils.</modeler_description>
   <arguments>
     <argument>
       <name>coil</name>
-      <display_name>Apply the Measure to a SINGLE Electric Heating Coil, ALL the Electric Heating Coils or NONE.</display_name>
+      <display_name>Apply the Measure to a SINGLE Water Heating Coil, ALL the Water Heating Coils or NONE.</display_name>
       <type>Choice</type>
       <required>true</required>
       <model_dependent>false</model_dependent>
-      <default_value>*All Electric Heating Coils*</default_value>
+      <default_value>*All Water Heating Coils*</default_value>
       <choices>
         <choice>
-          <value>{63b23789-e6a5-4447-9f56-9addca8ff24c}</value>
-          <display_name>*All Electric Heating Coils*</display_name>
+          <value>{912391a0-c172-4fad-a9eb-9c5bd5b3a39c}</value>
+          <display_name>*All Water Heating Coils*</display_name>
         </choice>
         <choice>
           <value>0</value>
@@ -29,9 +29,9 @@
       </choices>
     </argument>
     <argument>
-      <name>coil_efficiency_perc_change</name>
-      <display_name>Percent Change for coil Efficiency.</display_name>
-      <description>Percent Change for coil Efficiency.</description>
+      <name>ua_factor</name>
+      <display_name>Percent Change for UA coefficient.</display_name>
+      <description>Percent Change for UA coefficient.</description>
       <type>Double</type>
       <required>true</required>
       <model_dependent>false</model_dependent>
@@ -69,7 +69,7 @@
       <filename>measure.rb</filename>
       <filetype>rb</filetype>
       <usage_type>script</usage_type>
-      <checksum>B2C132E9</checksum>
+      <checksum>83293D11</checksum>
     </file>
   </files>
 </measure>

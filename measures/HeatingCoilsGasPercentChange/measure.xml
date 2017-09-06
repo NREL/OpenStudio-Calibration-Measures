@@ -2,8 +2,8 @@
   <schema_version>3.0</schema_version>
   <name>heating_coils_gas_percent_change</name>
   <uid>8589af79-cfe7-45fb-9c79-e7b95e5fb02f</uid>
-  <version_id>6820e54d-cd25-4a18-bf83-337baf60fef3</version_id>
-  <version_modified>20170906T174105Z</version_modified>
+  <version_id>cb5d6878-847c-40a1-9f5f-46488fa04f73</version_id>
+  <version_modified>20170906T205537Z</version_modified>
   <xml_checksum>1F3D2430</xml_checksum>
   <class_name>HeatingCoilsGasPercentChange</class_name>
   <display_name>Heating Coils Gas Percent Change</display_name>
@@ -19,7 +19,7 @@
       <default_value>*All Gas Heating Coils*</default_value>
       <choices>
         <choice>
-          <value>{13c99bbc-441e-454e-8171-e576560cccd9}</value>
+          <value>{839029a0-5986-49a0-92ba-e72addb57914}</value>
           <display_name>*All Gas Heating Coils*</display_name>
         </choice>
         <choice>
@@ -87,7 +87,7 @@
       <filename>measure.rb</filename>
       <filetype>rb</filetype>
       <usage_type>script</usage_type>
-      <checksum>0A47AB24</checksum>
+      <checksum>C0995110</checksum>
     </file>
   </files>
 </measure>

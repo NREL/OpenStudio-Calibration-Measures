@@ -1,14 +1,14 @@
 # start the measure
-class HeatingCoilsElectricPercentChange < OpenStudio::Ruleset::ModelUserScript
+class HeatingCoilsWaterMultiplier < OpenStudio::Ruleset::ModelUserScript
 
   # human readable name
   def name
-    return "Heating Coils Electric Percent Change"
+    return "Heating Coils Water Multiplier"
   end
 
   # human readable description
   def description
-    return "This is a general purpose measure to calibrate Electric Heating Coils with a Percent Change."
+    return "This is a general purpose measure to calibrate Water Heating Coils with a Multiplier."
   end
 
   # human readable description of modeling approach
@@ -16,15 +16,22 @@ class HeatingCoilsElectricPercentChange < OpenStudio::Ruleset::ModelUserScript
     return "It will be used for calibration of rated capacity and efficiency and parasitic loads. User can choose between a SINGLE coil or ALL the Coils."
   end
   
-  def change_name(object,coil_efficiency_perc_change,coil_capacity_perc_change)
+  def change_name(object,ua_factor,coil_capacity_multiplier)
     nameString = "#{object.name.get}"
-    if coil_efficiency_perc_change != 1.0
-      nameString = nameString + " #{coil_efficiency_perc_change.round(2)}percng coilEff"
+    if ua_factor != 1.0
+      nameString = nameString + " #{ua_factor.round(2)}x coilEff"
     end
-    if coil_capacity_perc_change != 1.0
-      nameString = nameString + " #{coil_capacity_perc_change.round(2)}percng coilCap"
+    if coil_capacity_multiplier != 1.0
+      nameString = nameString + " #{coil_capacity_multiplier.round(2)}x coilCap"
     end
     object.setName(nameString)
+  end
+  
+  def check_multiplier(runner, multiplier)
+    if multiplier < 0
+      runner.registerError("Multiplier #{multiplier} cannot be negative.")
+      return false
+    end
   end
   
   # define the arguments that the user will input
@@ -47,7 +54,7 @@ class HeatingCoilsElectricPercentChange < OpenStudio::Ruleset::ModelUserScript
       show_loop = false
       components = value.supplyComponents
       components.each do |component|
-        if not component.to_CoilHeatingElectric.empty?
+        if not component.to_CoilHeatingWater.empty?
           show_loop = true
         end
       end
@@ -62,29 +69,29 @@ class HeatingCoilsElectricPercentChange < OpenStudio::Ruleset::ModelUserScript
     #add building to string vector with space type
     building = model.getBuilding
     loop_handles << building.handle.to_s
-    loop_display_names << "*All Electric Heating Coils*"
+    loop_display_names << "*All Water Heating Coils*"
     loop_handles << "0"
     loop_display_names << "*None*"
 
     #make a choice argument for space type
     coil_arg = OpenStudio::Ruleset::OSArgument::makeChoiceArgument("coil", loop_handles, loop_display_names)
-    coil_arg.setDisplayName("Apply the Measure to a SINGLE Electric Heating Coil, ALL the Electric Heating Coils or NONE.")
-    coil_arg.setDefaultValue("*All Electric Heating Coils*") #if no space type is chosen this will run on the entire building
+    coil_arg.setDisplayName("Apply the Measure to a SINGLE Water Heating Coil, ALL the Water Heating Coils or NONE.")
+    coil_arg.setDefaultValue("*All Water Heating Coils*") #if no space type is chosen this will run on the entire building
     args << coil_arg
     
-    # coil_efficiency_perc_change
-    coil_efficiency_perc_change = OpenStudio::Ruleset::OSArgument.makeDoubleArgument("coil_efficiency_perc_change", true)
-    coil_efficiency_perc_change.setDisplayName("Percent Change for coil Efficiency.")
-    coil_efficiency_perc_change.setDescription("Percent Change for coil Efficiency.")
-    coil_efficiency_perc_change.setDefaultValue(0.0)
-    args << coil_efficiency_perc_change
+    # ua_factor
+    ua_factor = OpenStudio::Ruleset::OSArgument.makeDoubleArgument("ua_factor", true)
+    ua_factor.setDisplayName("Multiplier for UA coefficient.")
+    ua_factor.setDescription("Multiplier for UA coefficient.")
+    ua_factor.setDefaultValue(1.0)
+    args << ua_factor
     
-    # coil_capacity_perc_change
-    coil_capacity_perc_change = OpenStudio::Ruleset::OSArgument.makeDoubleArgument("coil_capacity_perc_change", true)
-    coil_capacity_perc_change.setDisplayName("Percent Change for coil Capacity.")
-    coil_capacity_perc_change.setDescription("Percent Change for coil Capacity.")
-    coil_capacity_perc_change.setDefaultValue(0.0)
-    args << coil_capacity_perc_change     
+    # coil_capacity_multiplier
+    coil_capacity_multiplier = OpenStudio::Ruleset::OSArgument.makeDoubleArgument("coil_capacity_multiplier", true)
+    coil_capacity_multiplier.setDisplayName("Multiplier for coil Capacity.")
+    coil_capacity_multiplier.setDescription("Multiplier for coil Capacity.")
+    coil_capacity_multiplier.setDefaultValue(1.0)
+    args << coil_capacity_multiplier    
     
     return args
   end
@@ -102,9 +109,11 @@ class HeatingCoilsElectricPercentChange < OpenStudio::Ruleset::ModelUserScript
     coil_object = runner.getOptionalWorkspaceObjectChoiceValue("coil",user_arguments,model)
     coil_handle = runner.getStringArgumentValue("coil",user_arguments)
 
-    coil_capacity_perc_change = runner.getDoubleArgumentValue("coil_capacity_perc_change",user_arguments)
-    coil_efficiency_perc_change = runner.getDoubleArgumentValue("coil_efficiency_perc_change",user_arguments)
-
+    coil_capacity_multiplier = runner.getDoubleArgumentValue("coil_capacity_multiplier",user_arguments)
+    check_multiplier(runner, coil_capacity_multiplier)
+    ua_factor = runner.getDoubleArgumentValue("ua_factor",user_arguments)
+    check_multiplier(runner, ua_factor)
+    
     #find objects to change
     coils = []
     building = model.getBuilding
@@ -120,8 +129,8 @@ class HeatingCoilsElectricPercentChange < OpenStudio::Ruleset::ModelUserScript
         supply_components = loop.supplyComponents
         #find coils on loops
         supply_components.each do |supply_component|
-          if not supply_component.to_CoilHeatingElectric.empty?
-            coils << supply_component.to_CoilHeatingElectric.get
+          if not supply_component.to_CoilHeatingWater.empty?
+            coils << supply_component.to_CoilHeatingWater.get
           end
         end   
       end      
@@ -130,9 +139,9 @@ class HeatingCoilsElectricPercentChange < OpenStudio::Ruleset::ModelUserScript
       runner.registerInfo("Applying change to NONE Coils")
     elsif not coil_handle.empty?
       #Single coil handle found, check if object is good    
-      if not coil_object.get.to_CoilHeatingElectric.empty?
+      if not coil_object.get.to_CoilHeatingWater.empty?
         runner.registerInfo("Applying change to #{coil_object.get.name.to_s} coil")
-        coils << coil_object.get.to_CoilHeatingElectric.get
+        coils << coil_object.get.to_CoilHeatingWater.get
       else
         runner.registerError("coil with handle #{coil_handle} could not be found.")
       end
@@ -150,24 +159,21 @@ class HeatingCoilsElectricPercentChange < OpenStudio::Ruleset::ModelUserScript
     # loop through coils
     coils.each do |coil|
       altered_coil = false
-      # coil_capacity_perc_change
-      if coil_capacity_perc_change != 0.0
-        if coil.nominalCapacity.is_initialized
-          runner.registerInfo("Applying #{coil_capacity_perc_change} Percent Change to #{coil.name.get}.")
-          coil.setNominalCapacity(coil.nominalCapacity.get + coil.nominalCapacity.get * coil_capacity_perc_change * 0.01)          
+      # coil_capacity_multiplier
+      if coil_capacity_multiplier != 1.0
+        if coil.ratedCapacity.is_initialized
+          runner.registerInfo("Applying #{coil_capacity_multiplier}x multiplier to #{coil.name.get}.")
+          coil.setRatedCapacity(coil.ratedCapacity.get * coil_capacity_multiplier)          
           altered_capacity << coil.handle.to_s
           altered_coil = true
         end
       end
       
-      # modify coil_efficiency_perc_change
-      if coil_efficiency_perc_change != 0.0
-        runner.registerInfo("Applying #{coil_efficiency_perc_change} Percent Change to #{coil.name.get}.")
-        if ((coil.efficiency + coil.efficiency * coil_efficiency_perc_change * 0.01) <= 1 )
-          coil.setEfficiency(coil.efficiency + coil.efficiency * coil_efficiency_perc_change * 0.01)   
-        else
-          coil.setEfficiency(1.0)
-          runner.registerWarning("#{coil_efficiency_perc_change} Percent Change results in Efficiency greater than 1.")
+      # modify ua_factor
+      if ua_factor != 1.0
+        runner.registerInfo("Applying #{ua_factor}x multiplier to #{coil.name.get}.")
+        if coil.uFactorTimesAreaValue.is_initialized
+          coil.setUFactorTimesAreaValue(coil.uFactorTimesAreaValue.get * ua_factor)   
         end        
         altered_coilefficiency << coil.handle.to_s
         altered_coil = true
@@ -175,7 +181,7 @@ class HeatingCoilsElectricPercentChange < OpenStudio::Ruleset::ModelUserScript
       
       if altered_coil
         altered_coils << coil.handle.to_s
-        change_name(coil,coil_efficiency_perc_change,coil_capacity_perc_change)
+        change_name(coil,ua_factor,coil_capacity_multiplier)
         runner.registerInfo("coil name changed to: #{coil.name.get}")
       end
     end #end coil loop
@@ -196,4 +202,4 @@ class HeatingCoilsElectricPercentChange < OpenStudio::Ruleset::ModelUserScript
 end
 
 # register the measure to be used by the application
-HeatingCoilsElectricPercentChange.new.registerWithApplication
+HeatingCoilsWaterMultiplier.new.registerWithApplication
