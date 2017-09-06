@@ -56,14 +56,16 @@ class HeatingCoilsElectricMultiplier < OpenStudio::Ruleset::ModelUserScript
       components.each do |component|
         if not component.to_CoilHeatingGas.empty?
           show_loop = true
+          loop_handles << component.handle.to_s
+          loop_display_names << component.name.to_s
         end
       end
 
       #if loop as object of correct type then add to hash.
-      if show_loop == true
-        loop_handles << value.handle.to_s
-        loop_display_names << key
-      end
+      # if show_loop == true
+        # loop_handles << value.handle.to_s
+        # loop_display_names << key
+      # end
     end
 
     #add building to string vector with space type
