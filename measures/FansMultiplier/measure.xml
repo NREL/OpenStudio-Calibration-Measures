@@ -2,8 +2,8 @@
   <schema_version>3.0</schema_version>
   <name>fans_multiplier</name>
   <uid>af156383-cfe2-4798-b581-08a4cccb8877</uid>
-  <version_id>5c42382f-aae5-4be6-bf79-e93ec7bfbcb1</version_id>
-  <version_modified>20170810T162731Z</version_modified>
+  <version_id>ef4293a5-c797-4fe8-82c2-0efa2fe45442</version_id>
+  <version_modified>20170906T225857Z</version_modified>
   <xml_checksum>3C1DA54F</xml_checksum>
   <class_name>FansMultiplier</class_name>
   <display_name>Fans Multiplier</display_name>
@@ -19,7 +19,7 @@
       <default_value>*All Fans*</default_value>
       <choices>
         <choice>
-          <value>{3266d916-b21d-4f47-b6e4-c8fc331fc795}</value>
+          <value>{12070448-fd94-49fc-b99d-b3a9bd0e154d}</value>
           <display_name>*All Fans*</display_name>
         </choice>
         <choice>
@@ -142,7 +142,7 @@
       <filename>measure.rb</filename>
       <filetype>rb</filetype>
       <usage_type>script</usage_type>
-      <checksum>03F0CF1D</checksum>
+      <checksum>FE4958C2</checksum>
     </file>
   </files>
 </measure>

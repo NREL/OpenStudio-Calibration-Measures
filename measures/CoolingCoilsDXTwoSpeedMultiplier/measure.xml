@@ -2,8 +2,8 @@
   <schema_version>3.0</schema_version>
   <name>cooling_coils_dx_two_speed_multiplier</name>
   <uid>fe4f36db-e296-4c9f-8199-19f2249384dd</uid>
-  <version_id>a28b2cf0-15ea-4139-a648-714855e1d7ea</version_id>
-  <version_modified>20170906T222908Z</version_modified>
+  <version_id>f50a762a-7c64-4f03-a681-d5b8c0ef3476</version_id>
+  <version_modified>20170906T225856Z</version_modified>
   <xml_checksum>8CBDDA1B</xml_checksum>
   <class_name>CoolingCoilsDXTwoSpeedMultiplier</class_name>
   <display_name>Cooling Coils DX Two Speed Multiplier</display_name>
@@ -19,7 +19,7 @@
       <default_value>*All DX Cooling Coils*</default_value>
       <choices>
         <choice>
-          <value>{815d5f18-3fca-4276-8095-6715ec02a4de}</value>
+          <value>{4eb37bdd-20c8-4232-91bd-cf443f7942fc}</value>
           <display_name>*All DX Cooling Coils*</display_name>
         </choice>
         <choice>
@@ -87,7 +87,7 @@
       <filename>measure.rb</filename>
       <filetype>rb</filetype>
       <usage_type>script</usage_type>
-      <checksum>686D6BBA</checksum>
+      <checksum>5894E59F</checksum>
     </file>
   </files>
 </measure>

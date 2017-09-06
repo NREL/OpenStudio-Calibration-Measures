@@ -2,8 +2,8 @@
   <schema_version>3.0</schema_version>
   <name>heating_coils_electric_percent_change</name>
   <uid>7c681481-16d2-4a8e-b0a3-71a86639f53a</uid>
-  <version_id>07462684-af48-416a-9e23-e0f96bb7f7c0</version_id>
-  <version_modified>20170906T215921Z</version_modified>
+  <version_id>839b3e47-e5ee-476c-bf46-49783c0ec0c8</version_id>
+  <version_modified>20170906T225857Z</version_modified>
   <xml_checksum>1F3D2430</xml_checksum>
   <class_name>HeatingCoilsElectricPercentChange</class_name>
   <display_name>Heating Coils Electric Percent Change</display_name>
@@ -19,7 +19,7 @@
       <default_value>*All Electric Heating Coils*</default_value>
       <choices>
         <choice>
-          <value>{63b23789-e6a5-4447-9f56-9addca8ff24c}</value>
+          <value>{f96e6280-948d-45c2-8bcb-0f1ceccc77b3}</value>
           <display_name>*All Electric Heating Coils*</display_name>
         </choice>
         <choice>
@@ -69,7 +69,7 @@
       <filename>measure.rb</filename>
       <filetype>rb</filetype>
       <usage_type>script</usage_type>
-      <checksum>B2C132E9</checksum>
+      <checksum>D8D4AB14</checksum>
     </file>
   </files>
 </measure>

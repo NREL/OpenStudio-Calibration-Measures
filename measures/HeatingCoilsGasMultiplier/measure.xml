@@ -2,8 +2,8 @@
   <schema_version>3.0</schema_version>
   <name>heating_coils_gas_multiplier</name>
   <uid>a4843fc4-4cc7-4112-b5a9-aef81cbeac63</uid>
-  <version_id>91e5ff51-1fcb-4104-a641-f40d8c36feba</version_id>
-  <version_modified>20170906T174105Z</version_modified>
+  <version_id>8bc371d7-b882-4e7e-9764-7a13e47c963a</version_id>
+  <version_modified>20170906T225857Z</version_modified>
   <xml_checksum>1F3D2430</xml_checksum>
   <class_name>HeatingCoilsGasMultiplier</class_name>
   <display_name>Heating Coils Gas Multiplier</display_name>
@@ -19,7 +19,7 @@
       <default_value>*All Gas Heating Coils*</default_value>
       <choices>
         <choice>
-          <value>{4c08c4d0-3cd5-4116-9b5d-8f5fe4450c39}</value>
+          <value>{5d38d9b9-cfd0-4c0d-9448-720e3242ebb6}</value>
           <display_name>*All Gas Heating Coils*</display_name>
         </choice>
         <choice>
@@ -87,7 +87,7 @@
       <filename>measure.rb</filename>
       <filetype>rb</filetype>
       <usage_type>script</usage_type>
-      <checksum>62CE7843</checksum>
+      <checksum>FFF717A6</checksum>
     </file>
   </files>
 </measure>

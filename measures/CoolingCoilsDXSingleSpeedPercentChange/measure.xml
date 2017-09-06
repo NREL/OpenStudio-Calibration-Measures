@@ -2,8 +2,8 @@
   <schema_version>3.0</schema_version>
   <name>cooling_coils_dx_single_speed_percent_change</name>
   <uid>97d0dbdf-6245-4cfd-8dfc-a6a5eb853b37</uid>
-  <version_id>e19b8431-6780-4650-826e-075f568bcced</version_id>
-  <version_modified>20170906T215921Z</version_modified>
+  <version_id>733e0e44-6cf6-46a0-8154-7bfeb9ee8238</version_id>
+  <version_modified>20170906T225856Z</version_modified>
   <xml_checksum>8CBDDA1B</xml_checksum>
   <class_name>CoolingCoilsDXSingleSpeedPercentChange</class_name>
   <display_name>Cooling Coils DX Single Speed Percent Change</display_name>
@@ -19,7 +19,7 @@
       <default_value>*All DX Cooling Coils*</default_value>
       <choices>
         <choice>
-          <value>{877221e8-e29c-435a-a8b8-55b1f5a76d8c}</value>
+          <value>{7269b3f7-298a-4215-8067-5b10e1307b76}</value>
           <display_name>*All DX Cooling Coils*</display_name>
         </choice>
         <choice>
@@ -69,7 +69,7 @@
       <filename>measure.rb</filename>
       <filetype>rb</filetype>
       <usage_type>script</usage_type>
-      <checksum>A37F08D0</checksum>
+      <checksum>2A14ABFD</checksum>
     </file>
   </files>
 </measure>

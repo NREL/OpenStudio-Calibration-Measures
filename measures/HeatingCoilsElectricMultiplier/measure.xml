@@ -2,8 +2,8 @@
   <schema_version>3.0</schema_version>
   <name>heating_coils_electric_multiplier</name>
   <uid>122e854c-d939-4bea-822a-89f2a5584a01</uid>
-  <version_id>06d41cda-61e1-4846-bf0c-2fb2f510326c</version_id>
-  <version_modified>20170906T215921Z</version_modified>
+  <version_id>3a973627-e6dc-40df-84c8-593077f56e96</version_id>
+  <version_modified>20170906T225857Z</version_modified>
   <xml_checksum>1F3D2430</xml_checksum>
   <class_name>HeatingCoilsElectricMultiplier</class_name>
   <display_name>Heating Coils Electric Multiplier</display_name>
@@ -19,7 +19,7 @@
       <default_value>*All Electric Heating Coils*</default_value>
       <choices>
         <choice>
-          <value>{6aa9fec1-0223-4a97-9d20-832f9b2e4d9f}</value>
+          <value>{d0cb63d6-12c2-4160-8bf9-3865a9a2a2b5}</value>
           <display_name>*All Electric Heating Coils*</display_name>
         </choice>
         <choice>
@@ -69,7 +69,7 @@
       <filename>measure.rb</filename>
       <filetype>rb</filetype>
       <usage_type>script</usage_type>
-      <checksum>E00FAE1E</checksum>
+      <checksum>6DF929D0</checksum>
     </file>
   </files>
 </measure>
