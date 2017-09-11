@@ -19,7 +19,7 @@ class CoilHeatingWaterPercentChange < OpenStudio::Ruleset::ModelUserScript
   def change_name(object,ua_factor,coil_capacity_perc_change)
     nameString = "#{object.name.get}"
     if ua_factor != 1.0
-      nameString = nameString + " #{ua_factor.round(2)}percng coilEff"
+      nameString = nameString + " #{ua_factor.round(2)}percng UA"
     end
     if coil_capacity_perc_change != 1.0
       nameString = nameString + " #{coil_capacity_perc_change.round(2)}percng coilCap"
@@ -155,7 +155,7 @@ class CoilHeatingWaterPercentChange < OpenStudio::Ruleset::ModelUserScript
       # coil_capacity_perc_change
       if coil_capacity_perc_change != 0.0
         if coil.ratedCapacity.is_initialized
-          runner.registerInfo("Applying #{coil_capacity_perc_change} Percent Change to #{coil.name.get}.")
+          runner.registerInfo("Applying ratedCapacity #{coil_capacity_perc_change} Percent Change to #{coil.name.get}.")
           coil.setRatedCapacity(coil.ratedCapacity.get + coil.ratedCapacity.get * coil_capacity_perc_change * 0.01)          
           altered_capacity << coil.handle.to_s
           altered_coil = true
@@ -165,7 +165,7 @@ class CoilHeatingWaterPercentChange < OpenStudio::Ruleset::ModelUserScript
       # modify ua_factor
       if ua_factor != 0.0
         if coil.uFactorTimesAreaValue.is_initialized
-          runner.registerInfo("Applying #{ua_factor} Percent Change to #{coil.name.get}.")
+          runner.registerInfo("Applying uFactorTimesAreaValue #{ua_factor} Percent Change to #{coil.name.get}.")
           coil.setUFactorTimesAreaValue(coil.uFactorTimesAreaValue.get + coil.uFactorTimesAreaValue.get * ua_factor * 0.01)       
           altered_coilefficiency << coil.handle.to_s
           altered_coil = true

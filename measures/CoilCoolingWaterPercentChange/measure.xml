@@ -2,8 +2,8 @@
   <schema_version>3.0</schema_version>
   <name>coil_cooling_water_percent_change</name>
   <uid>51bc1f02-f01b-4c5e-818a-db76ed783665</uid>
-  <version_id>e7a5799d-4d28-4999-8510-564bed6e95d6</version_id>
-  <version_modified>20170911T163616Z</version_modified>
+  <version_id>6bb068f3-39a2-48c3-bc5c-fd3448df9807</version_id>
+  <version_modified>20170911T165709Z</version_modified>
   <xml_checksum>8CBDDA1B</xml_checksum>
   <class_name>CoilCoolingWaterPercentChange</class_name>
   <display_name>Cooling Coils Water PercentChange</display_name>
@@ -19,7 +19,7 @@
       <default_value>*All Water Cooling Coils*</default_value>
       <choices>
         <choice>
-          <value>{8f555c12-ee77-42dd-ba98-0ff9cfbc0332}</value>
+          <value>{bf0d46f8-cdb7-4767-b3cd-0bb600bcca4b}</value>
           <display_name>*All Water Cooling Coils*</display_name>
         </choice>
         <choice>
@@ -105,7 +105,7 @@
       <filename>measure.rb</filename>
       <filetype>rb</filetype>
       <usage_type>script</usage_type>
-      <checksum>CC04CE38</checksum>
+      <checksum>D306AA93</checksum>
     </file>
   </files>
 </measure>

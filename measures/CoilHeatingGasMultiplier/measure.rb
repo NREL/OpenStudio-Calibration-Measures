@@ -190,7 +190,7 @@ class CoilHeatingGasMultiplier < OpenStudio::Ruleset::ModelUserScript
       # coil_capacity_multiplier
       if coil_capacity_multiplier != 1.0
         if coil.nominalCapacity.is_initialized
-          runner.registerInfo("Applying #{coil_capacity_multiplier}x multiplier to #{coil.name.get}.")
+          runner.registerInfo("Applying nominalCapacity #{coil_capacity_multiplier}x multiplier to #{coil.name.get}.")
           coil.setNominalCapacity(coil.nominalCapacity.get * coil_capacity_multiplier)          
           altered_capacity << coil.handle.to_s
           altered_coil = true
@@ -199,7 +199,7 @@ class CoilHeatingGasMultiplier < OpenStudio::Ruleset::ModelUserScript
       
       # modify coil_efficiency_multiplier
       if coil_efficiency_multiplier != 1.0
-        runner.registerInfo("Applying #{coil_efficiency_multiplier}x multiplier to #{coil.name.get}.")
+        runner.registerInfo("Applying gasBurnerEfficiency #{coil_efficiency_multiplier}x multiplier to #{coil.name.get}.")
         if coil.gasBurnerEfficiency * coil_efficiency_multiplier <= 1
           coil.setGasBurnerEfficiency(coil.gasBurnerEfficiency * coil_efficiency_multiplier)   
         else
@@ -212,7 +212,7 @@ class CoilHeatingGasMultiplier < OpenStudio::Ruleset::ModelUserScript
       
       # coil_parasitic_electric_multiplier
       if coil_parasitic_electric_multiplier != 1.0
-        runner.registerInfo("Applying #{coil_parasitic_electric_multiplier}x multiplier to #{coil.name.get}.")
+        runner.registerInfo("Applying parasiticElectricLoad #{coil_parasitic_electric_multiplier}x multiplier to #{coil.name.get}.")
         coil.setParasiticElectricLoad(coil.parasiticElectricLoad * coil_parasitic_electric_multiplier)          
         altered_parasiteelectric << coil.handle.to_s
         altered_coil = true
@@ -220,7 +220,7 @@ class CoilHeatingGasMultiplier < OpenStudio::Ruleset::ModelUserScript
       
       # coil_parasitic_gas_multiplier
       if coil_parasitic_gas_multiplier != 1.0
-        runner.registerInfo("Applying #{coil_parasitic_gas_multiplier}x multiplier to #{coil.name.get}.")
+        runner.registerInfo("Applying parasiticGasLoad #{coil_parasitic_gas_multiplier}x multiplier to #{coil.name.get}.")
         coil.setParasiticGasLoad(coil.parasiticGasLoad * coil_parasitic_gas_multiplier)          
         altered_parasitegas << coil.handle.to_s
         altered_coil = true

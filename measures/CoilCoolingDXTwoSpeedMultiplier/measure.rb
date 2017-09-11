@@ -16,13 +16,19 @@ class CoilCoolingDXTwoSpeedMultiplier < OpenStudio::Ruleset::ModelUserScript
     return "It will be used for calibration of rated capacity and COP. User can choose between a Two coil or ALL the Coils."
   end
   
-  def change_name(object,rated_cop_multiplier,rated_cooling_capacity_multiplier)
+  def change_name(object,rated_highspeed_cop_multiplier,rated_highspeed_cooling_capacity_multiplier,rated_lowspeed_cop_multiplier,rated_lowspeed_cooling_capacity_multiplier)
     nameString = "#{object.name.get}"
-    if rated_cop_multiplier != 1.0
-      nameString = nameString + " #{rated_cop_multiplier.round(2)}x coilEff"
+    if rated_highspeed_cop_multiplier != 1.0
+      nameString = nameString + " #{rated_highspeed_cop_multiplier.round(2)}x coilEff"
     end
-    if rated_cooling_capacity_multiplier != 1.0
-      nameString = nameString + " #{rated_cooling_capacity_multiplier.round(2)}x coilCap"
+    if rated_highspeed_cooling_capacity_multiplier != 1.0
+      nameString = nameString + " #{rated_highspeed_cooling_capacity_multiplier.round(2)}x coilCap"
+    end
+    if rated_lowspeed_cooling_capacity_multiplier != 1.0
+      nameString = nameString + " #{rated_lowspeed_cooling_capacity_multiplier.round(2)}x coilEff"
+    end
+    if rated_lowspeed_cop_multiplier != 1.0
+      nameString = nameString + " #{rated_lowspeed_cop_multiplier.round(2)}x coilCap"
     end
     object.setName(nameString)
   end
@@ -83,29 +89,29 @@ class CoilCoolingDXTwoSpeedMultiplier < OpenStudio::Ruleset::ModelUserScript
     
     # rated_highspeed_cop_multiplier
     rated_highspeed_cop_multiplier = OpenStudio::Ruleset::OSArgument.makeDoubleArgument("rated_highspeed_cop_multiplier", true)
-    rated_highspeed_cop_multiplier.setDisplayName("Multiplier for COP.")
-    rated_highspeed_cop_multiplier.setDescription("Multiplier for COP.")
+    rated_highspeed_cop_multiplier.setDisplayName("Multiplier for High Speed COP.")
+    rated_highspeed_cop_multiplier.setDescription("Multiplier for High Speed COP.")
     rated_highspeed_cop_multiplier.setDefaultValue(1.0)
     args << rated_highspeed_cop_multiplier
     
     # rated_lowspeed_cop_multiplier
     rated_lowspeed_cop_multiplier = OpenStudio::Ruleset::OSArgument.makeDoubleArgument("rated_lowspeed_cop_multiplier", true)
-    rated_lowspeed_cop_multiplier.setDisplayName("Multiplier for COP.")
-    rated_lowspeed_cop_multiplier.setDescription("Multiplier for COP.")
+    rated_lowspeed_cop_multiplier.setDisplayName("Multiplier for Low Speed COP.")
+    rated_lowspeed_cop_multiplier.setDescription("Multiplier for Low Speed COP.")
     rated_lowspeed_cop_multiplier.setDefaultValue(1.0)
     args << rated_lowspeed_cop_multiplier
     
     # rated_highspeed_cooling_capacity_multiplier
     rated_highspeed_cooling_capacity_multiplier = OpenStudio::Ruleset::OSArgument.makeDoubleArgument("rated_highspeed_cooling_capacity_multiplier", true)
-    rated_highspeed_cooling_capacity_multiplier.setDisplayName("Multiplier for rated cooling Capacity.")
-    rated_highspeed_cooling_capacity_multiplier.setDescription("Multiplier for rated cooling Capacity.")
+    rated_highspeed_cooling_capacity_multiplier.setDisplayName("Multiplier for High Speed rated cooling Capacity.")
+    rated_highspeed_cooling_capacity_multiplier.setDescription("Multiplier for High Speed rated cooling Capacity.")
     rated_highspeed_cooling_capacity_multiplier.setDefaultValue(1.0)
     args << rated_highspeed_cooling_capacity_multiplier 
     
     # rated_lowspeed_cooling_capacity_multiplier
     rated_lowspeed_cooling_capacity_multiplier = OpenStudio::Ruleset::OSArgument.makeDoubleArgument("rated_lowspeed_cooling_capacity_multiplier", true)
-    rated_lowspeed_cooling_capacity_multiplier.setDisplayName("Multiplier for rated cooling Capacity.")
-    rated_lowspeed_cooling_capacity_multiplier.setDescription("Multiplier for rated cooling Capacity.")
+    rated_lowspeed_cooling_capacity_multiplier.setDisplayName("Multiplier for Low Speed rated cooling Capacity.")
+    rated_lowspeed_cooling_capacity_multiplier.setDescription("Multiplier for Low Speed rated cooling Capacity.")
     rated_lowspeed_cooling_capacity_multiplier.setDefaultValue(1.0)
     args << rated_lowspeed_cooling_capacity_multiplier    
     
@@ -181,7 +187,7 @@ class CoilCoolingDXTwoSpeedMultiplier < OpenStudio::Ruleset::ModelUserScript
       # rated_highspeed_cooling_capacity_multiplier
       if rated_highspeed_cooling_capacity_multiplier != 1.0
         if coil.ratedHighSpeedTotalCoolingCapacity.is_initialized
-          runner.registerInfo("Applying #{rated_highspeed_cooling_capacity_multiplier}x multiplier to #{coil.name.get}.")
+          runner.registerInfo("Applying ratedHighSpeedTotalCoolingCapacity #{rated_highspeed_cooling_capacity_multiplier}x multiplier to #{coil.name.get}.")
           coil.setRatedHighSpeedTotalCoolingCapacity(coil.ratedHighSpeedTotalCoolingCapacity.get * rated_highspeed_cooling_capacity_multiplier)          
           altered_capacity << coil.handle.to_s
           altered_coil = true
@@ -191,7 +197,7 @@ class CoilCoolingDXTwoSpeedMultiplier < OpenStudio::Ruleset::ModelUserScript
       # rated_lowspeed_cooling_capacity_multiplier
       if rated_lowspeed_cooling_capacity_multiplier != 1.0
         if coil.ratedLowSpeedTotalCoolingCapacity.is_initialized
-          runner.registerInfo("Applying #{rated_lowspeed_cooling_capacity_multiplier}x multiplier to #{coil.name.get}.")
+          runner.registerInfo("Applying ratedLowSpeedTotalCoolingCapacity #{rated_lowspeed_cooling_capacity_multiplier}x multiplier to #{coil.name.get}.")
           coil.setRatedLowSpeedTotalCoolingCapacity(coil.ratedLowSpeedTotalCoolingCapacity.get * rated_lowspeed_cooling_capacity_multiplier)          
           altered_capacity << coil.handle.to_s
           altered_coil = true
@@ -201,7 +207,7 @@ class CoilCoolingDXTwoSpeedMultiplier < OpenStudio::Ruleset::ModelUserScript
       # modify rated_highspeed_cop_multiplier
       if rated_highspeed_cop_multiplier != 1.0
         if coil.ratedHighSpeedCOP.is_initialized
-          runner.registerInfo("Applying #{rated_highspeed_cop_multiplier}x multiplier to #{coil.name.get}.")
+          runner.registerInfo("Applying ratedHighSpeedCOP #{rated_highspeed_cop_multiplier}x multiplier to #{coil.name.get}.")
           coil.setRatedHighSpeedCOP(coil.ratedHighSpeedCOP.get * rated_highspeed_cop_multiplier)         
           altered_coilefficiency << coil.handle.to_s
           altered_coil = true
@@ -211,7 +217,7 @@ class CoilCoolingDXTwoSpeedMultiplier < OpenStudio::Ruleset::ModelUserScript
       # modify rated_lowspeed_cop_multiplier
       if rated_lowspeed_cop_multiplier != 1.0
         if coil.ratedLowSpeedCOP.is_initialized
-          runner.registerInfo("Applying #{rated_lowspeed_cop_multiplier}x multiplier to #{coil.name.get}.")
+          runner.registerInfo("Applying ratedLowSpeedCOP #{rated_lowspeed_cop_multiplier}x multiplier to #{coil.name.get}.")
           coil.setRatedLowSpeedCOP(coil.ratedLowSpeedCOP.get * rated_lowspeed_cop_multiplier)         
           altered_coilefficiency << coil.handle.to_s
           altered_coil = true
@@ -220,7 +226,7 @@ class CoilCoolingDXTwoSpeedMultiplier < OpenStudio::Ruleset::ModelUserScript
       
       if altered_coil
         altered_coils << coil.handle.to_s
-        change_name(coil,rated_highspeed_cop_multiplier,rated_highspeed_cooling_capacity_multiplier)
+        change_name(coil,rated_highspeed_cop_multiplier,rated_highspeed_cooling_capacity_multiplier,rated_lowspeed_cop_multiplier,rated_lowspeed_cooling_capacity_multiplier)
         runner.registerInfo("coil name changed to: #{coil.name.get}")
       end
     end #end coil loop

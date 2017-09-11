@@ -19,7 +19,7 @@ class CoilHeatingWaterMultiplier < OpenStudio::Ruleset::ModelUserScript
   def change_name(object,ua_factor,coil_capacity_multiplier)
     nameString = "#{object.name.get}"
     if ua_factor != 1.0
-      nameString = nameString + " #{ua_factor.round(2)}x coilEff"
+      nameString = nameString + " #{ua_factor.round(2)}x UA"
     end
     if coil_capacity_multiplier != 1.0
       nameString = nameString + " #{coil_capacity_multiplier.round(2)}x coilCap"
@@ -164,7 +164,7 @@ class CoilHeatingWaterMultiplier < OpenStudio::Ruleset::ModelUserScript
       # coil_capacity_multiplier
       if coil_capacity_multiplier != 1.0
         if coil.ratedCapacity.is_initialized
-          runner.registerInfo("Applying #{coil_capacity_multiplier}x multiplier to #{coil.name.get}.")
+          runner.registerInfo("Applying ratedCapacity #{coil_capacity_multiplier}x multiplier to #{coil.name.get}.")
           coil.setRatedCapacity(coil.ratedCapacity.get * coil_capacity_multiplier)          
           altered_capacity << coil.handle.to_s
           altered_coil = true
@@ -174,7 +174,7 @@ class CoilHeatingWaterMultiplier < OpenStudio::Ruleset::ModelUserScript
       # modify ua_factor
       if ua_factor != 1.0
         if coil.uFactorTimesAreaValue.is_initialized
-          runner.registerInfo("Applying #{ua_factor}x multiplier to #{coil.name.get}.")
+          runner.registerInfo("Applying uFactorTimesAreaValue #{ua_factor}x multiplier to #{coil.name.get}.")
           coil.setUFactorTimesAreaValue(coil.uFactorTimesAreaValue.get * ua_factor)   
           altered_coilefficiency << coil.handle.to_s
           altered_coil = true

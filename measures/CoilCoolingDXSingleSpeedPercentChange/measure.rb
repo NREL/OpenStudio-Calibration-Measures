@@ -155,7 +155,7 @@ class CoilCoolingDXSingleSpeedPercentChange < OpenStudio::Ruleset::ModelUserScri
       # rated_cooling_capacity_perc_change
       if rated_cooling_capacity_perc_change != 0.0
         if coil.ratedTotalCoolingCapacity.is_initialized
-          runner.registerInfo("Applying #{rated_cooling_capacity_perc_change} Percent Change to #{coil.name.get}.")
+          runner.registerInfo("Applying ratedTotalCoolingCapacity #{rated_cooling_capacity_perc_change} Percent Change to #{coil.name.get}.")
           coil.setRatedTotalCoolingCapacity(coil.ratedTotalCoolingCapacity.get + coil.ratedTotalCoolingCapacity.get * rated_cooling_capacity_perc_change * 0.01)          
           altered_capacity << coil.handle.to_s
           altered_coil = true
@@ -165,7 +165,7 @@ class CoilCoolingDXSingleSpeedPercentChange < OpenStudio::Ruleset::ModelUserScri
       # modify rated_cop_perc_change
       if rated_cop_perc_change != 0.0
         if coil.ratedCOP.is_initialized
-          runner.registerInfo("Applying #{rated_cop_perc_change} Percent Change to #{coil.name.get}.")
+          runner.registerInfo("Applying ratedCOP #{rated_cop_perc_change} Percent Change to #{coil.name.get}.")
           coil.setRatedCOP(coil.ratedCOP.get + coil.ratedCOP.get * rated_cop_perc_change * 0.01)       
           altered_coilefficiency << coil.handle.to_s
           altered_coil = true

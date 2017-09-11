@@ -164,7 +164,7 @@ class CoilCoolingDXSingleSpeedMultiplier < OpenStudio::Ruleset::ModelUserScript
       # rated_cooling_capacity_multiplier
       if rated_cooling_capacity_multiplier != 1.0
         if coil.ratedTotalCoolingCapacity.is_initialized
-          runner.registerInfo("Applying #{rated_cooling_capacity_multiplier}x multiplier to #{coil.name.get}.")
+          runner.registerInfo("Applying ratedTotalCoolingCapacity #{rated_cooling_capacity_multiplier}x multiplier to #{coil.name.get}.")
           coil.setRatedTotalCoolingCapacity(coil.ratedTotalCoolingCapacity.get * rated_cooling_capacity_multiplier)          
           altered_capacity << coil.handle.to_s
           altered_coil = true
@@ -174,7 +174,7 @@ class CoilCoolingDXSingleSpeedMultiplier < OpenStudio::Ruleset::ModelUserScript
       # modify rated_cop_multiplier
       if rated_cop_multiplier != 1.0
         if coil.ratedCOP.is_initialized
-          runner.registerInfo("Applying #{rated_cop_multiplier}x multiplier to #{coil.name.get}.")
+          runner.registerInfo("Applying ratedCOP #{rated_cop_multiplier}x multiplier to #{coil.name.get}.")
           coil.setRatedCOP(coil.ratedCOP.get * rated_cop_multiplier)         
           altered_coilefficiency << coil.handle.to_s
           altered_coil = true

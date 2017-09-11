@@ -19,22 +19,22 @@ class CoilCoolingWaterPercentChange < OpenStudio::Ruleset::ModelUserScript
   def change_name(object,design_water_flow_rate,design_air_flow_rate,design_inlet_water_temperature,design_inlet_air_temperature,design_outlet_air_temperature,design_inlet_air_humidity_ratio)
     nameString = "#{object.name.get}"
     if design_water_flow_rate != 1.0
-      nameString = nameString + " #{design_water_flow_rate.round(2)} prch waterDFR"
+      nameString = nameString + " #{design_water_flow_rate.round(2)} percng waterDFR"
     end
     if design_air_flow_rate != 1.0
-      nameString = nameString + " #{design_air_flow_rate.round(2)}prch airDFR"
+      nameString = nameString + " #{design_air_flow_rate.round(2)}percng airDFR"
     end
     if design_inlet_water_temperature != 1.0
-      nameString = nameString + " #{design_inlet_water_temperature.round(2)}prch DIWT"
+      nameString = nameString + " #{design_inlet_water_temperature.round(2)}percng DIWT"
     end
     if design_inlet_air_temperature != 1.0
-      nameString = nameString + " #{design_inlet_air_temperature.round(2)}prch DIAT"
+      nameString = nameString + " #{design_inlet_air_temperature.round(2)}percng DIAT"
     end
     if design_outlet_air_temperature != 1.0
-      nameString = nameString + " #{design_outlet_air_temperature.round(2)}prch DOAT"
+      nameString = nameString + " #{design_outlet_air_temperature.round(2)}percng DOAT"
     end
     if design_inlet_air_humidity_ratio != 1.0
-      nameString = nameString + " #{design_inlet_air_humidity_ratio.round(2)}prch DIAHR"
+      nameString = nameString + " #{design_inlet_air_humidity_ratio.round(2)}percng DIAHR"
     end
     object.setName(nameString)
   end

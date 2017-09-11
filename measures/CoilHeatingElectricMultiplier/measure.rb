@@ -164,7 +164,7 @@ class CoilHeatingElectricMultiplier < OpenStudio::Ruleset::ModelUserScript
       # coil_capacity_multiplier
       if coil_capacity_multiplier != 1.0
         if coil.nominalCapacity.is_initialized
-          runner.registerInfo("Applying #{coil_capacity_multiplier}x multiplier to #{coil.name.get}.")
+          runner.registerInfo("Applying nominalCapacity #{coil_capacity_multiplier}x multiplier to #{coil.name.get}.")
           coil.setNominalCapacity(coil.nominalCapacity.get * coil_capacity_multiplier)          
           altered_capacity << coil.handle.to_s
           altered_coil = true
@@ -173,7 +173,7 @@ class CoilHeatingElectricMultiplier < OpenStudio::Ruleset::ModelUserScript
       
       # modify coil_efficiency_multiplier
       if coil_efficiency_multiplier != 1.0
-        runner.registerInfo("Applying #{coil_efficiency_multiplier}x multiplier to #{coil.name.get}.")
+        runner.registerInfo("Applying efficiency #{coil_efficiency_multiplier}x multiplier to #{coil.name.get}.")
         if coil.efficiency * coil_efficiency_multiplier <= 1
           coil.setEfficiency(coil.efficiency * coil_efficiency_multiplier)   
         else

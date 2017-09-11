@@ -2,8 +2,8 @@
   <schema_version>3.0</schema_version>
   <name>coil_heating_water_percent_change</name>
   <uid>85674ff6-4fdc-463f-9695-36bf6c6a2608</uid>
-  <version_id>c53ec59d-dfa9-4b38-b2a2-e5a3e0bcef5c</version_id>
-  <version_modified>20170911T163616Z</version_modified>
+  <version_id>c42fe820-2a4b-49d6-9e8a-bcb0cc589d47</version_id>
+  <version_modified>20170911T165710Z</version_modified>
   <xml_checksum>1F3D2430</xml_checksum>
   <class_name>CoilHeatingWaterPercentChange</class_name>
   <display_name>Heating Coils Water Percent Change</display_name>
@@ -19,7 +19,7 @@
       <default_value>*All Water Heating Coils*</default_value>
       <choices>
         <choice>
-          <value>{5159588e-185b-42b4-a573-ac22671771a4}</value>
+          <value>{ebc035b9-9338-4547-99ab-710fa5af4034}</value>
           <display_name>*All Water Heating Coils*</display_name>
         </choice>
         <choice>
@@ -69,7 +69,7 @@
       <filename>measure.rb</filename>
       <filetype>rb</filetype>
       <usage_type>script</usage_type>
-      <checksum>B8E0B9E1</checksum>
+      <checksum>3830997F</checksum>
     </file>
   </files>
 </measure>

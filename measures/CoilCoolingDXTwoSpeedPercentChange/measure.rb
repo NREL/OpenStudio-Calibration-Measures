@@ -16,13 +16,19 @@ class CoilCoolingDXTwoSpeedPercentChange < OpenStudio::Ruleset::ModelUserScript
     return "It will be used for calibration of rated capacity and efficiency and parasitic loads. User can choose between a Two coil or ALL the Coils."
   end
   
-  def change_name(object,rated_highspeed_cop_perc_change,rated_highspeed_cooling_capacity_perc_change)
+  def change_name(object,rated_highspeed_cop_perc_change,rated_highspeed_cooling_capacity_perc_change,rated_lowspeed_cop_perc_change,rated_lowspeed_cooling_capacity_perc_change)
     nameString = "#{object.name.get}"
     if rated_highspeed_cop_perc_change != 1.0
-      nameString = nameString + " #{rated_highspeed_cop_perc_change.round(2)}percng coilEff"
+      nameString = nameString + " #{rated_highspeed_cop_perc_change.round(2)}x coilEff"
     end
     if rated_highspeed_cooling_capacity_perc_change != 1.0
-      nameString = nameString + " #{rated_highspeed_cooling_capacity_perc_change.round(2)}percng coilCap"
+      nameString = nameString + " #{rated_highspeed_cooling_capacity_perc_change.round(2)}x coilCap"
+    end
+    if rated_lowspeed_cooling_capacity_perc_change != 1.0
+      nameString = nameString + " #{rated_lowspeed_cooling_capacity_perc_change.round(2)}x coilEff"
+    end
+    if rated_lowspeed_cop_perc_change != 1.0
+      nameString = nameString + " #{rated_lowspeed_cop_perc_change.round(2)}x coilCap"
     end
     object.setName(nameString)
   end
@@ -76,29 +82,29 @@ class CoilCoolingDXTwoSpeedPercentChange < OpenStudio::Ruleset::ModelUserScript
     
     # rated_highspeed_cop_perc_change
     rated_highspeed_cop_perc_change = OpenStudio::Ruleset::OSArgument.makeDoubleArgument("rated_highspeed_cop_perc_change", true)
-    rated_highspeed_cop_perc_change.setDisplayName("Percent Change for COP.")
-    rated_highspeed_cop_perc_change.setDescription("Percent Change for COP.")
+    rated_highspeed_cop_perc_change.setDisplayName("Percent Change for High Speed COP.")
+    rated_highspeed_cop_perc_change.setDescription("Percent Change for High Speed COP.")
     rated_highspeed_cop_perc_change.setDefaultValue(0.0)
     args << rated_highspeed_cop_perc_change
     
     # rated_lowspeed_cop_perc_change
     rated_lowspeed_cop_perc_change = OpenStudio::Ruleset::OSArgument.makeDoubleArgument("rated_lowspeed_cop_perc_change", true)
-    rated_lowspeed_cop_perc_change.setDisplayName("Percent Change for COP.")
-    rated_lowspeed_cop_perc_change.setDescription("Percent Change for COP.")
+    rated_lowspeed_cop_perc_change.setDisplayName("Percent Change for Low Speed COP.")
+    rated_lowspeed_cop_perc_change.setDescription("Percent Change for Low Speed COP.")
     rated_lowspeed_cop_perc_change.setDefaultValue(0.0)
     args << rated_lowspeed_cop_perc_change
     
     # rated_highspeed_cooling_capacity_perc_change
     rated_highspeed_cooling_capacity_perc_change = OpenStudio::Ruleset::OSArgument.makeDoubleArgument("rated_highspeed_cooling_capacity_perc_change", true)
-    rated_highspeed_cooling_capacity_perc_change.setDisplayName("Percent Change for coil cooling Capacity.")
-    rated_highspeed_cooling_capacity_perc_change.setDescription("Percent Change for coil cooling Capacity.")
+    rated_highspeed_cooling_capacity_perc_change.setDisplayName("Percent Change for High Speed coil cooling Capacity.")
+    rated_highspeed_cooling_capacity_perc_change.setDescription("Percent Change for High Speed coil cooling Capacity.")
     rated_highspeed_cooling_capacity_perc_change.setDefaultValue(0.0)
     args << rated_highspeed_cooling_capacity_perc_change     
     
         # rated_lowspeed_cooling_capacity_perc_change
     rated_lowspeed_cooling_capacity_perc_change = OpenStudio::Ruleset::OSArgument.makeDoubleArgument("rated_lowspeed_cooling_capacity_perc_change", true)
-    rated_lowspeed_cooling_capacity_perc_change.setDisplayName("Percent Change for coil cooling Capacity.")
-    rated_lowspeed_cooling_capacity_perc_change.setDescription("Percent Change for coil cooling Capacity.")
+    rated_lowspeed_cooling_capacity_perc_change.setDisplayName("Percent Change for Low Speed coil cooling Capacity.")
+    rated_lowspeed_cooling_capacity_perc_change.setDescription("Percent Change for Low Speed coil cooling Capacity.")
     rated_lowspeed_cooling_capacity_perc_change.setDefaultValue(0.0)
     args << rated_lowspeed_cooling_capacity_perc_change  
     
@@ -171,7 +177,7 @@ class CoilCoolingDXTwoSpeedPercentChange < OpenStudio::Ruleset::ModelUserScript
       # rated_highspeed_cooling_capacity_perc_change
       if rated_highspeed_cooling_capacity_perc_change != 0.0
         if coil.ratedHighSpeedTotalCoolingCapacity.is_initialized
-          runner.registerInfo("Applying #{rated_highspeed_cooling_capacity_perc_change} Percent Change to #{coil.name.get}.")
+          runner.registerInfo("Applying ratedHighSpeedTotalCoolingCapacity #{rated_highspeed_cooling_capacity_perc_change} Percent Change to #{coil.name.get}.")
           coil.setRatedHighSpeedTotalCoolingCapacity(coil.ratedHighSpeedTotalCoolingCapacity.get + coil.ratedHighSpeedTotalCoolingCapacity.get * rated_highspeed_cooling_capacity_perc_change * 0.01)          
           altered_capacity << coil.handle.to_s
           altered_coil = true
@@ -181,7 +187,7 @@ class CoilCoolingDXTwoSpeedPercentChange < OpenStudio::Ruleset::ModelUserScript
       # rated_lowspeed_cooling_capacity_perc_change
       if rated_lowspeed_cooling_capacity_perc_change != 0.0
         if coil.ratedLowSpeedTotalCoolingCapacity.is_initialized
-          runner.registerInfo("Applying #{rated_lowspeed_cooling_capacity_perc_change} Percent Change to #{coil.name.get}.")
+          runner.registerInfo("Applying ratedLowSpeedTotalCoolingCapacity #{rated_lowspeed_cooling_capacity_perc_change} Percent Change to #{coil.name.get}.")
           coil.setRatedLowSpeedTotalCoolingCapacity(coil.ratedLowSpeedTotalCoolingCapacity.get + coil.ratedLowSpeedTotalCoolingCapacity.get * rated_lowspeed_cooling_capacity_perc_change * 0.01)          
           altered_capacity << coil.handle.to_s
           altered_coil = true
@@ -191,7 +197,7 @@ class CoilCoolingDXTwoSpeedPercentChange < OpenStudio::Ruleset::ModelUserScript
       # modify rated_highspeed_cop_perc_change
       if rated_highspeed_cop_perc_change != 0.0
         if coil.ratedHighSpeedCOP.is_initialized
-          runner.registerInfo("Applying #{rated_highspeed_cop_perc_change} Percent Change to #{coil.name.get}.")
+          runner.registerInfo("Applying ratedHighSpeedCOP #{rated_highspeed_cop_perc_change} Percent Change to #{coil.name.get}.")
           coil.setRatedHighSpeedCOP(coil.ratedHighSpeedCOP.get + coil.ratedHighSpeedCOP.get * rated_highspeed_cop_perc_change * 0.01)       
           altered_coilefficiency << coil.handle.to_s
           altered_coil = true
@@ -201,7 +207,7 @@ class CoilCoolingDXTwoSpeedPercentChange < OpenStudio::Ruleset::ModelUserScript
      # modify rated_lowspeed_cop_perc_change
       if rated_lowspeed_cop_perc_change != 0.0
         if coil.ratedLowSpeedCOP.is_initialized
-          runner.registerInfo("Applying #{rated_lowspeed_cop_perc_change} Percent Change to #{coil.name.get}.")
+          runner.registerInfo("Applying ratedLowSpeedCOP #{rated_lowspeed_cop_perc_change} Percent Change to #{coil.name.get}.")
           coil.setRatedLowSpeedCOP(coil.ratedLowSpeedCOP.get + coil.ratedLowSpeedCOP.get * rated_lowspeed_cop_perc_change * 0.01)       
           altered_coilefficiency << coil.handle.to_s
           altered_coil = true
@@ -210,7 +216,7 @@ class CoilCoolingDXTwoSpeedPercentChange < OpenStudio::Ruleset::ModelUserScript
       
       if altered_coil
         altered_coils << coil.handle.to_s
-        change_name(coil,rated_highspeed_cop_perc_change,rated_highspeed_cooling_capacity_perc_change)
+        change_name(coil,rated_highspeed_cop_perc_change,rated_highspeed_cooling_capacity_perc_change,rated_lowspeed_cop_perc_change,rated_lowspeed_cooling_capacity_perc_change)
         runner.registerInfo("coil name changed to: #{coil.name.get}")
       end
     end #end coil loop

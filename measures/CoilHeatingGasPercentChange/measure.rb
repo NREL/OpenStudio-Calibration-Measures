@@ -179,7 +179,7 @@ class CoilHeatingGasPercentChange < OpenStudio::Ruleset::ModelUserScript
       # coil_capacity_perc_change
       if coil_capacity_perc_change != 0.0
         if coil.nominalCapacity.is_initialized
-          runner.registerInfo("Applying #{coil_capacity_perc_change} Percent Change to #{coil.name.get}.")
+          runner.registerInfo("Applying nominalCapacity #{coil_capacity_perc_change} Percent Change to #{coil.name.get}.")
           coil.setNominalCapacity(coil.nominalCapacity.get + coil.nominalCapacity.get * coil_capacity_perc_change * 0.01)          
           altered_capacity << coil.handle.to_s
           altered_coil = true
@@ -188,7 +188,7 @@ class CoilHeatingGasPercentChange < OpenStudio::Ruleset::ModelUserScript
       
       # modify coil_efficiency_perc_change
       if coil_efficiency_perc_change != 0.0
-        runner.registerInfo("Applying #{coil_efficiency_perc_change} Percent Change to #{coil.name.get}.")
+        runner.registerInfo("Applying gasBurnerEfficiency #{coil_efficiency_perc_change} Percent Change to #{coil.name.get}.")
         if ((coil.gasBurnerEfficiency + coil.gasBurnerEfficiency * coil_efficiency_perc_change * 0.01) <= 1 )
           coil.setGasBurnerEfficiency(coil.gasBurnerEfficiency + coil.gasBurnerEfficiency * coil_efficiency_perc_change * 0.01)   
         else
@@ -201,7 +201,7 @@ class CoilHeatingGasPercentChange < OpenStudio::Ruleset::ModelUserScript
       
       # coil_parasitic_electric_perc_change
       if coil_parasitic_electric_perc_change != 0.0
-        runner.registerInfo("Applying #{coil_parasitic_electric_perc_change} Percent Change to #{coil.name.get}.")
+        runner.registerInfo("Applying parasiticElectricLoad #{coil_parasitic_electric_perc_change} Percent Change to #{coil.name.get}.")
         coil.setParasiticElectricLoad(coil.parasiticElectricLoad + coil.parasiticElectricLoad * coil_parasitic_electric_perc_change * 0.01)          
         altered_parasiteelectric << coil.handle.to_s
         altered_coil = true
@@ -209,7 +209,7 @@ class CoilHeatingGasPercentChange < OpenStudio::Ruleset::ModelUserScript
       
       # coil_parasitic_gas_perc_change
       if coil_parasitic_gas_perc_change != 0.0
-        runner.registerInfo("Applying #{coil_parasitic_gas_perc_change} Percent Change to #{coil.name.get}.")
+        runner.registerInfo("Applying parasiticGasLoad #{coil_parasitic_gas_perc_change} Percent Change to #{coil.name.get}.")
         coil.setParasiticGasLoad(coil.parasiticGasLoad + coil.parasiticGasLoad * coil_parasitic_gas_perc_change * 0.01)          
         altered_parasitegas << coil.handle.to_s
         altered_coil = true

@@ -155,7 +155,7 @@ class CoilHeatingElectricPercentChange < OpenStudio::Ruleset::ModelUserScript
       # coil_capacity_perc_change
       if coil_capacity_perc_change != 0.0
         if coil.nominalCapacity.is_initialized
-          runner.registerInfo("Applying #{coil_capacity_perc_change} Percent Change to #{coil.name.get}.")
+          runner.registerInfo("Applying nominalCapacity #{coil_capacity_perc_change} Percent Change to #{coil.name.get}.")
           coil.setNominalCapacity(coil.nominalCapacity.get + coil.nominalCapacity.get * coil_capacity_perc_change * 0.01)          
           altered_capacity << coil.handle.to_s
           altered_coil = true
@@ -164,7 +164,7 @@ class CoilHeatingElectricPercentChange < OpenStudio::Ruleset::ModelUserScript
       
       # modify coil_efficiency_perc_change
       if coil_efficiency_perc_change != 0.0
-        runner.registerInfo("Applying #{coil_efficiency_perc_change} Percent Change to #{coil.name.get}.")
+        runner.registerInfo("Applying efficiency #{coil_efficiency_perc_change} Percent Change to #{coil.name.get}.")
         if ((coil.efficiency + coil.efficiency * coil_efficiency_perc_change * 0.01) <= 1 )
           coil.setEfficiency(coil.efficiency + coil.efficiency * coil_efficiency_perc_change * 0.01)   
         else
