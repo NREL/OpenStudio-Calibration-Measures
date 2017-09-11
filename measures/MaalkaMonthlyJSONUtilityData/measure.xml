@@ -2,8 +2,8 @@
   <schema_version>3.0</schema_version>
   <name>maalka_monthly_json_utility_data</name>
   <uid>afe82cf5-3e3a-43ea-b31e-8289ff268bed</uid>
-  <version_id>de146a94-2c9a-4f7d-bf8c-1f6be7f66b2d</version_id>
-  <version_modified>20170724T152934Z</version_modified>
+  <version_id>7a4b398a-cb81-4b7a-bdf8-c78ffc89f5ca</version_id>
+  <version_modified>20170911T173309Z</version_modified>
   <xml_checksum>057E8D9D</xml_checksum>
   <class_name>MaalkaMonthlyJSONUtilityData</class_name>
   <display_name>Maalka Formatted Monthly JSON Utility Data</display_name>
@@ -12,12 +12,12 @@
   <arguments>
     <argument>
       <name>json</name>
-      <display_name>Path to JSON Data in the Server.</display_name>
-      <description>Path to JSON Data in the Server. calibration_data is directory name of uploaded files.</description>
+      <display_name>Path to JSON Data.</display_name>
+      <description>Path to JSON Data. resources is default directory name of uploaded files in the server.</description>
       <type>String</type>
       <required>true</required>
       <model_dependent>false</model_dependent>
-      <default_value>../../../lib/sample_json.json</default_value>
+      <default_value>../../../lib/resources/sample_json.json</default_value>
     </argument>
     <argument>
       <name>variable_name</name>
@@ -30,39 +30,83 @@
     </argument>
     <argument>
       <name>maalka_fuel_type</name>
-      <display_name>Maalka Fuel Type</display_name>
-      <description>Maalka Fuel Type</description>
-      <type>String</type>
+      <display_name>Maalka Fuel Type in JSON</display_name>
+      <description>Maalka Fuel Type in JSON</description>
+      <type>Choice</type>
       <required>true</required>
       <model_dependent>false</model_dependent>
       <default_value>electric</default_value>
+      <choices>
+        <choice>
+          <value>electric</value>
+          <display_name>electric</display_name>
+        </choice>
+        <choice>
+          <value>naturalGas</value>
+          <display_name>naturalGas</display_name>
+        </choice>
+      </choices>
     </argument>
     <argument>
       <name>fuel_type</name>
-      <display_name>Fuel Type</display_name>
-      <description>Fuel Type</description>
-      <type>String</type>
+      <display_name>OpenStudio Fuel Type</display_name>
+      <description>OpenStudio Fuel Type</description>
+      <type>Choice</type>
       <required>true</required>
       <model_dependent>false</model_dependent>
       <default_value>Electricity</default_value>
+      <choices>
+        <choice>
+          <value>NaturalGas</value>
+          <display_name>NaturalGas</display_name>
+        </choice>
+        <choice>
+          <value>Electricity</value>
+          <display_name>Electricity</display_name>
+        </choice>
+        <choice>
+          <value>PropaneGas</value>
+          <display_name>PropaneGas</display_name>
+        </choice>
+      </choices>
     </argument>
     <argument>
       <name>consumption_unit</name>
-      <display_name>Consumption Unit</display_name>
-      <description>Consumption Unit (usually kWh or therms)</description>
-      <type>String</type>
+      <display_name>OpenStudio Consumption Unit</display_name>
+      <description>OpenStudio Consumption Unit (usually kWh or therms)</description>
+      <type>Choice</type>
       <required>true</required>
       <model_dependent>false</model_dependent>
       <default_value>kWh</default_value>
+      <choices>
+        <choice>
+          <value>kWh</value>
+          <display_name>kWh</display_name>
+        </choice>
+        <choice>
+          <value>therms</value>
+          <display_name>therms</display_name>
+        </choice>
+      </choices>
     </argument>
     <argument>
       <name>data_key_name</name>
-      <display_name>data key name in JSON</display_name>
-      <description>data key name in JSON</description>
-      <type>String</type>
+      <display_name>Maalka data key name in JSON</display_name>
+      <description>Maalka data key name in JSON (tot_kwh or tot_therms)</description>
+      <type>Choice</type>
       <required>true</required>
       <model_dependent>false</model_dependent>
       <default_value>tot_kwh</default_value>
+      <choices>
+        <choice>
+          <value>tot_kwh</value>
+          <display_name>tot_kwh</display_name>
+        </choice>
+        <choice>
+          <value>tot_therms</value>
+          <display_name>tot_therms</display_name>
+        </choice>
+      </choices>
     </argument>
     <argument>
       <name>start_date</name>
@@ -148,7 +192,7 @@
       <filename>measure.rb</filename>
       <filetype>rb</filetype>
       <usage_type>script</usage_type>
-      <checksum>9DAA6BF2</checksum>
+      <checksum>396DE6F0</checksum>
     </file>
   </files>
 </measure>

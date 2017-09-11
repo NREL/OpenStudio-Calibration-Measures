@@ -55,9 +55,9 @@ class MaalkaMonthlyJSONUtilityData < OpenStudio::Ruleset::ModelUserScript
     
     #set path to json
     json = OpenStudio::Ruleset::OSArgument::makeStringArgument("json",true)
-    json.setDisplayName("Path to JSON Data in the Server.")
-    json.setDescription("Path to JSON Data in the Server. calibration_data is directory name of uploaded files.")
-    json.setDefaultValue("../../../lib/sample_json.json")
+    json.setDisplayName("Path to JSON Data.")
+    json.setDescription("Path to JSON Data. resources is default directory name of uploaded files in the server.")
+    json.setDefaultValue("../../../lib/resources/sample_json.json")
     args << json
     
     #set variable name
@@ -67,31 +67,46 @@ class MaalkaMonthlyJSONUtilityData < OpenStudio::Ruleset::ModelUserScript
     variable_name.setDefaultValue("Electric Bill")
     args << variable_name
     
-    #set fuel type  
-    maalka_fuel_type = OpenStudio::Ruleset::OSArgument::makeStringArgument("maalka_fuel_type", true)
-    maalka_fuel_type.setDisplayName("Maalka Fuel Type")
-    maalka_fuel_type.setDescription("Maalka Fuel Type")
+    #make a choice argument for Maalka fuel type
+    mft = OpenStudio::StringVector.new
+    mft << "electric"
+    mft << "naturalGas"
+    
+    maalka_fuel_type = OpenStudio::Ruleset::OSArgument::makeChoiceArgument("maalka_fuel_type", mft, mft)
+    maalka_fuel_type.setDisplayName("Maalka Fuel Type in JSON")
+    maalka_fuel_type.setDescription("Maalka Fuel Type in JSON")
     maalka_fuel_type.setDefaultValue("electric")
     args << maalka_fuel_type
     
-    #set fuel type  
-    fuel_type = OpenStudio::Ruleset::OSArgument::makeStringArgument("fuel_type", true)
-    fuel_type.setDisplayName("Fuel Type")
-    fuel_type.setDescription("Fuel Type")
+    #make a choice argument for openstudio fuel type
+    ft = OpenStudio::StringVector.new
+    ft << "NaturalGas"
+    ft << "Electricity"
+    ft << "PropaneGas"
+    
+    fuel_type = OpenStudio::Ruleset::OSArgument::makeChoiceArgument("fuel_type", ft, ft)
+    fuel_type.setDisplayName("OpenStudio Fuel Type")
+    fuel_type.setDescription("OpenStudio Fuel Type")
     fuel_type.setDefaultValue("Electricity")
     args << fuel_type
     
-    #set ConsumptionUnit
-    consumption_unit = OpenStudio::Ruleset::OSArgument::makeStringArgument("consumption_unit", true)
-    consumption_unit.setDisplayName("Consumption Unit")
-    consumption_unit.setDescription("Consumption Unit (usually kWh or therms)")
+    #make a choice argument for OpenStudio ConsumptionUnit
+    unit = OpenStudio::StringVector.new
+    unit << "kWh"
+    unit << "therms"
+    consumption_unit = OpenStudio::Ruleset::OSArgument::makeChoiceArgument("consumption_unit", unit, unit)
+    consumption_unit.setDisplayName("OpenStudio Consumption Unit")
+    consumption_unit.setDescription("OpenStudio Consumption Unit (usually kWh or therms)")
     consumption_unit.setDefaultValue("kWh")
     args << consumption_unit
     
-    #set data key name in json
-    data_key_name = OpenStudio::Ruleset::OSArgument::makeStringArgument("data_key_name",true)
-    data_key_name.setDisplayName("data key name in JSON")
-    data_key_name.setDescription("data key name in JSON")
+    #make a choice argument for Maalka data key
+    munit = OpenStudio::StringVector.new
+    munit << "tot_kwh"
+    munit << "tot_therms"
+    data_key_name = OpenStudio::Ruleset::OSArgument::makeChoiceArgument("data_key_name", munit, munit)
+    data_key_name.setDisplayName("Maalka data key name in JSON")
+    data_key_name.setDescription("Maalka data key name in JSON (tot_kwh or tot_therms)")
     data_key_name.setDefaultValue("tot_kwh")
     args << data_key_name
     
