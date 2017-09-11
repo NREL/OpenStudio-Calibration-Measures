@@ -4,6 +4,7 @@
 require 'csv'
 require 'time'
 require 'json'
+require 'erb'
 
 # start the measure
 class TimeseriesObjectiveFunction < OpenStudio::Ruleset::ReportingUserScript
