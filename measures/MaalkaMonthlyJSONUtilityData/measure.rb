@@ -214,7 +214,7 @@ class MaalkaMonthlyJSONUtilityData < OpenStudio::Ruleset::ModelUserScript
       utilityBill.setConsumptionUnit("#{consumption_unit}")
       #TODO trap nil
       runner.registerInfo("maalka_fuel_type is #{maalka_fuel_type}")
-      json_data['maalka_input']["#{maalka_fuel_type}"]['data'].each do |period|
+      json_data['data']['maalka_input']["#{maalka_fuel_type}"]['data'].each do |period|
         begin
           from_date = period['from'] ? Time.iso8601(period['from']).strftime("%Y%m%dT%H%M%S") : nil
           to_date = period['to'] ? Time.iso8601(period['to']).strftime("%Y%m%dT%H%M%S") : nil

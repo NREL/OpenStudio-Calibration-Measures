@@ -50,6 +50,7 @@ class TimeseriesObjectiveFunction < OpenStudio::Ruleset::ReportingUserScript
     convert_data_chs = OpenStudio::StringVector.new
     convert_data_chs << 'F to C'
     convert_data_chs << 'WH to J'
+    convert_data_chs << 'CFM to m3/s'
     convert_data_chs << 'None'
     convert_data = OpenStudio::Ruleset::OSArgument::makeChoiceArgument('convert_data', convert_data_chs, true)
     convert_data.setDisplayName("Convert Units")
@@ -249,6 +250,8 @@ class TimeseriesObjectiveFunction < OpenStudio::Ruleset::ReportingUserScript
       convert = 0.5556
     elsif convert_data == 'WH to J' 
       convert = 3600
+    elsif convert_data == 'CFM to m3/s'
+      convert = 0.00047    
     else convert_data_chs == 'None'
       convert = 1
     end
@@ -485,7 +488,7 @@ class TimeseriesObjectiveFunction < OpenStudio::Ruleset::ReportingUserScript
               if col > 0
                 mtr = csv[row][col].to_s
                 #try converting
-                if convert == 0.5556
+                if convert == 0.5556  #this is a temperature
                   if mtr != 'NAN'
                     mtr = (mtr.to_f - 32) * convert
                   else
@@ -545,7 +548,7 @@ class TimeseriesObjectiveFunction < OpenStudio::Ruleset::ReportingUserScript
         series2["data"] = data2
         all_series << series
         all_series << series2
-        yBar = ySum/n
+        yBar = [ySum/n,1e-19].max
         cvrmse = 100.0 * Math::sqrt(squaredError/n) / yBar
         nmbe = 100.0 * (sumError/n) / yBar
         series["cvrmse"] = cvrmse.round(2)
