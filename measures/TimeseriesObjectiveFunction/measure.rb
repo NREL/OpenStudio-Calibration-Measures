@@ -276,6 +276,8 @@ class TimeseriesObjectiveFunction < OpenStudio::Ruleset::ReportingUserScript
     sql = sqlFile
     #environment_period = sql.availableEnvPeriods[3]
     runner.registerInfo("environment_period: #{environment_period}")
+    environment_periods = environment_period.split(',')
+    runner.registerInfo("environment_periods: #{environment_periods}")
     runner.registerInfo("map: #{map}")
     runner.registerInfo("")
     
@@ -399,144 +401,147 @@ class TimeseriesObjectiveFunction < OpenStudio::Ruleset::ReportingUserScript
         diff_index = map[hdr][:index]
         runner.registerInfo("var: #{var}")
         runner.registerInfo("key: #{key}")        
-        runner.registerInfo("sqlcall: #{environment_period},#{reporting_frequency},#{var},#{key}")  
-        if sql.timeSeries(environment_period,reporting_frequency,var,key).is_initialized
-          ser = sql.timeSeries(environment_period,reporting_frequency,var,key).get
-        else
-            runner.registerWarning("sql.timeSeries not initialized environment_period: #{environment_period},reporting_frequency: #{reporting_frequency},var: #{var},key: #{key}.")
-          next
-        end
-        date_times = ser.dateTimes
-        first_date = date_times[0]
-        last_date = date_times[-1]
- 
+        
         # Store the timeseries data to hash for later
         # export to the HTML file
         series = {}
         series["name"] = "#{key} Simulated"
         series["type"] = "#{var}"
-        series["units"] = ser.units
         series["color"] = "blue"
         data = []    
         series2 = {}
         series2["name"] = "#{key} Metered"
         series2["type"] = "#{var}"
-        series2["units"] = ser.units
         series2["color"] = "red"
-        data2 = []          
-        
-        csv.each_index do |row|
-          if row > 0
-            if csv[row][0].nil?
-              if warning_messages
-                runner.registerWarning("empty csv row number #{row}")
-              end
-              next
-            end
-            mon = csv[row][0].split(' ')[0].split('/')[0].to_i
-            day = csv[row][0].split(' ')[0].split('/')[1].to_i
-            if !csv[row][0].split(' ')[0].split('/')[2].nil?
-              year = csv[row][0].split(' ')[0].split('/')[2].to_i
-            else
-              year = nil            
-            end
-            hou = csv[row][0].split(' ')[1].split(':')[0].to_i
-            min = csv[row][0].split(' ')[1].split(':')[1].to_i
-            if !csv[row][0].split(' ')[1].split(':')[2].nil?
-              sec = csv[row][0].split(' ')[1].split(':')[2].to_i
-            else
-              sec = nil            
-            end
-            if year == nil
-              dat = OpenStudio::Date.new(OpenStudio::MonthOfYear.new(cal[mon]),day)
-            else
-              #dat = OpenStudio::Date.new(OpenStudio::MonthOfYear.new(cal[mon]),day,year)
-              #hack since year is not in the sql file correctly
-              dat = OpenStudio::Date.new(OpenStudio::MonthOfYear.new(cal[mon]),day)
-            end
-            if sec == nil
-              tim = OpenStudio::Time.new(0,hou,min,0)
-            else
-              tim = OpenStudio::Time.new(0,hou,min,sec)
-            end            
-            dtm = OpenStudio::DateTime.new(dat,tim)
-            if !(dtm >= first_date && dtm <= last_date)
-              if warning_messages
-                runner.registerWarning("CSV DateTime #{dtm} is not in SQL Timeseries Dates")
-              end
-              next
-            end
-            if year == nil
-              if sec == nil
-                etim = Time.new(2009, mon, day, hou, min, 0, tz).to_i * 1000
-              else
-                etim = Time.new(2009, mon, day, hou, min, sec, tz).to_i * 1000
-              end
-            else
-              if sec == nil
-              #hack since year is not in the sql file correctly
-                #etim = Time.new(year, mon, day, hou, min, 0, tz).to_i * 1000
-                etim = Time.new(2009, mon, day, hou, min, 0, tz).to_i * 1000
-              else
-              #hack since year is not in the sql file correctly
-                #etim = Time.new(year, mon, day, hou, min, sec, tz).to_i * 1000
-                etim = Time.new(2009, mon, day, hou, min, sec, tz).to_i * 1000
-              end
-            end
-            runner.registerInfo("dtm: #{dtm}") if verbose_messages
-            csv[row].each_index do |col|
-              if col > 0
-                mtr = csv[row][col].to_s
-                #try converting
-                if convert == 0.5556  #this is a temperature
-                  if mtr != 'NAN'
-                    mtr = (mtr.to_f - 32) * convert
-                  else
-                    mtr = 0
-                  end                  
-                else
-                  if mtr != 'NAN'
-                    mtr = mtr.to_f * convert
-                  else
-                    mtr = 0
-                  end
+        data2 = []    
+        environment_periods.each do |environment_p|
+          runner.registerInfo("sqlcall: #{environment_p},#{reporting_frequency},#{var},#{key}")  
+          if sql.timeSeries(environment_p,reporting_frequency,var,key).is_initialized
+            ser = sql.timeSeries(environment_p,reporting_frequency,var,key).get
+          else
+              runner.registerWarning("sql.timeSeries not initialized environment_p: #{environment_p},reporting_frequency: #{reporting_frequency},var: #{var},key: #{key}.")
+            next
+          end
+          date_times = ser.dateTimes
+          first_date = date_times[0]
+          last_date = date_times[-1]      
+          #if
+            series["units"] = ser.units
+            series2["units"] = ser.units
+          #end
+          csv.each_index do |row|
+            if row > 0
+              if csv[row][0].nil?
+                if warning_messages
+                  runner.registerWarning("empty csv row number #{row}")
                 end
-                if csv[0][col] == hdr
-                  sim = ser.value(dtm)
-                  #store timeseries for plotting
-                  point = {}
-                  point["y"] = sim.round(2)
-                  point["time"] = to_JSTime(dtm)
-                  data << point
-                  point2 = {}
-                  point2["y"] = mtr.to_f.round(2)
-                  point2["time"] = to_JSTime(dtm)
-                  data2 << point2
-
-                  
-                  if norm == 1
-                    dif = scale.to_f * (mtr.to_f - sim.to_f).abs
-                  elsif norm == 2  
-                    dif = (scale.to_f * (mtr.to_f - sim.to_f))**2
+                next
+              end
+              mon = csv[row][0].split(' ')[0].split('/')[0].to_i
+              day = csv[row][0].split(' ')[0].split('/')[1].to_i
+              if !csv[row][0].split(' ')[0].split('/')[2].nil?
+                year = csv[row][0].split(' ')[0].split('/')[2].to_i
+              else
+                year = nil            
+              end
+              hou = csv[row][0].split(' ')[1].split(':')[0].to_i
+              min = csv[row][0].split(' ')[1].split(':')[1].to_i
+              if !csv[row][0].split(' ')[1].split(':')[2].nil?
+                sec = csv[row][0].split(' ')[1].split(':')[2].to_i
+              else
+                sec = nil            
+              end
+              if year == nil
+                dat = OpenStudio::Date.new(OpenStudio::MonthOfYear.new(cal[mon]),day)
+              else
+                #dat = OpenStudio::Date.new(OpenStudio::MonthOfYear.new(cal[mon]),day,year)
+                #hack since year is not in the sql file correctly
+                dat = OpenStudio::Date.new(OpenStudio::MonthOfYear.new(cal[mon]),day)
+              end
+              if sec == nil
+                tim = OpenStudio::Time.new(0,hou,min,0)
+              else
+                tim = OpenStudio::Time.new(0,hou,min,sec)
+              end            
+              dtm = OpenStudio::DateTime.new(dat,tim)
+              if !(dtm >= first_date && dtm <= last_date)
+                if warning_messages
+                  runner.registerWarning("CSV DateTime #{dtm} is not in SQL Timeseries Dates")
+                end
+                next
+              end
+              if year == nil
+                if sec == nil
+                  etim = Time.new(2009, mon, day, hou, min, 0, tz).to_i * 1000
+                else
+                  etim = Time.new(2009, mon, day, hou, min, sec, tz).to_i * 1000
+                end
+              else
+                if sec == nil
+                #hack since year is not in the sql file correctly
+                  #etim = Time.new(year, mon, day, hou, min, 0, tz).to_i * 1000
+                  etim = Time.new(2009, mon, day, hou, min, 0, tz).to_i * 1000
+                else
+                #hack since year is not in the sql file correctly
+                  #etim = Time.new(year, mon, day, hou, min, sec, tz).to_i * 1000
+                  etim = Time.new(2009, mon, day, hou, min, sec, tz).to_i * 1000
+                end
+              end
+              runner.registerInfo("dtm: #{dtm}") if verbose_messages
+              csv[row].each_index do |col|
+                if col > 0
+                  mtr = csv[row][col].to_s
+                  #try converting
+                  if convert == 0.5556  #this is a temperature
+                    if mtr != 'NAN'
+                      mtr = (mtr.to_f - 32) * convert
+                    else
+                      mtr = 0
+                    end                  
                   else
-                    dif = scale.to_f * (mtr.to_f - sim.to_f)
+                    if mtr != 'NAN'
+                      mtr = mtr.to_f * convert
+                    else
+                      mtr = 0
+                    end
                   end
-                  
-                  squaredError = squaredError + (mtr.to_f - sim.to_f)**2
-                  sumError = sumError + (mtr.to_f - sim.to_f)
-                  ySum = ySum + mtr.to_f
-                  n = n + 1
-                  
-                  temp_sim << [etim,sim.to_f]
-                  temp_mtr << [etim,mtr.to_f] 
-                  #temp_norm << [etim,dif.to_f]                  
-                  diff = diff + dif.to_f
-                  simdata = simdata + sim.to_f
-                  csvdata = csvdata + mtr.to_f
-                  runner.registerInfo("mtr value is #{mtr}") if verbose_messages
-                  runner.registerInfo("sim value is #{sim}") if verbose_messages
-                  runner.registerInfo("dif value is #{dif}") if verbose_messages
-                  runner.registerInfo("diff value is #{diff.inspect}") if verbose_messages
+                  if csv[0][col] == hdr
+                    sim = ser.value(dtm)
+                    #store timeseries for plotting
+                    point = {}
+                    point["y"] = sim.round(2)
+                    point["time"] = to_JSTime(dtm)
+                    data << point
+                    point2 = {}
+                    point2["y"] = mtr.to_f.round(2)
+                    point2["time"] = to_JSTime(dtm)
+                    data2 << point2
+
+                    
+                    if norm == 1
+                      dif = scale.to_f * (mtr.to_f - sim.to_f).abs
+                    elsif norm == 2  
+                      dif = (scale.to_f * (mtr.to_f - sim.to_f))**2
+                    else
+                      dif = scale.to_f * (mtr.to_f - sim.to_f)
+                    end
+                    
+                    squaredError = squaredError + (mtr.to_f - sim.to_f)**2
+                    sumError = sumError + (mtr.to_f - sim.to_f)
+                    ySum = ySum + mtr.to_f
+                    n = n + 1
+                    
+                    temp_sim << [etim,sim.to_f]
+                    temp_mtr << [etim,mtr.to_f] 
+                    #temp_norm << [etim,dif.to_f]                  
+                    diff = diff + dif.to_f
+                    simdata = simdata + sim.to_f
+                    csvdata = csvdata + mtr.to_f
+                    runner.registerInfo("mtr value is #{mtr}") if verbose_messages
+                    runner.registerInfo("sim value is #{sim}") if verbose_messages
+                    runner.registerInfo("dif value is #{dif}") if verbose_messages
+                    runner.registerInfo("diff value is #{diff.inspect}") if verbose_messages
+                  end
                 end
               end
             end
