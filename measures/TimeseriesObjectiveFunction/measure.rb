@@ -216,7 +216,8 @@ class TimeseriesObjectiveFunction < OpenStudio::Ruleset::ReportingUserScript
     environment_period = runner.getStringArgumentValue("environment_period", user_arguments)
     reporting_frequency = runner.getStringArgumentValue("reporting_frequency", user_arguments)
     convert_data = runner.getStringArgumentValue("convert_data", user_arguments)
-    
+    last_zero = true
+    first_zero = true
     # Method to translate from OpenStudio's time formatting
     # to Javascript time formatting
     # OpenStudio time
@@ -419,16 +420,34 @@ class TimeseriesObjectiveFunction < OpenStudio::Ruleset::ReportingUserScript
           if sql.timeSeries(environment_p,reporting_frequency,var,key).is_initialized
             ser = sql.timeSeries(environment_p,reporting_frequency,var,key).get
           else
-              runner.registerWarning("sql.timeSeries not initialized environment_p: #{environment_p},reporting_frequency: #{reporting_frequency},var: #{var},key: #{key}.")
+            runner.registerWarning("sql.timeSeries not initialized environment_p: #{environment_p},reporting_frequency: #{reporting_frequency},var: #{var},key: #{key}.")
             next
           end
           date_times = ser.dateTimes
           first_date = date_times[0]
           last_date = date_times[-1]      
+          if date_times.size >= 2
+            delta = OpenStudio::Time.new((date_times[1]-date_times[0]).days,(date_times[1]-date_times[0]).hours,(date_times[1]-date_times[0]).minutes,(date_times[1]-date_times[0]).seconds) 
+          end
+          runner.registerInfo("first_date: #{first_date}") if verbose_messages
+          runner.registerInfo("last_date: #{last_date}") if verbose_messages
           #if
             series["units"] = ser.units
             series2["units"] = ser.units
           #end
+          #add 0 for plotting
+          if first_zero
+            runner.registerInfo("adding first_zero: #{first_date-delta}")
+            point = {}
+            point["y"] = 0.0
+            point["time"] = to_JSTime(first_date-delta)
+            data << point
+            point2 = {}
+            point2["y"] = 0.0
+            point2["time"] = to_JSTime(first_date-delta)
+            data2 << point2
+          end
+                    
           csv.each_index do |row|
             if row > 0
               if csv[row][0].nil?
@@ -505,7 +524,7 @@ class TimeseriesObjectiveFunction < OpenStudio::Ruleset::ReportingUserScript
                       mtr = 0
                     end
                   end
-                  if csv[0][col] == hdr
+                  if csv[0][col] == hdr                   
                     sim = ser.value(dtm)
                     #store timeseries for plotting
                     point = {}
@@ -516,7 +535,6 @@ class TimeseriesObjectiveFunction < OpenStudio::Ruleset::ReportingUserScript
                     point2["y"] = mtr.to_f.round(2)
                     point2["time"] = to_JSTime(dtm)
                     data2 << point2
-
                     
                     if norm == 1
                       dif = scale.to_f * (mtr.to_f - sim.to_f).abs
@@ -545,6 +563,18 @@ class TimeseriesObjectiveFunction < OpenStudio::Ruleset::ReportingUserScript
                 end
               end
             end
+          end
+          #add 0 for plotting
+          if last_zero
+            runner.registerInfo("add last_zero: #{last_date+delta}")
+            point = {}
+            point["y"] = 0.0
+            point["time"] = to_JSTime(last_date+delta)
+            data << point
+            point2 = {}
+            point2["y"] = 0.0
+            point2["time"] = to_JSTime(last_date+delta)
+            data2 << point2
           end
         end
         series["displayname"] = plot_name
