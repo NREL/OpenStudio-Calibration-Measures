@@ -218,6 +218,7 @@ class TimeseriesObjectiveFunction < OpenStudio::Ruleset::ReportingUserScript
     convert_data = runner.getStringArgumentValue("convert_data", user_arguments)
     last_zero = true
     first_zero = true
+    @name = plot_name
     # Method to translate from OpenStudio's time formatting
     # to Javascript time formatting
     # OpenStudio time
