@@ -51,6 +51,7 @@ class TimeseriesObjectiveFunction < OpenStudio::Ruleset::ReportingUserScript
     convert_data_chs << 'F to C'
     convert_data_chs << 'WH to J'
     convert_data_chs << 'CFM to m3/s'
+    convert_data_chs << 'PSI to Pa'
     convert_data_chs << 'None'
     convert_data = OpenStudio::Ruleset::OSArgument::makeChoiceArgument('convert_data', convert_data_chs, true)
     convert_data.setDisplayName("Convert Units")
@@ -254,7 +255,9 @@ class TimeseriesObjectiveFunction < OpenStudio::Ruleset::ReportingUserScript
       convert = 3600
     elsif convert_data == 'CFM to m3/s'
       convert = 0.00047    
-    else convert_data_chs == 'None'
+    elsif convert_data == 'PSI to Pa'
+      convert = 6894.76
+    else convert_data == 'None'
       convert = 1
     end
     
