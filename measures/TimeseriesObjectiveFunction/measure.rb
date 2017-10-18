@@ -156,6 +156,18 @@ class TimeseriesObjectiveFunction < OpenStudio::Ruleset::ReportingUserScript
     warning_messages.setDefaultValue(true)
     args << warning_messages
 
+    add_first_zero_for_plots = OpenStudio::Ruleset::OSArgument.makeBoolArgument("add_first_zero_for_plots", true)
+    add_first_zero_for_plots.setDisplayName("add_first_zero_for_plots")
+    add_first_zero_for_plots.setDescription("Add a point of zero value to the plot at the beginning of the runperiod.")
+    add_first_zero_for_plots.setDefaultValue(false)
+    args << add_first_zero_for_plots
+    
+    add_last_zero_for_plots = OpenStudio::Ruleset::OSArgument.makeBoolArgument("add_last_zero_for_plots", true)
+    add_last_zero_for_plots.setDisplayName("add_last_zero_for_plots")
+    add_last_zero_for_plots.setDescription("Add a point of zero value to the plot at the end of the runperiod.")
+    add_last_zero_for_plots.setDefaultValue(false)
+    args << add_last_zero_for_plots
+    
     return args
   end
 
@@ -217,8 +229,8 @@ class TimeseriesObjectiveFunction < OpenStudio::Ruleset::ReportingUserScript
     environment_period = runner.getStringArgumentValue("environment_period", user_arguments)
     reporting_frequency = runner.getStringArgumentValue("reporting_frequency", user_arguments)
     convert_data = runner.getStringArgumentValue("convert_data", user_arguments)
-    last_zero = true
-    first_zero = true
+    last_zero = runner.getBoolArgumentValue("add_last_zero_for_plots", user_arguments)
+    first_zero = runner.getBoolArgumentValue("add_first_zero_for_plots", user_arguments)
     @name = plot_name
     # Method to translate from OpenStudio's time formatting
     # to Javascript time formatting

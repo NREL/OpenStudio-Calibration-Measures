@@ -2,8 +2,8 @@
   <schema_version>3.0</schema_version>
   <name>timeseries_objective_function</name>
   <uid>6804217d-4737-45f3-82df-b81393c29ce3</uid>
-  <version_id>d20bf252-f599-428b-8507-cea6b36330ca</version_id>
-  <version_modified>20171016T230347Z</version_modified>
+  <version_id>3b03c0a0-88a5-48d2-809b-2dfa22302538</version_id>
+  <version_modified>20171017T161354Z</version_modified>
   <xml_checksum>FFE04372</xml_checksum>
   <class_name>TimeseriesObjectiveFunction</class_name>
   <display_name>TimeSeries Objective Function</display_name>
@@ -299,6 +299,44 @@
         </choice>
       </choices>
     </argument>
+    <argument>
+      <name>add_first_zero_for_plots</name>
+      <display_name>add_first_zero_for_plots</display_name>
+      <description>Add a point of zero value to the plot at the beginning of the runperiod.</description>
+      <type>Boolean</type>
+      <required>true</required>
+      <model_dependent>false</model_dependent>
+      <default_value>false</default_value>
+      <choices>
+        <choice>
+          <value>true</value>
+          <display_name>true</display_name>
+        </choice>
+        <choice>
+          <value>false</value>
+          <display_name>false</display_name>
+        </choice>
+      </choices>
+    </argument>
+    <argument>
+      <name>add_last_zero_for_plots</name>
+      <display_name>add_last_zero_for_plots</display_name>
+      <description>Add a point of zero value to the plot at the end of the runperiod.</description>
+      <type>Boolean</type>
+      <required>true</required>
+      <model_dependent>false</model_dependent>
+      <default_value>false</default_value>
+      <choices>
+        <choice>
+          <value>true</value>
+          <display_name>true</display_name>
+        </choice>
+        <choice>
+          <value>false</value>
+          <display_name>false</display_name>
+        </choice>
+      </choices>
+    </argument>
   </arguments>
   <outputs>
     <output>
@@ -374,7 +412,7 @@
       <filename>measure.rb</filename>
       <filetype>rb</filetype>
       <usage_type>script</usage_type>
-      <checksum>6ED0985A</checksum>
+      <checksum>3439FE1A</checksum>
     </file>
   </files>
 </measure>
