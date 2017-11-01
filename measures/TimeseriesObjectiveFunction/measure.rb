@@ -531,13 +531,15 @@ class TimeseriesObjectiveFunction < OpenStudio::Ruleset::ReportingUserScript
                     if mtr != 'NAN'
                       mtr = (mtr.to_f - 32) * convert
                     else
-                      mtr = 0
+                      next
+                      #mtr = 0
                     end                  
                   else
                     if mtr != 'NAN'
                       mtr = mtr.to_f * convert
                     else
-                      mtr = 0
+                      next
+                      #mtr = 0
                     end
                   end
                   if csv[0][col] == hdr                   
