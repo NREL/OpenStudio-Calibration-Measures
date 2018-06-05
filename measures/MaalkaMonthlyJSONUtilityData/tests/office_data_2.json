@@ -1,0 +1,44 @@
+{
+  "name" : "feeda3fc-7fce-42fd-a377-a11c210ae4be",
+  "data" : {
+    "maalka_input" : {
+      "building" : {
+        "primary_building_type" : "Office",
+        "gross_floor_area" : 50000,
+        "floors_above_grade" : null,
+        "year_built" : 1999,
+        "postal_code" : "80401"
+      },
+      "electric" : {
+        "data" : [ {
+          "from" : "2011-11-05T00:00:00.000Z",
+          "to" : "2011-11-30T23:59:00.000Z",
+          "tot_kwh" : 123.456
+        }, {
+          "from" : "2011-12-01T00:00:00.000Z",
+          "to" : "2011-12-31T23:59:00.000Z",
+          "tot_kwh" : 123.456
+        }, {
+          "from" : "2012-01-01T00:00:00.000Z",
+          "to" : "2012-01-31T23:59:00.000Z",
+          "tot_kwh" : 123.456
+        }]
+      },
+      "naturalGas" : {
+        "data" : [ {
+          "from" : "2012-03-12T00:00:00.000Z",
+          "to" : "2012-03-31T23:59:00.000Z",
+          "tot_therms" : 123.456
+        }, {
+          "from" : "2012-04-01T00:00:00.000Z",
+          "to" : "2012-04-30T23:59:00.000Z",
+          "tot_therms" : 123.456
+        }, {
+          "from" : "2012-05-01T00:00:00.000Z",
+          "to" : "2012-05-31T23:59:00.000Z",
+          "tot_therms" : 123.456
+        } ]
+      }
+    }
+  }
+}
