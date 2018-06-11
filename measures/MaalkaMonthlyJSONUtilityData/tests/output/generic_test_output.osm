@@ -1,0 +1,23 @@
+
+OS:Version,
+  {48ad908d-5602-4bdb-9538-842c5aee12ff}, !- Handle
+  2.4.1;                                  !- Version Identifier
+
+OS:YearDescription,
+  {a4a18daf-3b26-40b7-9521-269205b6e314}, !- Handle
+  2013,                                   !- Calendar Year
+  ,                                       !- Day of Week for Start Day
+  ;                                       !- Is Leap Year
+
+OS:UtilityBill,
+  {b2a8315b-12e2-4d0a-a9e3-969e504a74ce}, !- Handle
+  Electric Bill,                          !- Name
+  Electricity,                            !- Fuel Type
+  ,                                       !- Meter Install Location
+  ,                                       !- Meter Specific Install Location
+  ,                                       !- Meter End Use Category
+  ,                                       !- Meter Specific End Use
+  kWh,                                    !- Consumption Unit
+  ,                                       !- Consumption Unit Conversion Factor
+  kW;                                     !- Peak Demand Unit
+

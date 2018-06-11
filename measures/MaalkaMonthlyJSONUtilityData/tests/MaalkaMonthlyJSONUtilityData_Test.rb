@@ -15,8 +15,10 @@ class MaalkaMonthlyJSONUtilityData_Test < MiniTest::Unit::TestCase
     # create an instance of the measure
     measure = MaalkaMonthlyJSONUtilityData.new
 
-    # create an instance of a runner
-    runner = OpenStudio::Ruleset::OSRunner.new
+    # create an instance of a runner with OSW
+    osw_path = OpenStudio::Path.new(File.dirname(__FILE__) + '/test.osw')
+    osw = OpenStudio::WorkflowJSON.load(osw_path).get
+    runner = OpenStudio::Measure::OSRunner.new(osw)
 
     if model_name.nil?
       # make an empty model
@@ -74,10 +76,5 @@ class MaalkaMonthlyJSONUtilityData_Test < MiniTest::Unit::TestCase
     apply_measure_to_model(__method__.to_s.gsub('test_',''), args)
   end
 
-  def no_test_custom_model
-    args = {}
-    #args["hoo_end_wkdy"] = 20.0
-    apply_measure_to_model(__method__.to_s.gsub('test_',''), args, 'example_model.osm',"Success",1)
-  end
 
 end

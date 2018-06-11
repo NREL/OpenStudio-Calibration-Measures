@@ -55,11 +55,10 @@ class MaalkaMonthlyJSONUtilityData < OpenStudio::Ruleset::ModelUserScript
     
     #set path to json
     json = OpenStudio::Ruleset::OSArgument::makeStringArgument("json",true)
-    json.setDisplayName("Path to JSON Data.")
-    json.setDescription("Path to JSON Data. resources is default directory name of uploaded files in the server.")
-    json.setDefaultValue("../../../lib/resources/sample_json.json")
+    json.setDisplayName("JSON file name.")
+    json.setDescription("Name of the JSON file to import data from. This is the filename with the extension (e.g. NewWeather.epw). Optionally this can inclucde the full file path, but for most use cases should just be file name.")
     args << json
-    
+
     #set variable name
     variable_name = OpenStudio::Ruleset::OSArgument::makeStringArgument("variable_name",true)
     variable_name.setDisplayName("Variable name")
@@ -201,19 +200,59 @@ class MaalkaMonthlyJSONUtilityData < OpenStudio::Ruleset::ModelUserScript
         bill.remove
       end
     end
-    
-    runner.registerInfo("json is #{json}")
-    json_path = File.expand_path("#{json}", __FILE__)
-    runner.registerInfo("json_path is #{json_path}")
+
+    # find json file
+    osw_file = runner.workflow.findFile(json)
+    json_path = nil
+    if osw_file.is_initialized
+      json_path = osw_file.get.to_s
+    else
+      runner.registerError("Did not find #{json} in paths described in OSW file.")
+      return false
+    end
+
+    # parse json file
     temp = File.read(json_path)
     json_data = JSON.parse(temp)  
     if not json_data.nil?
+
+      # gather building inputs
+      runner.registerValue('bldg_type_a',json_data['data']['maalka_input']['building']['primary_building_type'])
+      runner.registerValue('total_bldg_floor_area',json_data['data']['maalka_input']['building']['primary_building_type'])
+      if !json_data['data']['maalka_input']['building']['floors_above_grade'] == "null"
+        runner.registerValue('total_bldg_floor_area',json_data['data']['maalka_input']['building']['floors_above_grade'])
+      end
+      runner.registerValue('zipcode',json_data['data']['maalka_input']['building']['postal_code'])
+
+      # todo - add more advanced logic to infer tempalte from year build current code just shows basic concept
+      # lookup template
+      year_built = json_data['data']['maalka_input']['building']['year_built'].to_i
+      runner.registerValue('year_built',year_built)
+      template = nil
+      if year_built < 1980
+        template = 'DOE Ref Pre-1980'
+      elsif year_built < 2004
+        template = 'DOE Ref 1980-2004'
+      elsif year_built < 2007
+        template = '90.1-2004'
+      elsif year_built < 2010
+        template = '90.1-2007'
+      elsif year_built < 2013
+        template = "90.1-2010"
+      else
+        template = "90.1-2013"
+      end
+      runner.registerValue('template',template)
+
       runner.registerInfo("fuel_type is #{fuel_type}")
       utilityBill = OpenStudio::Model::UtilityBill.new("#{fuel_type}".to_FuelType, model)
       utilityBill.setName("#{variable_name}")
       utilityBill.setConsumptionUnit("#{consumption_unit}")
       #TODO trap nil
       runner.registerInfo("maalka_fuel_type is #{maalka_fuel_type}")
+
+      runner.registerInfo("#{json_data['data']['maalka_input']["#{maalka_fuel_type}"]['data'].join(",")}")
+
       json_data['data']['maalka_input']["#{maalka_fuel_type}"]['data'].each do |period|
         begin
           from_date = period['from'] ? Time.iso8601(period['from']).strftime("%Y%m%dT%H%M%S") : nil
