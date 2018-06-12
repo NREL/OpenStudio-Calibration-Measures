@@ -73,6 +73,9 @@ class MaalkaMonthlyJSONUtilityData_Test < MiniTest::Unit::TestCase
   def test_generic
     args = {}
     args["json"] = "office_data_2.json"
+    #args["maalka_fuel_type"] = "naturalGas"
+    args["start_date"] = "2012-01-1"
+    args["end_date"] = "2012-12-31"
     apply_measure_to_model(__method__.to_s.gsub('test_',''), args)
   end
 

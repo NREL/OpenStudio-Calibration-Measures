@@ -1,7 +1,7 @@
 
 OS:Version,
-  {c698d0ec-0efe-4adb-bc4b-97048afa8e9e}, !- Handle
-  1.3.1;                                  !- Version Identifier
+  {e6a999f0-3520-4704-a5b6-2249d1b4178b}, !- Handle
+  2.4.1;                                  !- Version Identifier
 
 OS:SpaceType,
   {a7add399-372e-443d-8845-f1bd4bc0f9ec}, !- Handle
@@ -346,8 +346,8 @@ OS:Schedule:Ruleset,
 OS:ScheduleTypeLimits,
   {9facda4a-1f55-4db7-a9bd-a47c5a28fa4d}, !- Handle
   ActivityLevel,                          !- Name
-  0,                                      !- Lower Limit Value {BasedOnField A4}
-  ,                                       !- Upper Limit Value {BasedOnField A4}
+  0,                                      !- Lower Limit Value
+  ,                                       !- Upper Limit Value
   Continuous,                             !- Numeric Type
   ActivityLevel;                          !- Unit Type
 
@@ -667,8 +667,8 @@ OS:Schedule:Ruleset,
 OS:ScheduleTypeLimits,
   {ef7c8f10-a2a5-49dc-b234-67c263a49a0e}, !- Handle
   Temperature 36,                         !- Name
-  ,                                       !- Lower Limit Value {BasedOnField A4}
-  ,                                       !- Upper Limit Value {BasedOnField A4}
+  ,                                       !- Lower Limit Value
+  ,                                       !- Upper Limit Value
   Continuous,                             !- Numeric Type
   Temperature;                            !- Unit Type
 
@@ -780,8 +780,8 @@ OS:Schedule:Ruleset,
 OS:ScheduleTypeLimits,
   {b02437e9-f414-4c27-b4a3-876abf881832}, !- Handle
   Temperature 37,                         !- Name
-  ,                                       !- Lower Limit Value {BasedOnField A4}
-  ,                                       !- Upper Limit Value {BasedOnField A4}
+  ,                                       !- Lower Limit Value
+  ,                                       !- Upper Limit Value
   Continuous,                             !- Numeric Type
   Temperature;                            !- Unit Type
 
@@ -2282,8 +2282,8 @@ OS:Schedule:Ruleset,
 OS:ScheduleTypeLimits,
   {8c20be8f-2c3b-4970-bd69-008a9c7394ea}, !- Handle
   Fractional,                             !- Name
-  0,                                      !- Lower Limit Value {BasedOnField A4}
-  1,                                      !- Upper Limit Value {BasedOnField A4}
+  0,                                      !- Lower Limit Value
+  1,                                      !- Upper Limit Value
   Continuous;                             !- Numeric Type
 
 OS:Schedule:Day,
@@ -2581,8 +2581,8 @@ OS:Schedule:Ruleset,
 OS:ScheduleTypeLimits,
   {cb9330d2-e37e-4f84-8347-6276682d5791}, !- Handle
   ActivityLevel 5,                        !- Name
-  0,                                      !- Lower Limit Value {BasedOnField A4}
-  ,                                       !- Upper Limit Value {BasedOnField A4}
+  0,                                      !- Lower Limit Value
+  ,                                       !- Upper Limit Value
   Continuous,                             !- Numeric Type
   ActivityLevel;                          !- Unit Type
 
@@ -2902,8 +2902,8 @@ OS:Schedule:Ruleset,
 OS:ScheduleTypeLimits,
   {e6bd7042-6dde-4ac7-9a33-6cfa958e6594}, !- Handle
   Temperature 3,                          !- Name
-  ,                                       !- Lower Limit Value {BasedOnField A4}
-  ,                                       !- Upper Limit Value {BasedOnField A4}
+  ,                                       !- Lower Limit Value
+  ,                                       !- Upper Limit Value
   Continuous,                             !- Numeric Type
   Temperature;                            !- Unit Type
 
@@ -3015,8 +3015,8 @@ OS:Schedule:Ruleset,
 OS:ScheduleTypeLimits,
   {59eab45e-d90b-4ae8-a3c2-85c03d4f6329}, !- Handle
   Temperature 5,                          !- Name
-  ,                                       !- Lower Limit Value {BasedOnField A4}
-  ,                                       !- Upper Limit Value {BasedOnField A4}
+  ,                                       !- Lower Limit Value
+  ,                                       !- Upper Limit Value
   Continuous,                             !- Numeric Type
   Temperature;                            !- Unit Type
 
@@ -3342,8 +3342,8 @@ OS:Schedule:Ruleset,
 OS:ScheduleTypeLimits,
   {0b673adf-19e2-4554-a2dd-d94a0b9f9312}, !- Handle
   ActivityLevel 13,                       !- Name
-  0,                                      !- Lower Limit Value {BasedOnField A4}
-  ,                                       !- Upper Limit Value {BasedOnField A4}
+  0,                                      !- Lower Limit Value
+  ,                                       !- Upper Limit Value
   Continuous,                             !- Numeric Type
   ActivityLevel;                          !- Unit Type
 
@@ -3997,8 +3997,8 @@ OS:Schedule:Ruleset,
 OS:ScheduleTypeLimits,
   {01bc3079-ffe7-451c-ae38-beb0d7071a1d}, !- Handle
   ActivityLevel 12,                       !- Name
-  0,                                      !- Lower Limit Value {BasedOnField A4}
-  ,                                       !- Upper Limit Value {BasedOnField A4}
+  0,                                      !- Lower Limit Value
+  ,                                       !- Upper Limit Value
   Continuous,                             !- Numeric Type
   ActivityLevel;                          !- Unit Type
 
@@ -4312,8 +4312,8 @@ OS:Schedule:Ruleset,
 OS:ScheduleTypeLimits,
   {f83b46b4-4e1d-488a-803e-2cc53e952213}, !- Handle
   Temperature 11,                         !- Name
-  ,                                       !- Lower Limit Value {BasedOnField A4}
-  ,                                       !- Upper Limit Value {BasedOnField A4}
+  ,                                       !- Lower Limit Value
+  ,                                       !- Upper Limit Value
   Continuous,                             !- Numeric Type
   Temperature;                            !- Unit Type
 
@@ -4425,8 +4425,8 @@ OS:Schedule:Ruleset,
 OS:ScheduleTypeLimits,
   {33a9233d-d776-418a-b755-072f0542d5c3}, !- Handle
   Temperature 4,                          !- Name
-  ,                                       !- Lower Limit Value {BasedOnField A4}
-  ,                                       !- Upper Limit Value {BasedOnField A4}
+  ,                                       !- Lower Limit Value
+  ,                                       !- Upper Limit Value
   Continuous,                             !- Numeric Type
   Temperature;                            !- Unit Type
 
@@ -8685,13 +8685,12 @@ OS:Surface,
   -2.22044604925031e-016, 2.14411821630733e-015, 0, !- X,Y,Z Vertex 3 {m}
   -5.01015, 3.33934269125535e-015, 0;     !- X,Y,Z Vertex 4 {m}
 
-
 OS:SizingPeriod:DesignDay,
   {004b4249-2cb8-4c64-a47d-eaa84a9869a2}, !- Handle
-  My Previous DD, !- Name
+  My Previous DD,                         !- Name
   -13.6,                                  !- Maximum Dry-Bulb Temperature {C}
   0,                                      !- Daily Dry-Bulb Temperature Range {deltaC}
-  -13.6,                                  !- Humidity Indicating Conditions at Maximum Dry-Bulb {BasedOnField A3}
+  -13.6,                                  !- Humidity Indicating Conditions at Maximum Dry-Bulb
   101253,                                 !- Barometric Pressure {Pa}
   7.2,                                    !- Wind Speed {m/s}
   320,                                    !- Wind Direction {deg}
@@ -8707,4 +8706,232 @@ OS:SizingPeriod:DesignDay,
   DefaultMultipliers,                     !- Dry-Bulb Temperature Range Modifier Type
   ,                                       !- Dry-Bulb Temperature Range Modifier Schedule Name
   ASHRAEClearSky;                         !- Solar Model Indicator
+
+OS:Site,
+  {02fa0db2-a961-4528-801e-2727f1be5d15}, !- Handle
+  Chicago Ohare Intl Ap,                  !- Name
+  41.98,                                  !- Latitude {deg}
+  -87.92,                                 !- Longitude {deg}
+  -6,                                     !- Time Zone {hr}
+  201,                                    !- Elevation {m}
+  ;                                       !- Terrain
+
+OS:YearDescription,
+  {97d6f807-43ad-4022-b0dc-38ac5b3039ee}, !- Handle
+  2012,                                   !- Calendar Year
+  ,                                       !- Day of Week for Start Day
+  ;                                       !- Is Leap Year
+
+OS:ClimateZones,
+  {6b2af166-67a7-4311-bcf0-bbdfd960fdc3}, !- Handle
+  ,                                       !- Active Institution
+  ,                                       !- Active Year
+  ,                                       !- Climate Zone Institution Name 1
+  ,                                       !- Climate Zone Document Name 1
+  ,                                       !- Climate Zone Document Year 1
+  ,                                       !- Climate Zone Value 1
+  CEC,                                    !- Climate Zone Institution Name 2
+  California Climate Zone Descriptions,   !- Climate Zone Document Name 2
+  1995,                                   !- Climate Zone Document Year 2
+  ;                                       !- Climate Zone Value 2
+
+OS:SimulationControl,
+  {fc45872f-0e0d-47d1-9956-d3ad080d3a60}; !- Handle
+
+OS:Sizing:Parameters,
+  {09f0a5b8-a45f-4604-a2bb-434262f13460}, !- Handle
+  1.25,                                   !- Heating Sizing Factor
+  1.15;                                   !- Cooling Sizing Factor
+
+OS:Timestep,
+  {d82eadf1-de4d-43b9-b5c1-dd9bbc98e0f7}, !- Handle
+  6;                                      !- Number of Timesteps per Hour
+
+OS:ShadowCalculation,
+  {bd89d0d8-1fea-45a0-89f2-68b3c1714c75}, !- Handle
+  20,                                     !- Calculation Frequency
+  15000;                                  !- Maximum Figures in Shadow Overlap Calculations
+
+OS:HeatBalanceAlgorithm,
+  {3b669bce-0a7b-4d7c-8e88-cfbdd31f3200}, !- Handle
+  ConductionTransferFunction,             !- Algorithm
+  200;                                    !- Surface Temperature Upper Limit {C}
+
+OS:RunPeriod,
+  {523719bf-839e-4439-bd44-f26d4ede26f2}, !- Handle
+  Run Period 1,                           !- Name
+  1,                                      !- Begin Month
+  1,                                      !- Begin Day of Month
+  12,                                     !- End Month
+  31,                                     !- End Day of Month
+  ,                                       !- Use Weather File Holidays and Special Days
+  ,                                       !- Use Weather File Daylight Saving Period
+  ,                                       !- Apply Weekend Holiday Rule
+  ,                                       !- Use Weather File Rain Indicators
+  ,                                       !- Use Weather File Snow Indicators
+  ;                                       !- Number of Times Runperiod to be Repeated
+
+OS:LifeCycleCost:Parameters,
+  {ca46ec86-5415-4406-aedd-e3d8f9f14d01}, !- Handle
+  ,                                       !- Analysis Type
+  ,                                       !- Discounting Convention
+  ,                                       !- Inflation Approach
+  ,                                       !- Real Discount Rate
+  ,                                       !- Nominal Discount Rate
+  ,                                       !- Inflation
+  ,                                       !- Base Date Month
+  ,                                       !- Base Date Year
+  ,                                       !- Service Date Month
+  ,                                       !- Service Date Year
+  ;                                       !- Length of Study Period in Years
+
+OS:StandardsInformation:Material,
+  {c1e3070c-3afe-4872-b150-2fd845254480}, !- Handle
+  {839235fd-41ba-4118-a8aa-c667e0995cf5}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {808deeba-672e-42ff-9b0d-e48202a61262}, !- Handle
+  {e6c3956d-31ac-4148-9109-1865ca3eeba6}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {476edeed-f67e-44dc-8dbe-1e2ad6016ce8}, !- Handle
+  {ee012fc6-1c7f-4569-9612-71eed70b09d7}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {6cf23e26-035e-4c66-80f0-988c8399a0c0}, !- Handle
+  {96ccf4a1-4c7b-4799-ab7a-1d083dfb87f7}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {7f5df14b-1ba5-4be7-a688-e32218a8e757}, !- Handle
+  {d6d7ab19-7b36-4783-86a3-ccf307d1465b}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {a51aacf4-f9b4-423b-88f2-a346dc174fca}, !- Handle
+  {c98e2f43-db67-4d50-8f99-e21ea9223bbc}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {d84f8a39-6c1d-48d6-ae2b-a1f9a5abb720}, !- Handle
+  {f8e45cc2-312b-4e98-a7e0-a00eee0cabdc}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {efd81b68-535b-4f42-8641-45dd0460bcf1}, !- Handle
+  {e3b0a2fb-4e34-4708-b361-184703f7ffb5}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {25e17dea-2b54-4a86-b84e-d445865253e2}, !- Handle
+  {729a27f4-ed55-42da-ae00-a1423dec1fe0}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {fb2dffa7-f6ab-4829-b114-40070d49e871}, !- Handle
+  {030c0ffb-35d5-4880-a64f-327f1e3542cb}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {a034787f-57f6-42fd-9c01-37e55e37ed00}, !- Handle
+  {ac44d20c-d08e-460c-b849-66511a53aea5}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {a69dac75-14e3-4965-86c9-1203d4201a04}, !- Handle
+  {e1c93642-3d33-4fa2-a6c3-3294cd2726c1}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {51835f47-3987-41ed-b4bf-d26c2cb756e7}, !- Handle
+  {c19ba1d7-584c-4965-890b-b7642c602d31}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {d2a3c069-dcb0-4932-a225-80d975897557}, !- Handle
+  {d8a27782-0734-4db0-a71c-ee511588824a}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {27834916-0b28-4ce0-a532-3b9f0654779a}, !- Handle
+  {96148114-810b-4ae6-8316-294a83f630b6}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {7f6c75b9-9dc0-4679-9cc9-8da110736fe5}, !- Handle
+  {8737c9ae-954c-4e1a-97e2-fac431a3253f}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {1605aca2-730b-4f9a-9519-5bd1e3984e38}, !- Handle
+  {aaf2174c-a4af-4b20-91a4-441520b152d6}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {228674b5-8ca1-45fa-a845-f153835a7974}, !- Handle
+  {28752eca-e107-477c-8984-9a3943c061db}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {eaa7d268-d36f-4dbb-9a54-6b1b8817d415}, !- Handle
+  {0cab1586-509b-43bc-8648-96545e6a7a20}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {8d1a94cf-1e76-4994-8a7c-ad85812dd76f}, !- Handle
+  {59873ec8-f973-493f-b3f9-f6d65404d66d}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {56d2d1eb-7d9f-4503-a4fd-a79eb4f01d34}, !- Handle
+  {e1837eb1-f159-439f-8f2a-51bdaa330cbb}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {b2098d64-890b-4dcc-b867-b7ef1920a7a1}, !- Handle
+  {91305a91-e336-41ab-8f58-0728060166c7}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {8de432c5-2b36-44d6-ab8e-c20d5cda07a3}, !- Handle
+  {cad6069c-50e0-4445-a17e-efd50c5b2655}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {af4ad7a9-f14e-44da-9ec4-3642b4506c8b}, !- Handle
+  {55cba50d-1cdf-4358-9ca8-3933c7dc3f28}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {75c1d97c-2ab7-4598-ae21-1b87a632739c}, !- Handle
+  {04c16f98-8695-4273-a210-15d50daee2b7}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {2486daf6-425f-4dc5-9394-fd966bb644fc}, !- Handle
+  {18037c88-0e2c-45cb-8ef4-fe77e5930ec0}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {78d66795-cd4a-46af-b370-048c13236250}, !- Handle
+  {080f2b93-f5e3-4cdd-bad0-b0656e5215ad}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {a6646e6e-c762-4fda-a8d4-82ea41d72416}, !- Handle
+  {8c100f6e-0f22-4b73-aa04-a314b4a95386}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {c302ccf4-d7b4-4c47-bc9c-323d48ed9fd8}, !- Handle
+  {2e551d36-44f5-4926-8fb1-89c4acc21871}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {69894842-eb0e-4c86-bb82-0ded90a08a99}, !- Handle
+  {893cc4d2-1e91-45cc-93c8-a3137fbb807c}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {0ab78789-7040-429a-b2ca-002164451bda}, !- Handle
+  {9f7bc973-4cb1-4404-bdf2-e45797184361}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {c30fa2e5-9d8e-413e-9390-ade63a57193a}, !- Handle
+  {c773b4b4-2d03-4ec0-9c1b-92eb3bebecb9}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {19ddfb25-7d26-4e07-803a-1ff6a42f91ff}, !- Handle
+  {817ab445-5772-4092-9509-242c81e82d80}; !- Material Name
+
+OS:StandardsInformation:Material,
+  {12bb2ed0-4ae1-4a99-84e9-f2b3ec2ced95}, !- Handle
+  {523bab10-8364-43ff-b71b-dcd4f8195dbb}; !- Material Name
+
+OS:WeatherFile,
+  {94104678-b123-4f82-a0bf-c3432080232b}, !- Handle
+  Chicago Ohare Intl Ap,                  !- City
+  IL,                                     !- State Province Region
+  USA,                                    !- Country
+  TMY3,                                   !- Data Source
+  725300,                                 !- WMO Number
+  41.98,                                  !- Latitude {deg}
+  -87.92,                                 !- Longitude {deg}
+  -6,                                     !- Time Zone {hr}
+  201,                                    !- Elevation {m}
+  file:USA_IL_Chicago-OHare.Intl.AP.725300_TMY3.epw, !- Url
+  C254B53F;                               !- Checksum
 
