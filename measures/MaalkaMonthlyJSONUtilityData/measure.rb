@@ -105,7 +105,10 @@ class MaalkaMonthlyJSONUtilityData < OpenStudio::Ruleset::ModelUserScript
     end_date = runner.getStringArgumentValue("end_date",user_arguments)
     remove_utility_bill_data = runner.getBoolArgumentValue("remove_existing_data",user_arguments)
     set_runperiod = runner.getBoolArgumentValue("set_runperiod",user_arguments)
-    
+
+    #reporting final condition of model
+    runner.registerInitialCondition("Model started with #{model.getUtilityBills.size} utility bill objects.")
+
     # set start date
     if date = year_month_day(start_date)
       start_date = OpenStudio::Date.new(OpenStudio::MonthOfYear.new(date[1]), date[2], date[0])    
@@ -151,6 +154,7 @@ class MaalkaMonthlyJSONUtilityData < OpenStudio::Ruleset::ModelUserScript
     json_path = nil
     if osw_file.is_initialized
       json_path = osw_file.get.to_s
+      runner.registerInfo("Gathering utility and high level building data from #{json_path}.")
     else
       runner.registerError("Did not find #{json} in paths described in OSW file.")
       return false
@@ -167,12 +171,21 @@ class MaalkaMonthlyJSONUtilityData < OpenStudio::Ruleset::ModelUserScript
     if not json_data.nil?
 
       # gather building inputs
-      runner.registerValue('bldg_type_a',json_data['data']['maalka_input']['building']['primary_building_type'])
-      runner.registerValue('total_bldg_floor_area',json_data['data']['maalka_input']['building']['primary_building_type'])
-      if !json_data['data']['maalka_input']['building']['floors_above_grade'] == "null"
-        runner.registerValue('total_bldg_floor_area',json_data['data']['maalka_input']['building']['floors_above_grade'])
-      end
+      runner.registerInfo(json_data['data']['maalka_input']['building'].to_s)
+      runner.registerValue('total_bldg_floor_area',json_data['data']['maalka_input']['building']['gross_floor_area'].to_f)
       runner.registerValue('zipcode',json_data['data']['maalka_input']['building']['postal_code'])
+
+      # todo - map better to small medium or large office
+      building_type = json_data['data']['maalka_input']['building']['primary_building_type']
+      if building_type == 'Office'
+        building_type = 'MediumOffice'
+      end
+      runner.registerValue('bldg_type_a',building_type)
+
+      # this is empty in example file but we should always have it. Could default to 1 if not provided
+      if !json_data['data']['maalka_input']['building']['floors_above_grade'] == "null"
+        runner.registerValue('floors_above_grade',json_data['data']['maalka_input']['building']['floors_above_grade'].to_f)
+      end
 
       # todo - add more advanced logic to infer tempalte from year build current code just shows basic concept
       # lookup template
@@ -255,7 +268,7 @@ class MaalkaMonthlyJSONUtilityData < OpenStudio::Ruleset::ModelUserScript
     end
     
     #reporting final condition of model
-    runner.registerFinalCondition("Utility bill data has been added to the model.")
+    runner.registerFinalCondition("Model finished with #{model.getUtilityBills.size} utility bill objects.")
     
     return true
  

@@ -2,8 +2,8 @@
   <schema_version>3.0</schema_version>
   <name>maalka_monthly_json_utility_data</name>
   <uid>afe82cf5-3e3a-43ea-b31e-8289ff268bed</uid>
-  <version_id>2c95aec8-77dc-4e94-87d3-51b4c2b53f99</version_id>
-  <version_modified>20170918T200500Z</version_modified>
+  <version_id>36e25c35-24ba-4d05-8ba9-9640fa13df42</version_id>
+  <version_modified>20180612T221309Z</version_modified>
   <xml_checksum>057E8D9D</xml_checksum>
   <class_name>MaalkaMonthlyJSONUtilityData</class_name>
   <display_name>Maalka Formatted Monthly JSON Utility Data</display_name>
@@ -12,101 +12,11 @@
   <arguments>
     <argument>
       <name>json</name>
-      <display_name>Path to JSON Data.</display_name>
-      <description>Path to JSON Data. resources is default directory name of uploaded files in the server.</description>
+      <display_name>JSON file name.</display_name>
+      <description>Name of the JSON file to import data from. This is the filename with the extension (e.g. NewWeather.epw). Optionally this can inclucde the full file path, but for most use cases should just be file name.</description>
       <type>String</type>
       <required>true</required>
       <model_dependent>false</model_dependent>
-      <default_value>../../../lib/resources/sample_json.json</default_value>
-    </argument>
-    <argument>
-      <name>variable_name</name>
-      <display_name>Variable name</display_name>
-      <description>Name of the Utility Bill Object.  For Calibration Report use Electric Bill or Gas Bill</description>
-      <type>String</type>
-      <required>true</required>
-      <model_dependent>false</model_dependent>
-      <default_value>Electric Bill</default_value>
-    </argument>
-    <argument>
-      <name>maalka_fuel_type</name>
-      <display_name>Maalka Fuel Type in JSON</display_name>
-      <description>Maalka Fuel Type in JSON</description>
-      <type>Choice</type>
-      <required>true</required>
-      <model_dependent>false</model_dependent>
-      <default_value>electric</default_value>
-      <choices>
-        <choice>
-          <value>electric</value>
-          <display_name>electric</display_name>
-        </choice>
-        <choice>
-          <value>naturalGas</value>
-          <display_name>naturalGas</display_name>
-        </choice>
-      </choices>
-    </argument>
-    <argument>
-      <name>fuel_type</name>
-      <display_name>OpenStudio Fuel Type</display_name>
-      <description>OpenStudio Fuel Type</description>
-      <type>Choice</type>
-      <required>true</required>
-      <model_dependent>false</model_dependent>
-      <default_value>Electricity</default_value>
-      <choices>
-        <choice>
-          <value>NaturalGas</value>
-          <display_name>NaturalGas</display_name>
-        </choice>
-        <choice>
-          <value>Electricity</value>
-          <display_name>Electricity</display_name>
-        </choice>
-        <choice>
-          <value>PropaneGas</value>
-          <display_name>PropaneGas</display_name>
-        </choice>
-      </choices>
-    </argument>
-    <argument>
-      <name>consumption_unit</name>
-      <display_name>OpenStudio Consumption Unit</display_name>
-      <description>OpenStudio Consumption Unit (usually kWh or therms)</description>
-      <type>Choice</type>
-      <required>true</required>
-      <model_dependent>false</model_dependent>
-      <default_value>kWh</default_value>
-      <choices>
-        <choice>
-          <value>kWh</value>
-          <display_name>kWh</display_name>
-        </choice>
-        <choice>
-          <value>therms</value>
-          <display_name>therms</display_name>
-        </choice>
-      </choices>
-    </argument>
-    <argument>
-      <name>data_key_name</name>
-      <display_name>Maalka data key name in JSON</display_name>
-      <description>Maalka data key name in JSON (tot_kwh or tot_therms)</description>
-      <type>Choice</type>
-      <required>true</required>
-      <model_dependent>false</model_dependent>
-      <default_value>tot_kwh</default_value>
-      <choices>
-        <choice>
-          <value>tot_kwh</value>
-          <display_name>tot_kwh</display_name>
-        </choice>
-        <choice>
-          <value>tot_therms</value>
-          <display_name>tot_therms</display_name>
-        </choice>
-      </choices>
     </argument>
     <argument>
       <name>start_date</name>
@@ -184,6 +94,42 @@
   </attributes>
   <files>
     <file>
+      <filename>electric_billed_usages.json</filename>
+      <filetype>json</filetype>
+      <usage_type>test</usage_type>
+      <checksum>5F884191</checksum>
+    </file>
+    <file>
+      <filename>gas_billed_usages.json</filename>
+      <filetype>json</filetype>
+      <usage_type>test</usage_type>
+      <checksum>5F884191</checksum>
+    </file>
+    <file>
+      <filename>MaalkaMonthlyJSONUtilityData_Test.rb</filename>
+      <filetype>rb</filetype>
+      <usage_type>test</usage_type>
+      <checksum>6383B4D9</checksum>
+    </file>
+    <file>
+      <filename>office_data_2.json</filename>
+      <filetype>json</filetype>
+      <usage_type>test</usage_type>
+      <checksum>15CD47D6</checksum>
+    </file>
+    <file>
+      <filename>test.osm</filename>
+      <filetype>osm</filetype>
+      <usage_type>test</usage_type>
+      <checksum>CDC0F144</checksum>
+    </file>
+    <file>
+      <filename>test.osw</filename>
+      <filetype>osw</filetype>
+      <usage_type>test</usage_type>
+      <checksum>F5FABCCF</checksum>
+    </file>
+    <file>
       <version>
         <software_program>OpenStudio</software_program>
         <identifier>2.1.0</identifier>
@@ -192,7 +138,7 @@
       <filename>measure.rb</filename>
       <filetype>rb</filetype>
       <usage_type>script</usage_type>
-      <checksum>F75AC8FB</checksum>
+      <checksum>D0866B37</checksum>
     </file>
   </files>
 </measure>
