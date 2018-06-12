@@ -58,56 +58,6 @@ class MaalkaMonthlyJSONUtilityData < OpenStudio::Ruleset::ModelUserScript
     json.setDisplayName("JSON file name.")
     json.setDescription("Name of the JSON file to import data from. This is the filename with the extension (e.g. NewWeather.epw). Optionally this can inclucde the full file path, but for most use cases should just be file name.")
     args << json
-
-    #set variable name
-    variable_name = OpenStudio::Ruleset::OSArgument::makeStringArgument("variable_name",true)
-    variable_name.setDisplayName("Variable name")
-    variable_name.setDescription("Name of the Utility Bill Object.  For Calibration Report use Electric Bill or Gas Bill")
-    variable_name.setDefaultValue("Electric Bill")
-    args << variable_name
-    
-    #make a choice argument for Maalka fuel type
-    mft = OpenStudio::StringVector.new
-    mft << "electric"
-    mft << "naturalGas"
-    
-    maalka_fuel_type = OpenStudio::Ruleset::OSArgument::makeChoiceArgument("maalka_fuel_type", mft, mft)
-    maalka_fuel_type.setDisplayName("Maalka Fuel Type in JSON")
-    maalka_fuel_type.setDescription("Maalka Fuel Type in JSON")
-    maalka_fuel_type.setDefaultValue("electric")
-    args << maalka_fuel_type
-    
-    #make a choice argument for openstudio fuel type
-    ft = OpenStudio::StringVector.new
-    ft << "NaturalGas"
-    ft << "Electricity"
-    ft << "PropaneGas"
-    
-    fuel_type = OpenStudio::Ruleset::OSArgument::makeChoiceArgument("fuel_type", ft, ft)
-    fuel_type.setDisplayName("OpenStudio Fuel Type")
-    fuel_type.setDescription("OpenStudio Fuel Type")
-    fuel_type.setDefaultValue("Electricity")
-    args << fuel_type
-    
-    #make a choice argument for OpenStudio ConsumptionUnit
-    unit = OpenStudio::StringVector.new
-    unit << "kWh"
-    unit << "therms"
-    consumption_unit = OpenStudio::Ruleset::OSArgument::makeChoiceArgument("consumption_unit", unit, unit)
-    consumption_unit.setDisplayName("OpenStudio Consumption Unit")
-    consumption_unit.setDescription("OpenStudio Consumption Unit (usually kWh or therms)")
-    consumption_unit.setDefaultValue("kWh")
-    args << consumption_unit
-    
-    #make a choice argument for Maalka data key
-    munit = OpenStudio::StringVector.new
-    munit << "tot_kwh"
-    munit << "tot_therms"
-    data_key_name = OpenStudio::Ruleset::OSArgument::makeChoiceArgument("data_key_name", munit, munit)
-    data_key_name.setDisplayName("Maalka data key name in JSON")
-    data_key_name.setDescription("Maalka data key name in JSON (tot_kwh or tot_therms)")
-    data_key_name.setDefaultValue("tot_kwh")
-    args << data_key_name
     
     #make a start date argument
     start_date = OpenStudio::Ruleset::OSArgument::makeStringArgument("start_date",true)
@@ -151,11 +101,6 @@ class MaalkaMonthlyJSONUtilityData < OpenStudio::Ruleset::ModelUserScript
 
     #assign the user inputs to variables
     json = runner.getStringArgumentValue("json",user_arguments)
-    variable_name = runner.getStringArgumentValue("variable_name",user_arguments)
-    fuel_type = runner.getStringArgumentValue("fuel_type",user_arguments)
-    maalka_fuel_type = runner.getStringArgumentValue("maalka_fuel_type",user_arguments)
-    consumption_unit = runner.getStringArgumentValue("consumption_unit",user_arguments)
-    data_key_name = runner.getStringArgumentValue("data_key_name",user_arguments)
     start_date = runner.getStringArgumentValue("start_date",user_arguments)
     end_date = runner.getStringArgumentValue("end_date",user_arguments)
     remove_utility_bill_data = runner.getBoolArgumentValue("remove_existing_data",user_arguments)
@@ -211,6 +156,11 @@ class MaalkaMonthlyJSONUtilityData < OpenStudio::Ruleset::ModelUserScript
       return false
     end
 
+    # OS fuel types key json value is os
+    fuel_types = {}
+    fuel_types['electric'] = {'fuel' => 'Electricity', 'units' => 'kWh', 'data_key_name' => 'tot_kwh' }
+    fuel_types['naturalGas'] = {'fuel' => 'NaturalGas', 'units' => 'therms', 'data_key_name' => 'tot_therms' }
+
     # parse json file
     temp = File.read(json_path)
     json_data = JSON.parse(temp)  
@@ -244,61 +194,63 @@ class MaalkaMonthlyJSONUtilityData < OpenStudio::Ruleset::ModelUserScript
       end
       runner.registerValue('template',template)
 
-      runner.registerInfo("fuel_type is #{fuel_type}")
-      utilityBill = OpenStudio::Model::UtilityBill.new("#{fuel_type}".to_FuelType, model)
-      utilityBill.setName("#{variable_name}")
-      utilityBill.setConsumptionUnit("#{consumption_unit}")
-      #TODO trap nil
-      runner.registerInfo("maalka_fuel_type is #{maalka_fuel_type}")
+      json_data['data']['maalka_input'].each do |key,value|
+        next if key == "building"
+        fuel_type = fuel_types[key]['fuel'].to_s
+        periods = value['data']
 
-      runner.registerInfo("#{json_data['data']['maalka_input']["#{maalka_fuel_type}"]['data'].join(",")}")
+        utilityBill = OpenStudio::Model::UtilityBill.new("#{fuel_type}".to_FuelType, model)
+        utilityBill.setName("#{fuel_type}")
+        utilityBill.setConsumptionUnit("#{fuel_types['units']}")
+        #TODO trap nil
+        runner.registerInfo("Adding utility bills for #{fuel_type}")
 
-      json_data['data']['maalka_input']["#{maalka_fuel_type}"]['data'].each do |period|
-        begin
-          from_date = period['from'] ? Time.iso8601(period['from']).strftime("%Y%m%dT%H%M%S") : nil
-          to_date = period['to'] ? Time.iso8601(period['to']).strftime("%Y%m%dT%H%M%S") : nil
-        rescue ArgumentError => e
-          runner.registerError("Unknown date format in period '#{period}'")
-        end
-        if from_date.nil? or to_date.nil?
-          runner.registerError("Unknown date format in period '#{period}'")
-          fail "Unknown date format in period '#{period}'"
-          return false
-        end
-        #runner.registerInfo("GC.start")
-        #GC.start
-        period_start_date = OpenStudio::DateTime.fromISO8601(from_date).get.date
-        #period_start_date = OpenStudio::Date.new(OpenStudio::MonthOfYear.new(from_date[1]), from_date[2], from_date[0])
-        #period_end_date = OpenStudio::DateTime.fromISO8601(to_date).get.date - OpenStudio::Time.new(1.0)
-        period_end_date = OpenStudio::DateTime.fromISO8601(to_date).get.date
-        #period_end_date = OpenStudio::Date.new(OpenStudio::MonthOfYear.new(to_date[1]), to_date[2], to_date[0])
-        
-        if (period_start_date < start_date) or (period_end_date > end_date)
-          runner.registerInfo("skipping period #{period_start_date} to #{period_end_date}")
-          next
-        end
-        
-        if period["#{data_key_name}"].nil?
-          runner.registerError("Billing period missing key:#{data_key_name} in: '#{period}'")
-          return false
-        end
-        data_key_value = period["#{data_key_name}"].to_f
-        
-        # peak_kw = nil
-        # if not period['peak_kw'].nil?
+        periods.each do |period|
+
+          begin
+            from_date = period['from'] ? Time.iso8601(period['from']).strftime("%Y%m%dT%H%M%S") : nil
+            to_date = period['to'] ? Time.iso8601(period['to']).strftime("%Y%m%dT%H%M%S") : nil
+          rescue ArgumentError => e
+            runner.registerError("Unknown date format in period '#{period}'")
+          end
+          if from_date.nil? or to_date.nil?
+            runner.registerError("Unknown date format in period '#{period}'")
+            fail "Unknown date format in period '#{period}'"
+            return false
+          end
+          period_start_date = OpenStudio::DateTime.fromISO8601(from_date).get.date
+          period_end_date = OpenStudio::DateTime.fromISO8601(to_date).get.date
+
+          if (period_start_date < start_date) or (period_end_date > end_date)
+            runner.registerInfo("skipping period #{period_start_date} to #{period_end_date}")
+            next
+          end
+
+          data_key_name = fuel_types[key]['data_key_name']
+          if period["#{data_key_name}"].nil?
+            runner.registerError("Billing period missing key:#{data_key_name} in: '#{period}'")
+            return false
+          end
+          data_key_value = period["#{data_key_name}"].to_f
+
+          # peak_kw = nil
+          # if not period['peak_kw'].nil?
           # peak_kw = period['peak_kw'].to_f
-        # end
-        
-        runner.registerInfo("period #{period}")
-        runner.registerInfo("period_start_date: #{period_start_date}, period_end_date: #{period_end_date}, #{data_key_name}: #{data_key_value}")
-        
-        bp = utilityBill.addBillingPeriod()
-        bp.setStartDate(period_start_date)
-        bp.setEndDate(period_end_date)
-        bp.setConsumption(data_key_value)
-        # if peak_kw
+          # end
+
+          runner.registerInfo("period #{period}")
+          runner.registerInfo("period_start_date: #{period_start_date}, period_end_date: #{period_end_date}, #{data_key_name}: #{data_key_value}")
+
+          bp = utilityBill.addBillingPeriod()
+          bp.setStartDate(period_start_date)
+          bp.setEndDate(period_end_date)
+          bp.setConsumption(data_key_value)
+          # if peak_kw
           # bp.setPeakDemand(peak_kw)
-        # end
+          # end
+
+        end
+
       end
     end
     
