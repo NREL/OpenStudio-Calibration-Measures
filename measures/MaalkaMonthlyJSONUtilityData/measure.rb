@@ -183,8 +183,8 @@ class MaalkaMonthlyJSONUtilityData < OpenStudio::Ruleset::ModelUserScript
       runner.registerValue('bldg_type_a',building_type)
 
       # this is empty in example file but we should always have it. Could default to 1 if not provided
-      if !json_data['data']['maalka_input']['building']['floors_above_grade'] == "null"
-        runner.registerValue('floors_above_grade',json_data['data']['maalka_input']['building']['floors_above_grade'].to_f)
+      if json_data['data']['maalka_input']['building']['floors_above_grade'].to_f > 0.0
+        runner.registerValue('num_stories_above_grade',json_data['data']['maalka_input']['building']['floors_above_grade'].to_f)
       end
 
       # todo - add more advanced logic to infer tempalte from year build current code just shows basic concept

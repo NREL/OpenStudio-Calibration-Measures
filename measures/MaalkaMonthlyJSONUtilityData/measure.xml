@@ -2,8 +2,8 @@
   <schema_version>3.0</schema_version>
   <name>maalka_monthly_json_utility_data</name>
   <uid>afe82cf5-3e3a-43ea-b31e-8289ff268bed</uid>
-  <version_id>36e25c35-24ba-4d05-8ba9-9640fa13df42</version_id>
-  <version_modified>20180612T221309Z</version_modified>
+  <version_id>d8de115b-5eec-44bc-a7dd-0e9411ded6f2</version_id>
+  <version_modified>20180613T034143Z</version_modified>
   <xml_checksum>057E8D9D</xml_checksum>
   <class_name>MaalkaMonthlyJSONUtilityData</class_name>
   <display_name>Maalka Formatted Monthly JSON Utility Data</display_name>
@@ -138,7 +138,7 @@
       <filename>measure.rb</filename>
       <filetype>rb</filetype>
       <usage_type>script</usage_type>
-      <checksum>D0866B37</checksum>
+      <checksum>CEDF4AF9</checksum>
     </file>
   </files>
 </measure>
