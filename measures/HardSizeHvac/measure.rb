@@ -38,7 +38,17 @@ class HardSizeHVAC < OpenStudio::Ruleset::ModelUserScript
     # Run a sizing run and attach the resulting
     # sql file to the model.  Hard sizing methods
     # won't work unless the model has a sql file.
-    model.runSizingRun("#{Dir.pwd}")    
+
+    # this method works for 2.5.0 and ealier
+    #model.runSizingRun("#{Dir.pwd}")
+
+    # Make the standard applier
+    standard = Standard.build('90.1-2004') # assume it doesn't matter what template I choose
+
+    # Perform a sizing run (2.5.1 and later)
+    if standard.model_run_sizing_run(model, "#{Dir.pwd}/SR1") == false
+      return false
+    end
 
     # Hard sizing every object in the model.
     model.applySizingValues

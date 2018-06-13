@@ -1,10 +1,9 @@
 <measure>
   <schema_version>3.0</schema_version>
-  <error>superclass mismatch for class CreateDOEPrototypeBuilding</error>
   <name>create_doe_prototype_building</name>
   <uid>6fe2a5bd-76b2-4523-ac41-ac9264f43ab2</uid>
-  <version_id>c85f552e-4a06-4059-bbf2-9fc0a9dc3a99</version_id>
-  <version_modified>20180613T140342Z</version_modified>
+  <version_id>e2d422b3-478a-421f-94d5-a7b8ad24b3dd</version_id>
+  <version_modified>20180613T150039Z</version_modified>
   <xml_checksum>057E8D9D</xml_checksum>
   <class_name>CreateDOEPrototypeBuilding</class_name>
   <display_name>Create DOE Prototype Building</display_name>
