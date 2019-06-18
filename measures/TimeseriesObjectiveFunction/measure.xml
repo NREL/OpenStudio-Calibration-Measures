@@ -2,8 +2,8 @@
   <schema_version>3.0</schema_version>
   <name>timeseries_objective_function</name>
   <uid>6804217d-4737-45f3-82df-b81393c29ce3</uid>
-  <version_id>3b9d0ffc-e1c5-4573-a86b-9b65eceacb3f</version_id>
-  <version_modified>20171101T185246Z</version_modified>
+  <version_id>b4344d6e-9780-4de6-9bb5-30eb4d9216a4</version_id>
+  <version_modified>20190618T205853Z</version_modified>
   <xml_checksum>FFE04372</xml_checksum>
   <class_name>TimeseriesObjectiveFunction</class_name>
   <display_name>TimeSeries Objective Function</display_name>
@@ -140,15 +140,14 @@
       <type>Choice</type>
       <required>true</required>
       <model_dependent>false</model_dependent>
-      <default_value>Zone Timestep</default_value>
       <choices>
         <choice>
-          <value>HVAC System Timestep</value>
-          <display_name>HVAC System Timestep</display_name>
+          <value>Detailed</value>
+          <display_name>Detailed</display_name>
         </choice>
         <choice>
-          <value>Zone Timestep</value>
-          <display_name>Zone Timestep</display_name>
+          <value>Timestep</value>
+          <display_name>Timestep</display_name>
         </choice>
         <choice>
           <value>Hourly</value>
@@ -401,7 +400,7 @@
       <filename>report.html.erb</filename>
       <filetype>erb</filetype>
       <usage_type>resource</usage_type>
-      <checksum>6CBAC1DE</checksum>
+      <checksum>C57A57AD</checksum>
     </file>
     <file>
       <version>
@@ -412,7 +411,7 @@
       <filename>measure.rb</filename>
       <filetype>rb</filetype>
       <usage_type>script</usage_type>
-      <checksum>82CF89EA</checksum>
+      <checksum>E61FF04E</checksum>
     </file>
   </files>
 </measure>
