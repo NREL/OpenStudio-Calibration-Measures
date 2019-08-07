@@ -2,8 +2,8 @@
   <schema_version>3.0</schema_version>
   <name>exterior_wall_thermal_properties_multiplier</name>
   <uid>6ab39cf2-1f9e-4570-a797-360a814aaa74</uid>
-  <version_id>102b0e26-cd1f-4b06-9829-bc9cd1dfa75b</version_id>
-  <version_modified>20170710T194314Z</version_modified>
+  <version_id>faef5bcf-5c05-4ffb-94d6-b2c39f99f1fe</version_id>
+  <version_modified>20190806T204742Z</version_modified>
   <xml_checksum>31085437</xml_checksum>
   <class_name>ExteriorWallThermalPropertiesMultiplier</class_name>
   <display_name>Exterior Wall Thermal Properties Multiplier</display_name>
@@ -73,7 +73,7 @@
       <filename>measure.rb</filename>
       <filetype>rb</filetype>
       <usage_type>script</usage_type>
-      <checksum>AD47EA97</checksum>
+      <checksum>D833676E</checksum>
     </file>
   </files>
 </measure>

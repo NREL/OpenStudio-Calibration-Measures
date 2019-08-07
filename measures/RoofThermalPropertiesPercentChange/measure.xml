@@ -2,8 +2,8 @@
   <schema_version>3.0</schema_version>
   <name>roof_thermal_properties_percent_change</name>
   <uid>07516685-60fd-4da8-9872-1154a995047d</uid>
-  <version_id>5d9f57ba-f3d2-46d1-8c3a-a6a7c2537f23</version_id>
-  <version_modified>20170710T192126Z</version_modified>
+  <version_id>4f9e2368-14fc-495c-8cba-e12e8903b81a</version_id>
+  <version_modified>20190806T204743Z</version_modified>
   <xml_checksum>31085437</xml_checksum>
   <class_name>RoofThermalPropertiesPercentChange</class_name>
   <display_name>Roof Thermal Properties Percent Change</display_name>
@@ -73,7 +73,7 @@
       <filename>measure.rb</filename>
       <filetype>rb</filetype>
       <usage_type>script</usage_type>
-      <checksum>A9E1B1BD</checksum>
+      <checksum>E202EA5C</checksum>
     </file>
   </files>
 </measure>

@@ -2,8 +2,8 @@
   <schema_version>3.0</schema_version>
   <name>electric_baseboard_efficiency_and_capacity</name>
   <uid>4253e38c-6b48-4e96-8da7-002cec68d376</uid>
-  <version_id>834b3275-b0d9-4f4a-8d80-679801fa8671</version_id>
-  <version_modified>20170710T155907Z</version_modified>
+  <version_id>08e5ed97-bfd9-4295-a84a-b1041975484b</version_id>
+  <version_modified>20190806T204742Z</version_modified>
   <xml_checksum>0DA5C9E6</xml_checksum>
   <class_name>ElectricBaseboardEfficiencyAndCapacity</class_name>
   <display_name>Electric Baseboard Efficiency And Capacity</display_name>
@@ -54,7 +54,7 @@
       <filename>measure.rb</filename>
       <filetype>rb</filetype>
       <usage_type>script</usage_type>
-      <checksum>459797DB</checksum>
+      <checksum>1018CFB1</checksum>
     </file>
   </files>
 </measure>
